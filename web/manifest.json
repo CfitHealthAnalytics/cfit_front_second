@@ -1,6 +1,6 @@
 {
-    "name": "cfit",
-    "short_name": "cfit",
+    "name": "finance_cp",
+    "short_name": "finance_cp",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
