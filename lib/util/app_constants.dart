@@ -1,6 +1,3 @@
-import 'package:cfit/data/modal/response/language_model.dart';
-import 'package:cfit/util/images.dart';
-
 class AppConstants {
   static const String APP_NAME = 'CFIT';
   static const int APP_VERSION = 1;
@@ -9,8 +6,7 @@ class AppConstants {
 
   //static const String BASE_URL = 'http://localhost/teste/stackfood';
   //static const String BASE_URL = 'https://ecode.codephix.com';
-  static const String BASE_URL2 = 'https://cfit-api.herokuapp.com';
-  static const String BASE_URL = 'https://cfit-api.herokuapp.com';
+  static const String BASE_URL = 'cfit-api.herokuapp.com';
 
   static const String AUTHENTICATION = '/authentication/';
 
@@ -122,6 +118,7 @@ class AppConstants {
   static const String USER_ADDRESS = 'user_address';
   static const String USER_EMAIL = 'user_email';
   static const String USER_COUNTRY_CODE = 'user_country_code';
+  static const String USER_ID = 'user_id';
   static const String NOTIFICATION = 'notification';
   static const String SEARCH_HISTORY = 'search_history';
   static const String INTRO = 'intro';
@@ -132,17 +129,4 @@ class AppConstants {
 
   static const String USER_NUMBER = 'cfit_user_number';
 
-  static List<LanguageModel> languages = [
-    LanguageModel(
-        imageUrl: Images.english,
-        languageName: 'Brasil',
-        countryCode: 'BR',
-        languageCode: 'pt-br'),
-    LanguageModel(
-        imageUrl: Images.english,
-        languageName: 'English',
-        countryCode: 'US',
-        languageCode: 'en'),
-    /*LanguageModel(imageUrl: Images.arabic, languageName: 'عربى', countryCode: 'SA', languageCode: 'ar'),*/
-  ];
 }
