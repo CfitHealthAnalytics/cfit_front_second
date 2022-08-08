@@ -34,4 +34,8 @@ class LoginCubit extends Cubit<LoginState> {
       emit(state.copyWith(loadingRequest: false));
     }
   }
+
+  void register() {
+    _navigation.toRegister();
+  }
 }

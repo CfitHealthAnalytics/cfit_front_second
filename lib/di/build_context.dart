@@ -1,6 +1,7 @@
 import 'package:cfit/data/models/auth.dart';
 import 'package:cfit/data/repository/auth.dart';
 import 'package:cfit/domain/use_cases/initialization_use_case.dart';
+import 'package:cfit/domain/use_cases/register_use_case.dart';
 import 'package:cfit/external/api/unauthenticated_client.dart';
 import 'package:cfit/external/factory/api.dart';
 import 'package:cfit/external/storage/storage_client.dart';
@@ -40,6 +41,12 @@ extension DependencyInjection on BuildContext {
 
   LoginUseCase loginUseCase() {
     return LoginUseCase(
+      authRepository(),
+    );
+  }
+
+  RegisterUseCase registerUseCase() {
+    return RegisterUseCase(
       authRepository(),
     );
   }

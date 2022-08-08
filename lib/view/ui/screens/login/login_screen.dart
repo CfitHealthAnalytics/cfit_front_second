@@ -13,6 +13,7 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final emailFormKey = GlobalKey<FormState>();
     final cubit = context.read<LoginCubit>();
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
@@ -56,6 +57,7 @@ class LoginScreen extends StatelessWidget {
                       hintText: 'Email',
                       onChanged: cubit.onChangeEmail,
                       type: InputTextType.email,
+                      formKey: emailFormKey,
                     ),
                   ),
                   Padding(
@@ -79,18 +81,24 @@ class LoginScreen extends StatelessWidget {
                         return ButtonAction(
                           text: 'Entrar',
                           type: ButtonActionType.primary,
-                          onPressed:
-                              state.isEnabled ? cubit.authentication : null,
+                          onPressed: state.isEnabled
+                              ? () {
+                                  if (emailFormKey.currentState!.validate()) {
+                                    cubit.authentication();
+                                  }
+                                }
+                              : null,
                           loading: state.loadingRequest,
                         );
                       },
                     ),
                   ),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 4),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 4),
                     child: ButtonAction(
                       text: 'Cadastre-se',
                       type: ButtonActionType.text,
+                      onPressed: cubit.register,
                     ),
                   ),
                 ],
