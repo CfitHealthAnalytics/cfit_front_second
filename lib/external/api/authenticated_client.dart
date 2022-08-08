@@ -1,10 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:cfit/domain/erros/rules.dart';
 import 'package:cfit/external/factory/api.dart';
 import 'package:cfit/external/models/api.dart';
+import 'package:cfit/external/models/storage.dart';
 import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../util/app_constants.dart';
 
@@ -15,15 +16,11 @@ class AuthenticatedClient implements ApiClient {
     required this.factory,
   });
   final ApiResponseFactory factory;
-  final SharedPreferences storage;
+  final Storage storage;
   final String baseUri;
 
-  String get token => storage.getString(AppConstants.TOKEN)!;
-
-  @override
-  Future<ApiResponse> get({
-    required String path,
-  }) async {
+  Future<ApiResponse> _get(
+      {required String path, required String token}) async {
     final response = await http.get(
       Uri(
         host: baseUri,
@@ -31,35 +28,32 @@ class AuthenticatedClient implements ApiClient {
       ),
       headers: {
         'Authorization': 'Bearer $token',
-        AppConstants.ZONE_ID: '',
-        AppConstants.LOCALIZATION_KEY: 'pt-br'
+        'accept': 'application/json',
+        'Content-Type': 'application/json'
       },
     );
     return factory.fromHttpResponse(response);
   }
 
-  @override
-  Future<ApiResponse> post({
+  Future<ApiResponse> _post({
     required String path,
+    required String token,
     Map<String, dynamic>? body,
     File? file,
   }) async {
-    assert(
-        (body == null && file == null) || (body != null && file != null),
-        'Apenas um dos dois atributos podem ser envidados '
-        'mas os dois não podem ser nulos');
     late final http.Response response;
     if (body != null) {
       response = await http.post(
         Uri(
           host: baseUri,
           path: path,
-          scheme: jsonEncode(body),
+          scheme: 'https',
         ),
+        body: jsonEncode(body),
         headers: {
           'Authorization': 'Bearer $token',
-          AppConstants.ZONE_ID: '',
-          AppConstants.LOCALIZATION_KEY: 'pt-br'
+          'accept': 'application/json',
+          'Content-Type': 'application/json'
         },
       );
     } else {
@@ -83,5 +77,75 @@ class AuthenticatedClient implements ApiClient {
       response = await http.Response.fromStream(await request.send());
     }
     return factory.fromHttpResponse(response);
+  }
+
+  Future<void> refreshToken() async {
+    final refreshToken = await storage.get(AppConstants.TOKEN_REFRESH);
+    final response = await http.post(
+      Uri(
+        host: baseUri,
+        path: AppConstants.REFRESH_TOKEN,
+        scheme: 'https',
+      ),
+      body: jsonEncode({'refresh_token': refreshToken}),
+      headers: {
+        'accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+    );
+    final apiResponse = factory.fromHttpResponse(response);
+
+    await storage.setAll({
+      AppConstants.TOKEN: apiResponse.data['id_token'],
+      AppConstants.TOKEN_REFRESH: apiResponse.data['refresh_token'],
+    });
+  }
+
+  @override
+  Future<ApiResponse> get({
+    required String path,
+  }) async {
+    final token = await storage.get<String>(AppConstants.TOKEN);
+    if (token == null) {
+      throw NotLoggedUser();
+    }
+    try {
+      return await _get(path: path, token: token);
+    } on UnauthorizedException {
+      await refreshToken();
+      return await _get(path: path, token: token);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<ApiResponse> post({
+    required String path,
+    Map<String, dynamic>? body,
+    File? file,
+  }) async {
+    final token = await storage.get<String>(AppConstants.TOKEN);
+    if (token == null) {
+      throw NotLoggedUser();
+    }
+    try {
+      return await _post(
+        path: path,
+        token: token,
+        body: body,
+        file: file,
+      );
+    } on UnauthorizedException catch (_) {
+      await refreshToken();
+      return await _post(
+        path: path,
+        token: token,
+        body: body,
+        file: file,
+      );
+    } catch (_) {
+      rethrow;
+    }
   }
 }

@@ -1,20 +1,20 @@
 import 'package:cfit/util/routes.dart';
 import 'package:flutter/widgets.dart';
 
-class LoginNavigation {
-  final void Function() toRegister;
+class HomeNavigation {
+  final void Function() toLogin;
   final void Function() toHome;
 
-  LoginNavigation({
-    required this.toRegister,
+  HomeNavigation({
+    required this.toLogin,
     required this.toHome,
   });
 
-  factory LoginNavigation.fromMaterialNavigation(
+  factory HomeNavigation.fromMaterialNavigation(
     NavigatorState navigator,
   ) {
-    return LoginNavigation(
-      toRegister: () => navigator.pushNamed(Routes.register),
+    return HomeNavigation(
+      toLogin: () => navigator.pushReplacementNamed(Routes.login),
       toHome: () => navigator.pushReplacementNamed(Routes.home),
     );
   }

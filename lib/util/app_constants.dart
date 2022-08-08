@@ -114,11 +114,16 @@ class AppConstants {
   static const String COUNTRY_CODE = 'country_code';
   static const String LANGUAGE_CODE = 'language_code';
   static const String CART_LIST = 'cart_list';
+
   static const String USER_PASSWORD = 'user_password';
   static const String USER_ADDRESS = 'user_address';
   static const String USER_EMAIL = 'user_email';
   static const String USER_COUNTRY_CODE = 'user_country_code';
+  static const String USER_DATE_BIRTH = 'user_date_birth';
+  static const String USER_GENDER = 'user_gender';
+  static const String USER_NAME = 'user_name';
   static const String USER_ID = 'user_id';
+  
   static const String NOTIFICATION = 'notification';
   static const String SEARCH_HISTORY = 'search_history';
   static const String INTRO = 'intro';

@@ -1,14 +1,15 @@
-enum Gender { male, female }
+import 'package:cfit/domain/models/user.dart';
 
 class RegisterState {
   final String email;
   final String name;
-  final Gender gender;
+  final UserGender gender;
   final String dateBirth;
   final String password;
   final String confirmedPassword;
   final bool loadingRequest;
   final bool hasError;
+  final bool accountExists;
 
   RegisterState({
     required this.email,
@@ -19,6 +20,7 @@ class RegisterState {
     required this.confirmedPassword,
     required this.loadingRequest,
     required this.hasError,
+    required this.accountExists,
   });
 
   factory RegisterState.empty() {
@@ -29,19 +31,21 @@ class RegisterState {
       hasError: false,
       confirmedPassword: '',
       dateBirth: '',
-      gender: Gender.male,
+      gender: UserGender.male,
       name: '',
+      accountExists: false,
     );
   }
   RegisterState copyWith({
     String? email,
     String? name,
-    Gender? gender,
+    UserGender? gender,
     String? dateBirth,
     String? password,
     String? confirmedPassword,
     bool? loadingRequest,
     bool? hasError,
+    bool? accountExists,
   }) {
     return RegisterState(
       email: email ?? this.email,
@@ -52,13 +56,14 @@ class RegisterState {
       confirmedPassword: confirmedPassword ?? this.confirmedPassword,
       loadingRequest: loadingRequest ?? this.loadingRequest,
       hasError: hasError ?? this.hasError,
+      accountExists: accountExists ?? this.accountExists,
     );
   }
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-
+  
     return other is RegisterState &&
         other.email == email &&
         other.name == name &&
@@ -67,7 +72,8 @@ class RegisterState {
         other.password == password &&
         other.confirmedPassword == confirmedPassword &&
         other.loadingRequest == loadingRequest &&
-        other.hasError == hasError;
+        other.hasError == hasError &&
+        other.accountExists == accountExists;
   }
 
   @override
@@ -79,7 +85,8 @@ class RegisterState {
         password.hashCode ^
         confirmedPassword.hashCode ^
         loadingRequest.hashCode ^
-        hasError.hashCode;
+        hasError.hashCode ^
+        accountExists.hashCode;
   }
 }
 
@@ -91,16 +98,4 @@ extension RegisterStateEnabled on RegisterState {
       dateBirth.isNotEmpty &&
       name.isNotEmpty &&
       password == confirmedPassword;
-}
-
-extension GenderStringRepresentation on Gender {
-  String toStringRepresentation() {
-    switch (this) {
-      case Gender.male:
-        return 'masculino';
-
-      case Gender.female:
-        return 'feminino';
-    }
-  }
 }

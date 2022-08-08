@@ -26,7 +26,7 @@ class AuthRepositoryImpl implements AuthRepository {
     await storage.setAll({
       AppConstants.TOKEN: loginResponse.idToken,
       AppConstants.TOKEN_EXPIRESIN: loginResponse.expiresIn,
-      AppConstants.TOKEN_REFRESH: loginResponse.expiresIn,
+      AppConstants.TOKEN_REFRESH: loginResponse.refreshToken,
       AppConstants.USER_ID: loginResponse.localId,
     });
 
@@ -43,7 +43,7 @@ class AuthRepositoryImpl implements AuthRepository {
     await storage.setAll({
       AppConstants.TOKEN: registerResponse.idToken,
       AppConstants.TOKEN_EXPIRESIN: registerResponse.expiresIn,
-      AppConstants.TOKEN_REFRESH: registerResponse.expiresIn,
+      AppConstants.TOKEN_REFRESH: registerResponse.refreshToken,
       AppConstants.USER_ID: registerResponse.localId,
     });
 

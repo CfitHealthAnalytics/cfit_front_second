@@ -24,7 +24,14 @@ class ApiResponseFactory {
     if (error.statusCode == 400) {
       return BadRequestException(error);
     }
+    
+    if (error.statusCode == 401) {
+      return UnauthorizedException(error);
+    }
     if (error.statusCode == 422) {
+      if (error.body.toLowerCase().contains('email_exists')) {
+        return ForbiddenException(error);
+      }
       return NotFoundException(error);
     }
     return ApiException('Algo deu errado', error);

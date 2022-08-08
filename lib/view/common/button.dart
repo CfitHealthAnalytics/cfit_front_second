@@ -28,9 +28,11 @@ class _ButtonActionState extends State<ButtonAction> {
         return TextButton(
           child: Container(
             width: double.maxFinite,
-            decoration: const BoxDecoration(
-              color: Color.fromARGB(255, 23, 97, 91),
-              borderRadius: BorderRadius.all(
+            decoration: BoxDecoration(
+              color: widget.onPressed == null
+                  ? const Color.fromARGB(100, 23, 97, 91)
+                  : const Color.fromARGB(255, 23, 97, 91),
+              borderRadius: const BorderRadius.all(
                 Radius.circular(8),
               ),
             ),
@@ -48,8 +50,10 @@ class _ButtonActionState extends State<ButtonAction> {
                       )
                     : Text(
                         widget.text,
-                        style: const TextStyle(
-                          color: Colors.white,
+                        style: TextStyle(
+                          color: widget.onPressed == null
+                              ? Colors.white.withAlpha(100)
+                              : Colors.white,
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
                         ),

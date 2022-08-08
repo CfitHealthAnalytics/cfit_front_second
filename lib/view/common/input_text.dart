@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 const String pattern =
     r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]"
@@ -12,12 +13,16 @@ class InputText extends StatefulWidget {
     required this.onChanged,
     required this.type,
     this.formKey,
+    this.inputFormatter,
+    this.validator,
   }) : super(key: key);
 
   final String hintText;
   final ValueChanged<String> onChanged;
   final InputTextType type;
   final GlobalKey<FormState>? formKey;
+  final List<TextInputFormatter>? inputFormatter;
+  final String? Function(String?)? validator;
 
   @override
   State<InputText> createState() => _InputTextState();
@@ -61,18 +66,28 @@ class _InputTextState extends State<InputText> {
   Widget build(BuildContext context) {
     switch (widget.type) {
       case InputTextType.text:
-        return TextFormField(
-          decoration: InputDecoration(
-            hintText: widget.hintText,
-            fillColor: Colors.white,
-            filled: true,
-            border: const OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(24)),
+        return Form(
+          key: _formKey,
+          child: TextFormField(
+            decoration: InputDecoration(
+              hintText: widget.hintText,
+              fillColor: Colors.white,
+              filled: true,
+              border: const OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(24)),
+              ),
+              errorBorder: InputBorder.none,
+              errorStyle: const TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.bold,
+              ),
             ),
+            validator: widget.validator,
+            inputFormatters: widget.inputFormatter,
+            focusNode: _focusNode,
+            onChanged: widget.onChanged,
+            cursorColor: Colors.grey,
           ),
-          focusNode: _focusNode,
-          onChanged: widget.onChanged,
-          cursorColor: Colors.grey,
         );
 
       case InputTextType.email:
@@ -110,32 +125,46 @@ class _InputTextState extends State<InputText> {
         return Stack(
           alignment: Alignment.centerRight,
           children: [
-            TextFormField(
-              decoration: InputDecoration(
-                hintText: widget.hintText,
-                fillColor: Colors.white,
-                filled: true,
-                border: const OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(12)),
+            Form(
+              key: _formKey,
+              child: TextFormField(
+                focusNode: _focusNode,
+                decoration: InputDecoration(
+                  hintText: widget.hintText,
+                  fillColor: Colors.white,
+                  filled: true,
+                  border: const OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(12)),
+                  ),
+                  errorBorder: InputBorder.none,
+                  errorStyle: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
+                onChanged: widget.onChanged,
+                obscureText: hiddenText,
+                cursorColor: Colors.grey,
+                validator: widget.validator,
               ),
-              onChanged: widget.onChanged,
-              obscureText: hiddenText,
-              cursorColor: Colors.grey,
             ),
-            GestureDetector(
-              onTap: () {
-                setState(() {
-                  hiddenText = !hiddenText;
-                });
-              },
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Icon(
-                  hiddenText
-                      ? Icons.visibility_outlined
-                      : Icons.visibility_off_outlined,
-                  color: Colors.grey,
+            Positioned(
+              right: 0,
+              top: 12,
+              child: GestureDetector(
+                onTap: () {
+                  setState(() {
+                    hiddenText = !hiddenText;
+                  });
+                },
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Icon(
+                    hiddenText
+                        ? Icons.visibility_outlined
+                        : Icons.visibility_off_outlined,
+                    color: Colors.grey,
+                  ),
                 ),
               ),
             )

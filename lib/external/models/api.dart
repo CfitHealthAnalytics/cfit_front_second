@@ -46,6 +46,23 @@ class BadRequestException extends ApiException {
         );
 }
 
+
+class UnauthorizedException extends ApiException {
+  const UnauthorizedException(Http.Response error)
+      : super(
+          'Token expirado',
+          error,
+        );
+}
+
+class ForbiddenException extends ApiException {
+  const ForbiddenException(Http.Response error)
+      : super(
+          'Não tem permissão para realizar essa operação',
+          error,
+        );
+}
+
 class ServerException extends ApiException {
   const ServerException(Http.Response error)
       : super(

@@ -14,8 +14,8 @@ class SplashNavigation {
     NavigatorState navigator,
   ) {
     return SplashNavigation(
-      toLogin: () => navigator.pushNamed(Routes.login),
-      toHome: () => navigator.pushNamed(Routes.login),
+      toLogin: () => navigator.pushReplacementNamed(Routes.login),
+      toHome: () => navigator.pushReplacementNamed(Routes.home),
     );
   }
 }

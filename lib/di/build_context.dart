@@ -1,7 +1,11 @@
 import 'package:cfit/data/models/auth.dart';
+import 'package:cfit/data/models/user.dart';
 import 'package:cfit/data/repository/auth.dart';
+import 'package:cfit/data/repository/user.dart';
+import 'package:cfit/domain/use_cases/feed_use_case.dart';
 import 'package:cfit/domain/use_cases/initialization_use_case.dart';
 import 'package:cfit/domain/use_cases/register_use_case.dart';
+import 'package:cfit/external/api/authenticated_client.dart';
 import 'package:cfit/external/api/unauthenticated_client.dart';
 import 'package:cfit/external/factory/api.dart';
 import 'package:cfit/external/storage/storage_client.dart';
@@ -19,6 +23,13 @@ extension DependencyInjection on BuildContext {
       factory: ApiResponseFactory(),
     );
   }
+  
+  AuthenticatedClient authenticatedClient() {
+    return AuthenticatedClient(
+        baseUri: AppConstants.BASE_URL,
+        factory: ApiResponseFactory(),
+        storage: storage());
+  }
 
   Storage storage() {
     return StorageImpl(
@@ -29,6 +40,13 @@ extension DependencyInjection on BuildContext {
   AuthRepository authRepository() {
     return AuthRepositoryImpl(
       client: unauthenticatedClient(),
+      storage: storage(),
+    );
+  }
+  
+  UserRepository userRepository() {
+    return UserRepositoryImpl(
+      client: authenticatedClient(),
       storage: storage(),
     );
   }
@@ -48,6 +66,12 @@ extension DependencyInjection on BuildContext {
   RegisterUseCase registerUseCase() {
     return RegisterUseCase(
       authRepository(),
+    );
+  }
+
+  FeedUseCase feedUseCase() {
+    return FeedUseCase(
+      userRepository: userRepository(),
     );
   }
 }
