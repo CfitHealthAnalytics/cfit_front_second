@@ -14,6 +14,7 @@ class FeedUseCase {
 
     return Feed(
       user: User(
+        id: userResponse.id,
         name: userResponse.name,
         email: userResponse.email,
         dateBirth: userResponse.dateBirth,

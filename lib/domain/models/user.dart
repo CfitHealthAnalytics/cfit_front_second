@@ -1,10 +1,12 @@
 class User {
+  final String id;
   final String name;
   final String email;
   final String dateBirth;
   final UserGender gender;
 
   User({
+    required this.id,
     required this.name,
     required this.email,
     required this.dateBirth,
@@ -22,6 +24,16 @@ extension GenderStringRepresentation on UserGender {
 
       case UserGender.female:
         return 'feminino';
+    }
+  }
+  
+  String abbreviation() {
+    switch (this) {
+      case UserGender.male:
+        return 'M';
+
+      case UserGender.female:
+        return 'F';
     }
   }
 }

@@ -20,6 +20,7 @@ class UserRepositoryImpl implements UserRepository {
       path: AppConstants.GET_USER,
       body: UserBodyRequest(idToken: idToken).toMap(),
     );
-    return UserBodyResponse.fromMap(response.data);
+    final userId = await storage.get(AppConstants.USER_ID);
+    return UserBodyResponse.fromMap({...response.data, 'id': userId});
   }
 }

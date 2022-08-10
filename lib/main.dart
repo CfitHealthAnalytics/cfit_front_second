@@ -8,14 +8,14 @@ import 'package:cfit/view/ui/screens/splash/splash_route.dart';
 import 'package:flutter/material.dart';
 
 const primaryColor = Color.fromRGBO(17, 165, 153, 1);
-const primaryColorDark = Color.fromARGB(255, 38, 162, 151);
+const primaryColorDark = Color.fromARGB(255, 24, 105, 99);
 const primaryColorLight = Color.fromRGBO(17, 165, 153, 1);
 
 Future<void> main(List<String> arguments) async {
   runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
     theme: ThemeData(
-      fontFamily: 'SF Pro Display',
+      fontFamily: 'Rubik',
       primaryColor: primaryColor,
       primaryColorDark: primaryColorDark,
       primaryColorLight: primaryColorLight,
@@ -25,7 +25,13 @@ Future<void> main(List<String> arguments) async {
           fontSize: 30,
           fontWeight: FontWeight.bold,
           color: primaryColor,
+          fontFamily: 'Rubik',
         ),
+        headline2: TextStyle(
+            fontSize: 28,
+            fontWeight: FontWeight.bold,
+            color: primaryColor,
+            fontFamily: 'Rubik'),
       ),
       inputDecorationTheme: const InputDecorationTheme(
         enabledBorder: UnderlineInputBorder(

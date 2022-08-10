@@ -46,12 +46,14 @@ class UserBodyRequest {
 }
 
 class UserBodyResponse {
+  final String id;
   final String name;
   final String dateBirth;
   final String gender;
   final String email;
 
   UserBodyResponse({
+    required this.id,
     required this.name,
     required this.dateBirth,
     required this.gender,
@@ -59,12 +61,14 @@ class UserBodyResponse {
   });
 
   UserBodyResponse copyWith({
+    String? id,
     String? name,
     String? dateBirth,
     String? gender,
     String? email,
   }) {
     return UserBodyResponse(
+      id: id ?? this.id,
       name: name ?? this.name,
       dateBirth: dateBirth ?? this.dateBirth,
       gender: gender ?? this.gender,
@@ -74,6 +78,7 @@ class UserBodyResponse {
 
   Map<String, dynamic> toMap() {
     return {
+      'id': id,
       'name': name,
       'dateBirth': dateBirth,
       'gender': gender,
@@ -83,6 +88,7 @@ class UserBodyResponse {
 
   factory UserBodyResponse.fromMap(Map<String, dynamic> map) {
     return UserBodyResponse(
+      id: map['id'] ?? '',
       name: map['name'] ?? '',
       dateBirth: map['data_nascimento'] ?? '',
       gender: map['genero'] ?? '',
@@ -103,8 +109,9 @@ class UserBodyResponse {
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-
+  
     return other is UserBodyResponse &&
+        other.id == id &&
         other.name == name &&
         other.dateBirth == dateBirth &&
         other.gender == gender &&
@@ -113,7 +120,8 @@ class UserBodyResponse {
 
   @override
   int get hashCode {
-    return name.hashCode ^
+    return id.hashCode ^
+        name.hashCode ^
         dateBirth.hashCode ^
         gender.hashCode ^
         email.hashCode;
