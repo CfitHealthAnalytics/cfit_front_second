@@ -13,7 +13,7 @@ class HomeController {
   final HomeNavigation navigation;
   final FeedUseCase feedUseCase;
   late final User _user;
-
+  bool alreadyTried = false;
   User get user => _user;
 
   String get qrData =>
@@ -29,6 +29,11 @@ class HomeController {
       navigation.toLogin();
     } on NotLoggedUser catch (_) {
       navigation.toLogin();
+    } catch (e) {
+      if (alreadyTried == false) {
+        alreadyTried = true;
+        return await init();
+      }
     }
     return null;
   }

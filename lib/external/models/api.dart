@@ -5,12 +5,14 @@ import 'package:http/http.dart' as Http;
 abstract class ApiClient {
   Future<ApiResponse> get({
     required String path,
+    int retries = 3,
   });
 
   Future<ApiResponse> post({
     required String path,
     Map<String, dynamic> body,
     File file,
+    int retries = 3,
   });
 }
 

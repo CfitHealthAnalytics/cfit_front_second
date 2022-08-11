@@ -4,6 +4,7 @@ import 'package:cfit/data/repository/auth.dart';
 import 'package:cfit/data/repository/user.dart';
 import 'package:cfit/domain/use_cases/feed_use_case.dart';
 import 'package:cfit/domain/use_cases/initialization_use_case.dart';
+import 'package:cfit/domain/use_cases/logout_use_case.dart';
 import 'package:cfit/domain/use_cases/register_use_case.dart';
 import 'package:cfit/external/api/authenticated_client.dart';
 import 'package:cfit/external/api/unauthenticated_client.dart';
@@ -23,7 +24,7 @@ extension DependencyInjection on BuildContext {
       factory: ApiResponseFactory(),
     );
   }
-  
+
   AuthenticatedClient authenticatedClient() {
     return AuthenticatedClient(
         baseUri: AppConstants.BASE_URL,
@@ -43,7 +44,7 @@ extension DependencyInjection on BuildContext {
       storage: storage(),
     );
   }
-  
+
   UserRepository userRepository() {
     return UserRepositoryImpl(
       client: authenticatedClient(),
@@ -72,6 +73,12 @@ extension DependencyInjection on BuildContext {
   FeedUseCase feedUseCase() {
     return FeedUseCase(
       userRepository: userRepository(),
+    );
+  }
+
+  LogoutUseCase logoutUseCase() {
+    return LogoutUseCase(
+      authRepository(),
     );
   }
 }

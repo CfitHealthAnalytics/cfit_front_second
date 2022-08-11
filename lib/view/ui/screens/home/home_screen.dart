@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'home_controller.dart';
 import 'pages/dashboard/app_bar.dart';
 import 'pages/profile/app_bar.dart';
+import 'pages/profile/navigation.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({
@@ -26,10 +27,21 @@ class HomeScreen extends StatelessWidget {
             appBar: AppBar(
               backgroundColor: Colors.transparent,
               elevation: 0,
-              title: const LoadingBox(
-                height: 20,
+              title: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: const [
+                  LoadingBox(
+                    height: 20,
+                    customWidth: 50,
+                  ),
+                  SizedBox(height: 10),
+                  LoadingBox(
+                    height: 20,
+                  ),
+                ],
               ),
               centerTitle: true,
+              leadingWidth: 0,
               actions: const [
                 Padding(
                   padding: EdgeInsets.symmetric(
@@ -93,6 +105,9 @@ class _HomeLoadedState extends State<HomeLoaded> {
           body: BodyProfile(
             user: widget.user,
             qrData: widget.qrData,
+            navigation: ProfileNavigation.fromMaterialNavigator(
+              Navigator.of(context),
+            ),
           ),
           appBar: PreferredSize(
             child: const AppBarProfile(),

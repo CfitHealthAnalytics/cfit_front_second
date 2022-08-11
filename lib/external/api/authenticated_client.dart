@@ -19,8 +19,10 @@ class AuthenticatedClient implements ApiClient {
   final Storage storage;
   final String baseUri;
 
-  Future<ApiResponse> _get(
-      {required String path, required String token}) async {
+  Future<ApiResponse> _get({
+    required String path,
+    required String token,
+  }) async {
     final response = await http.get(
       Uri(
         host: baseUri,
@@ -104,6 +106,7 @@ class AuthenticatedClient implements ApiClient {
   @override
   Future<ApiResponse> get({
     required String path,
+    int retries = 0,
   }) async {
     final token = await storage.get<String>(AppConstants.TOKEN);
     if (token == null) {
@@ -124,6 +127,7 @@ class AuthenticatedClient implements ApiClient {
     required String path,
     Map<String, dynamic>? body,
     File? file,
+    int retries = 3,
   }) async {
     final token = await storage.get<String>(AppConstants.TOKEN);
     if (token == null) {
@@ -137,15 +141,27 @@ class AuthenticatedClient implements ApiClient {
         file: file,
       );
     } on UnauthorizedException catch (_) {
+      if (retries == 0) {
+        rethrow;
+      }
       await refreshToken();
-      return await _post(
+      return await post(
         path: path,
-        token: token,
         body: body,
         file: file,
+        retries: retries - 1,
       );
     } catch (_) {
-      rethrow;
+      if (retries == 0) {
+        rethrow;
+      }
+
+      return await post(
+        path: path,
+        body: body,
+        file: file,
+        retries: retries - 1,
+      );
     }
   }
 }

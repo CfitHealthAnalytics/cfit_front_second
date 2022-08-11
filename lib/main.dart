@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:cfit/util/routes.dart';
 import 'package:cfit/view/ui/screens/home/home_route.dart';
 import 'package:cfit/view/ui/screens/login/login_route.dart';
+import 'package:cfit/view/ui/screens/my_datas/my_datas_arguments.dart';
+import 'package:cfit/view/ui/screens/my_datas/my_datas_route.dart';
 import 'package:cfit/view/ui/screens/register/register_route.dart';
 import 'package:cfit/view/ui/screens/splash/splash_route.dart';
 import 'package:flutter/material.dart';
@@ -53,11 +55,27 @@ Future<void> main(List<String> arguments) async {
       colorScheme: ColorScheme.fromSwatch().copyWith(secondary: primaryColor),
     ),
     initialRoute: Routes.splash,
-    routes: {
-      Routes.splash: (_) => const SplashRoute(),
-      Routes.login: (_) => const LoginRoute(),
-      Routes.register: (_) => const RegisterRoute(),
-      Routes.home: (_) => const HomeRoute()
+    onGenerateRoute: (settings) {
+      final arguments = settings.arguments;
+      switch (settings.name) {
+        case Routes.splash:
+          return MaterialPageRoute(builder: (_) => const SplashRoute());
+        case Routes.login:
+          return MaterialPageRoute(builder: (_) => const LoginRoute());
+        case Routes.register:
+          return MaterialPageRoute(builder: (_) => const RegisterRoute());
+        case Routes.home:
+          return MaterialPageRoute(builder: (_) => const HomeRoute());
+        case Routes.my_datas:
+          final myDatasArguments =
+              MyDataArguments.fromJson(arguments as String);
+          return MaterialPageRoute(
+              builder: (_) => MyDatasRoute(
+                    user: myDatasArguments.user,
+                  ));
+        default:
+      }
+      return null;
     },
   ));
 }

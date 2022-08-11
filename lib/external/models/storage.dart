@@ -4,4 +4,7 @@ abstract class Storage {
 
   Future<void> set(String key, {required dynamic data});
   Future<void> setAll(Map<String, dynamic> values);
+  
+  Future<void> delete(String key);
+  Future<void> deleteAll(Set<String> keys);
 }

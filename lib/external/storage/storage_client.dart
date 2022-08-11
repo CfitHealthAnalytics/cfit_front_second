@@ -59,4 +59,21 @@ class StorageImpl implements Storage {
     }
     await Future.wait(futures);
   }
+
+  @override
+  Future<void> delete(String key) async {
+    (await sharedPreferences).remove(key);
+  }
+
+  @override
+  Future<void> deleteAll(Set<String> keys) async {
+    final storage = await sharedPreferences;
+
+    final List<Future<void>> futures = [];
+    for (final value in keys) {
+      final key = value;
+      futures.add(storage.remove(key));
+    }
+    await Future.wait(futures);
+  }
 }

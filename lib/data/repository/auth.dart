@@ -66,4 +66,14 @@ class AuthRepositoryImpl implements AuthRepository {
       expiresIn: responses[AppConstants.TOKEN_EXPIRESIN],
     );
   }
+  
+  @override
+  Future<void> logout() async {
+    await storage.deleteAll({
+      AppConstants.TOKEN,
+      AppConstants.TOKEN_EXPIRESIN,
+      AppConstants.TOKEN_REFRESH,
+      AppConstants.USER_ID,
+    });
+  }
 }

@@ -7,12 +7,14 @@ class ButtonAction extends StatefulWidget {
     required this.type,
     this.onPressed,
     this.loading,
+    this.customBackgroundColor,
   }) : super(key: key);
 
   final String text;
   final VoidCallback? onPressed;
   final bool? loading;
   final ButtonActionType type;
+  final Color? customBackgroundColor;
 
   @override
   State<ButtonAction> createState() => _ButtonActionState();
@@ -20,6 +22,16 @@ class ButtonAction extends StatefulWidget {
 
 class _ButtonActionState extends State<ButtonAction> {
   bool hiddenText = true;
+
+  Color _getColor() {
+    if (widget.customBackgroundColor != null) {
+      return widget.customBackgroundColor!;
+    }
+
+    return widget.onPressed == null
+        ? const Color.fromARGB(100, 23, 97, 91)
+        : const Color.fromARGB(255, 23, 97, 91);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,9 +41,7 @@ class _ButtonActionState extends State<ButtonAction> {
           child: Container(
             width: double.maxFinite,
             decoration: BoxDecoration(
-              color: widget.onPressed == null
-                  ? const Color.fromARGB(100, 23, 97, 91)
-                  : const Color.fromARGB(255, 23, 97, 91),
+              color: _getColor(),
               borderRadius: const BorderRadius.all(
                 Radius.circular(8),
               ),

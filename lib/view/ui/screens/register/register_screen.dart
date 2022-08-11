@@ -1,4 +1,5 @@
 import 'package:cfit/domain/models/user.dart';
+import 'package:cfit/util/extentions.dart';
 import 'package:cfit/view/common/button.dart';
 import 'package:cfit/view/common/input_text.dart';
 import 'package:flutter/material.dart';
@@ -389,11 +390,5 @@ class RegisterErrorAlreadyExistsModal extends StatelessWidget {
         )
       ],
     );
-  }
-}
-
-extension on String {
-  String upperOnlyFirstLetter() {
-    return "${this[0].toUpperCase()}${substring(1).toLowerCase()}";
   }
 }

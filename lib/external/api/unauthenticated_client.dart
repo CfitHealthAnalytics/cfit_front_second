@@ -17,6 +17,7 @@ class UnauthenticatedClient implements ApiClient {
   @override
   Future<ApiResponse> get({
     required String path,
+    int retries = 0,
   }) async {
     final response = await http.get(Uri(
       host: baseUri,
@@ -30,6 +31,7 @@ class UnauthenticatedClient implements ApiClient {
     required String path,
     Map<String, dynamic>? body,
     File? file,
+    int retries = 3,
   }) async {
     assert(
         (body != null && file == null) || (body != null && file == null),

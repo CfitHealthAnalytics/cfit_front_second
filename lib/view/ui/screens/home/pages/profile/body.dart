@@ -1,5 +1,6 @@
 import 'package:cfit/domain/models/user.dart';
 import 'package:cfit/view/common/list_tile.dart';
+import 'package:cfit/view/ui/screens/home/pages/profile/navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:qr_flutter/qr_flutter.dart';
@@ -9,9 +10,12 @@ class BodyProfile extends StatelessWidget {
     Key? key,
     required this.user,
     required this.qrData,
+    required this.navigation,
   }) : super(key: key);
   final User user;
   final String qrData;
+  final ProfileNavigation navigation;
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -53,7 +57,7 @@ class BodyProfile extends StatelessWidget {
                   color: Colors.white,
                 ),
               ),
-              onPressed: () {},
+              onPressed: () => navigation.toMyDatas(user),
             ),
           ),
           Padding(

@@ -8,4 +8,6 @@ abstract class AuthRepository {
   Future<RegisterBodyResponse> register(RegisterBodyRequest register);
 
   Future<Credentials> getStoredCredentials();
+
+  Future<void> logout();
 }

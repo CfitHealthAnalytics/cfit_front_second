@@ -13,6 +13,7 @@ class Routes {
   static const cadastro_eventos = '/eventos/cadastro';
   static const eventos_search = '/eventos/pesquisa';
   static const perfil = '/perfil';
+  static const my_datas = '/perfil/meus_dados';
   static const mymeasures = '/mymeasures';
   static const qrcode = '/qrcode';
 

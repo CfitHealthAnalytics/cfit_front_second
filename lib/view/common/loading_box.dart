@@ -5,9 +5,11 @@ class LoadingBox extends StatelessWidget {
   const LoadingBox({
     Key? key,
     required this.height,
+    this.customWidth,
   }) : super(key: key);
 
   final double height;
+  final double? customWidth;
   @override
   Widget build(BuildContext context) {
     return Shimmer(
@@ -21,7 +23,7 @@ class LoadingBox extends StatelessWidget {
       ),
       child: Container(
         height: height,
-        width: MediaQuery.of(context).size.width * 0.75,
+        width: customWidth ?? MediaQuery.of(context).size.width * 0.75,
         color: Colors.grey,
       ),
     );
