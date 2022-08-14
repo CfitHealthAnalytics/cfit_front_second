@@ -15,6 +15,7 @@ class BodyProfile extends StatelessWidget {
   final User user;
   final String qrData;
   final ProfileNavigation navigation;
+  
 
   @override
   Widget build(BuildContext context) {

@@ -22,16 +22,21 @@ class AuthenticatedClient implements ApiClient {
   Future<ApiResponse> _get({
     required String path,
     required String token,
+    Map<String, dynamic>? query,
   }) async {
     final response = await http.get(
       Uri(
         host: baseUri,
         path: path,
+        queryParameters: query,
+        scheme: 'https',
       ),
       headers: {
         'Authorization': 'Bearer $token',
-        'accept': 'application/json',
-        'Content-Type': 'application/json'
+        'accept': 'application/json; charset=utf-8',
+        'Content-Type': 'application/json; charset=utf-8',
+        'accept-encoding': 'gzip, deflate, br',
+        'accept-language': 'pt,en;q=0.9',
       },
     );
     return factory.fromHttpResponse(response);
@@ -42,20 +47,39 @@ class AuthenticatedClient implements ApiClient {
     required String token,
     Map<String, dynamic>? body,
     File? file,
+    Map<String, dynamic>? query,
+    bool? isBodyEmpty,
   }) async {
     late final http.Response response;
-    if (body != null) {
+    if (isBodyEmpty == true) {
       response = await http.post(
         Uri(
           host: baseUri,
           path: path,
           scheme: 'https',
+          queryParameters: query,
+        ),
+        headers: {
+          'Authorization': 'Bearer $token',
+          'accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+      );
+    } else if (body != null) {
+      response = await http.post(
+        Uri(
+          host: baseUri,
+          path: path,
+          scheme: 'https',
+          queryParameters: query,
         ),
         body: jsonEncode(body),
         headers: {
           'Authorization': 'Bearer $token',
           'accept': 'application/json',
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json; charset=utf-8',
+          'accept-encoding': 'gzip, deflate, br',
+          'accept-language': 'pt,en;q=0.9',
         },
       );
     } else {
@@ -106,19 +130,39 @@ class AuthenticatedClient implements ApiClient {
   @override
   Future<ApiResponse> get({
     required String path,
-    int retries = 0,
+    int retries = 3,
+    Map<String, dynamic>? query,
   }) async {
     final token = await storage.get<String>(AppConstants.TOKEN);
+
     if (token == null) {
       throw NotLoggedUser();
     }
     try {
-      return await _get(path: path, token: token);
-    } on UnauthorizedException {
+      return await _get(
+        path: path,
+        token: token,
+        query: query,
+      );
+    } on UnauthorizedException catch (_) {
+      if (retries == 0) {
+        rethrow;
+      }
       await refreshToken();
-      return await _get(path: path, token: token);
-    } catch (e) {
-      rethrow;
+      return await get(
+        path: path,
+        retries: retries - 1,
+        query: query,
+      );
+    } catch (_) {
+      if (retries == 0) {
+        rethrow;
+      }
+      return await get(
+        path: path,
+        retries: retries - 1,
+        query: query,
+      );
     }
   }
 
@@ -128,6 +172,8 @@ class AuthenticatedClient implements ApiClient {
     Map<String, dynamic>? body,
     File? file,
     int retries = 3,
+    Map<String, dynamic>? query,
+    bool? isBodyEmpty,
   }) async {
     final token = await storage.get<String>(AppConstants.TOKEN);
     if (token == null) {
@@ -139,6 +185,8 @@ class AuthenticatedClient implements ApiClient {
         token: token,
         body: body,
         file: file,
+        query: query,
+        isBodyEmpty: isBodyEmpty,
       );
     } on UnauthorizedException catch (_) {
       if (retries == 0) {
@@ -149,7 +197,9 @@ class AuthenticatedClient implements ApiClient {
         path: path,
         body: body,
         file: file,
+        query: query,
         retries: retries - 1,
+        isBodyEmpty: isBodyEmpty,
       );
     } catch (_) {
       if (retries == 0) {
@@ -160,7 +210,9 @@ class AuthenticatedClient implements ApiClient {
         path: path,
         body: body,
         file: file,
+        query: query,
         retries: retries - 1,
+        isBodyEmpty: isBodyEmpty,
       );
     }
   }

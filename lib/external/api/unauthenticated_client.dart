@@ -18,11 +18,15 @@ class UnauthenticatedClient implements ApiClient {
   Future<ApiResponse> get({
     required String path,
     int retries = 0,
+    Map<String, dynamic>? query,
   }) async {
-    final response = await http.get(Uri(
-      host: baseUri,
-      path: path,
-    ));
+    final response = await http.get(
+      Uri(
+        host: baseUri,
+        path: path,
+        queryParameters: query,
+      ),
+    );
     return factory.fromHttpResponse(response);
   }
 
@@ -32,19 +36,13 @@ class UnauthenticatedClient implements ApiClient {
     Map<String, dynamic>? body,
     File? file,
     int retries = 3,
+    Map<String, dynamic>? query,
+    bool? isBodyEmpty,
   }) async {
-    assert(
-        (body != null && file == null) || (body != null && file == null),
-        'Apenas um dos dois atributos podem ser envidados '
-        'mas os dois não podem ser nulos');
     late final http.Response response;
     if (body != null) {
       response = await http.post(
-        Uri(
-          host: baseUri,
-          path: path,
-          scheme: 'https',
-        ),
+        Uri(host: baseUri, path: path, scheme: 'https', queryParameters: query),
         body: jsonEncode(body),
         headers: {
           'accept': 'application/json',

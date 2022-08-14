@@ -1,11 +1,15 @@
 import 'package:cfit/data/models/auth.dart';
+import 'package:cfit/data/models/events.dart';
 import 'package:cfit/data/models/user.dart';
 import 'package:cfit/data/repository/auth.dart';
+import 'package:cfit/data/repository/events.dart';
 import 'package:cfit/data/repository/user.dart';
+import 'package:cfit/domain/use_cases/events_in_city_use_case.dart';
 import 'package:cfit/domain/use_cases/feed_use_case.dart';
 import 'package:cfit/domain/use_cases/initialization_use_case.dart';
 import 'package:cfit/domain/use_cases/logout_use_case.dart';
 import 'package:cfit/domain/use_cases/register_use_case.dart';
+import 'package:cfit/domain/use_cases/schedule_event_in_city_use_case.dart';
 import 'package:cfit/external/api/authenticated_client.dart';
 import 'package:cfit/external/api/unauthenticated_client.dart';
 import 'package:cfit/external/factory/api.dart';
@@ -52,6 +56,13 @@ extension DependencyInjection on BuildContext {
     );
   }
 
+  EventsRepository eventsRepository() {
+    return EventsRepositoryImpl(
+      authenticatedClient(),
+      storage(),
+    );
+  }
+
   InitializationUseCase initializationUseCase() {
     return InitializationUseCase(
       authRepository: authRepository(),
@@ -79,6 +90,18 @@ extension DependencyInjection on BuildContext {
   LogoutUseCase logoutUseCase() {
     return LogoutUseCase(
       authRepository(),
+    );
+  }
+  
+  EventsInCityUseCase eventsInCityUseCase() {
+    return EventsInCityUseCase(
+      eventsRepository: eventsRepository(),
+    );
+  }
+
+  ScheduleEventInCityUseCase scheduleEventsInCityUseCase() {
+    return ScheduleEventInCityUseCase(
+      eventsRepository: eventsRepository(),
     );
   }
 }

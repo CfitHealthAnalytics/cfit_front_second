@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:cfit/util/routes.dart';
+import 'package:cfit/view/ui/screens/event_detail/event_details_arguments.dart';
+import 'package:cfit/view/ui/screens/event_detail/event_details_route.dart';
 import 'package:cfit/view/ui/screens/home/home_route.dart';
 import 'package:cfit/view/ui/screens/login/login_route.dart';
 import 'package:cfit/view/ui/screens/my_datas/my_datas_arguments.dart';
@@ -73,6 +75,14 @@ Future<void> main(List<String> arguments) async {
               builder: (_) => MyDatasRoute(
                     user: myDatasArguments.user,
                   ));
+        case Routes.event_details:
+          final eventDetailsArguments =
+              EventDetailsArguments.fromJson(arguments as String);
+          return MaterialPageRoute(
+            builder: (_) => EventDetailsRoute(
+              eventCity: eventDetailsArguments.eventCity,
+            ),
+          );
         default:
       }
       return null;

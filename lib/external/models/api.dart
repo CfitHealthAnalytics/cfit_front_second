@@ -6,6 +6,7 @@ abstract class ApiClient {
   Future<ApiResponse> get({
     required String path,
     int retries = 3,
+    Map<String, dynamic>? query,
   });
 
   Future<ApiResponse> post({
@@ -13,6 +14,8 @@ abstract class ApiClient {
     Map<String, dynamic> body,
     File file,
     int retries = 3,
+    Map<String, dynamic>? query,
+    bool? isBodyEmpty,
   });
 }
 
@@ -47,7 +50,6 @@ class BadRequestException extends ApiException {
           error,
         );
 }
-
 
 class UnauthorizedException extends ApiException {
   const UnauthorizedException(Http.Response error)

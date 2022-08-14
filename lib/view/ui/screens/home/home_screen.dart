@@ -1,11 +1,15 @@
+import 'package:cfit/domain/models/events_city.dart';
 import 'package:cfit/domain/models/feed.dart';
 import 'package:cfit/domain/models/user.dart';
 import 'package:cfit/view/common/loading_box.dart';
+import 'package:cfit/view/ui/screens/home/pages/gym/app_bar.dart';
+import 'package:cfit/view/ui/screens/home/pages/gym/navigation.dart';
 import 'package:cfit/view/ui/screens/home/pages/profile/body.dart';
 import 'package:flutter/material.dart';
 
 import 'home_controller.dart';
 import 'pages/dashboard/app_bar.dart';
+import 'pages/gym/body.dart';
 import 'pages/profile/app_bar.dart';
 import 'pages/profile/navigation.dart';
 
@@ -64,6 +68,7 @@ class HomeScreen extends StatelessWidget {
         return HomeLoaded(
           user: user,
           qrData: controller.qrData,
+          getCityEvents: controller.getEventsCity,
         );
       },
     );
@@ -75,10 +80,15 @@ class HomeLoaded extends StatefulWidget {
     Key? key,
     required this.user,
     required this.qrData,
+    required this.getCityEvents,
   }) : super(key: key);
 
   final User user;
   final String qrData;
+  final Future<List<EventCity>> Function({
+    DateTime? endTime,
+    required DateTime startTime,
+  }) getCityEvents;
 
   @override
   State<HomeLoaded> createState() => _HomeLoadedState();
@@ -101,6 +111,22 @@ class _HomeLoadedState extends State<HomeLoaded> {
           ),
         );
       case 1:
+        return HomeLoadedContent(
+          body: BodyGym(
+            getEventsCity: widget.getCityEvents,
+            navigation: GymNavigation.fromMaterialNavigator(
+              Navigator.of(context),
+            ),
+          ),
+          appBar: PreferredSize(
+            child: const AppBarGym(),
+            preferredSize: Size(
+              MediaQuery.of(context).size.width,
+              60,
+            ),
+          ),
+        );
+      case 2:
         return HomeLoadedContent(
           body: BodyProfile(
             user: widget.user,
@@ -142,6 +168,10 @@ class _HomeLoadedState extends State<HomeLoaded> {
           BottomNavigationBarItem(
             icon: Icon(Icons.home_filled),
             label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.fitness_center),
+            label: 'Academia Recife',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),

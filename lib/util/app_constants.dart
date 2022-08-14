@@ -6,7 +6,7 @@ class AppConstants {
 
   //static const String BASE_URL = 'http://localhost/teste/stackfood';
   //static const String BASE_URL = 'https://ecode.codephix.com';
-  static const String BASE_URL = 'cfit-api.herokuapp.com';
+  static const String BASE_URL = 'api.vivendocfit.com.br';
 
   static const String AUTHENTICATION = '/authentication/';
 
@@ -46,6 +46,8 @@ class AppConstants {
 
   /// City Events
 
+  static const String GET_HALL_EVENTS = '/city_hall_events';
+  static const String CONFIRMATION_HALL_EVENTS = '/comfirmation_in_events/';
   static const String GET_CITY_EVENTS = '/get_city_events/';
   static const String GET_PUBLIC_EVENTS = '/get_public_events/';
   static const String GET_MODALIDADES_EVENTS = '/modalidades';

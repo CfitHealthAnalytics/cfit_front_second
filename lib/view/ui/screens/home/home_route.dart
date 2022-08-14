@@ -13,6 +13,7 @@ class HomeRoute extends StatelessWidget {
     return HomeScreen(
       controller: HomeController(
         feedUseCase: context.feedUseCase(),
+        eventsInCityUseCase: context.eventsInCityUseCase(),
         navigation: HomeNavigation.fromMaterialNavigation(
           Navigator.of(context),
         ),

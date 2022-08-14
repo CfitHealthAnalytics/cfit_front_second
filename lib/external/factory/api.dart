@@ -6,8 +6,9 @@ import 'package:http/http.dart' as http;
 class ApiResponseFactory {
   ApiResponse fromHttpResponse(http.Response response) {
     if (response.statusCode >= 200 && response.statusCode < 300) {
+      final data = jsonDecode(utf8.decode(response.bodyBytes));
       return ApiResponse(
-        data: jsonDecode(response.body),
+        data: data is List ? {'responses': data} : data,
         status: response.statusCode,
       );
     }

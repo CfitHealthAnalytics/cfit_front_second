@@ -1,3 +1,4 @@
+import 'package:cfit/util/bottom_sheet.dart';
 import 'package:cfit/view/common/button.dart';
 import 'package:cfit/view/common/input_text.dart';
 import 'package:cfit/view/ui/screens/login/login_cubit.dart';
@@ -27,7 +28,10 @@ class LoginScreen extends StatelessWidget {
                 previous.hasError != current.hasError,
             listener: (context, state) {
               if (state.hasError) {
-                presentShowError(context);
+                presentBottomSheet(
+                  context: context,
+                  builder: (_) => const LoginErrorModal(),
+                );
               }
             },
             builder: (context, state) {
@@ -107,23 +111,6 @@ class LoginScreen extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-
-  void presentShowError(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      isDismissible: true,
-      shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(20))),
-      constraints: BoxConstraints.loose(
-        Size(
-          double.infinity,
-          MediaQuery.of(context).size.height * 0.35,
-        ),
-      ),
-      builder: (context) => const LoginErrorModal(),
-      elevation: 5,
     );
   }
 }
