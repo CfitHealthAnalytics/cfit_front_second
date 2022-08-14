@@ -232,7 +232,7 @@ class CalendarDetails extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                '${eventCity.startTime.getCustomHour()} h',
+                eventCity.startTime.getCustomHour(),
                 style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
@@ -379,7 +379,7 @@ class ScheduleConfirmation extends StatelessWidget {
         const Padding(
           padding: EdgeInsets.symmetric(horizontal: 16.0),
           child: Text(
-            '''Seu agendamento foi feito, não esqueça de adicionar na sua agenda para não esquecer.''',
+            '''Não esqueça de adicionar na sua agenda para não esquecer.''',
             style: TextStyle(
               fontSize: 20,
             ),

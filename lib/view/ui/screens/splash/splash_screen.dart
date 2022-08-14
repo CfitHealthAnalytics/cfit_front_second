@@ -22,8 +22,8 @@ class SplashScreen extends StatelessWidget {
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 25),
               child: Image.asset(
-                'assets/images/logo-final-03.png',
-                scale: 8,
+                'assets/images/vamoo_white.png',
+                height: 200,
               ),
             ),
           );

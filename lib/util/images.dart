@@ -1,7 +1,7 @@
 class Images {
   static const String logo = 'assets/images/logo.png';
-  static const String logo_name = 'assets/images/logo-final-03.png';
-  static const String logo_nameLogin = 'assets/images/logo-final-03.png';
+  static const String logo_name = 'assets/images/vamoo_white.png';
+  static const String logo_nameLogin = 'assets/images/vamoo_white.png';
   static const String placeholder = 'assets/images/placeholder.jpg';
   static const String avatar = 'assets/images/avatar.png';
   static const String location_ap = 'assets/images/location_icon.png';

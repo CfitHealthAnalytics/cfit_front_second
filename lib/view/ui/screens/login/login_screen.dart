@@ -40,8 +40,8 @@ class LoginScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Image.asset(
-                    'assets/images/logo-final-03.png',
-                    scale: 6,
+                    'assets/images/vamoo_white.png',
+                    height: 200,
                   ),
                   const SizedBox(height: 32),
                   const Padding(

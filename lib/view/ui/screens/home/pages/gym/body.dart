@@ -107,9 +107,9 @@ class ResultsEvents extends StatelessWidget {
                 child: Text(
                   'Não temos eventos para este dia',
                   style: TextStyle(
-                    fontSize: 22,
+                    fontSize: 20,
                     color: Colors.black,
-                    fontWeight: FontWeight.w600,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
               ),
@@ -228,7 +228,7 @@ class ListEventCity extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              '${event.startTime.getCustomHour()} h',
+                              event.startTime.getCustomHour(),
                               style: const TextStyle(
                                 fontSize: 18,
                                 color: Colors.black,
