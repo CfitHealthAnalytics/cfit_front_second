@@ -90,8 +90,8 @@ class UserBodyResponse {
     return UserBodyResponse(
       id: map['id'] ?? '',
       name: map['name'] ?? '',
-      dateBirth: map['data_nascimento'] ?? '',
-      gender: map['genero'] ?? '',
+      dateBirth: map['data_nascimento'] ?? map['born_date'] ?? '',
+      gender: map['genero'] ?? map['gender'] ?? '',
       email: map['email'] ?? '',
     );
   }
