@@ -200,6 +200,9 @@ class ListEventCity extends StatelessWidget {
                 title: Container(
                   child: Text(
                     event.type.upperOnlyFirstLetter(),
+                    style: const TextStyle(
+                      fontSize: 14,
+                    ),
                   ),
                 ),
                 shape: RoundedRectangleBorder(

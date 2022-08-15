@@ -35,7 +35,6 @@ class AuthenticatedClient implements ApiClient {
         'Authorization': 'Bearer $token',
         'accept': 'application/json; charset=utf-8',
         'Content-Type': 'application/json; charset=utf-8',
-        'accept-encoding': 'gzip, deflate, br',
         'accept-language': 'pt,en;q=0.9',
       },
     );
@@ -78,7 +77,6 @@ class AuthenticatedClient implements ApiClient {
           'Authorization': 'Bearer $token',
           'accept': 'application/json',
           'Content-Type': 'application/json; charset=utf-8',
-          'accept-encoding': 'gzip, deflate, br',
           'accept-language': 'pt,en;q=0.9',
         },
       );
@@ -134,8 +132,9 @@ class AuthenticatedClient implements ApiClient {
     Map<String, dynamic>? query,
   }) async {
     final token = await storage.get<String>(AppConstants.TOKEN);
+    final refreshToken = await storage.get(AppConstants.TOKEN_REFRESH);
 
-    if (token == null) {
+    if (token == null || refreshToken.toString() == "3600") {
       throw NotLoggedUser();
     }
     try {

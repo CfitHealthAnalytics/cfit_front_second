@@ -18,10 +18,11 @@ class RegisterBodyRequest {
   Map<String, dynamic> toMap() {
     return {
       'email': email,
-      'nome': name,
+      'name': name,
       'password': password,
-      'data_nascimento': dateBirth,
-      'genero': genre,
+      'born_date': dateBirth,
+      'gender': genre,
+      'deficiency': 'False',
     };
   }
 

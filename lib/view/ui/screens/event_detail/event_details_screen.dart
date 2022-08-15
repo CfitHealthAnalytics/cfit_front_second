@@ -379,7 +379,7 @@ class ScheduleConfirmation extends StatelessWidget {
         const Padding(
           padding: EdgeInsets.symmetric(horizontal: 16.0),
           child: Text(
-            '''Não esqueça de adicionar na sua agenda para não esquecer.''',
+            '''Não se esqueça de adicionar na sua agenda.''',
             style: TextStyle(
               fontSize: 20,
             ),

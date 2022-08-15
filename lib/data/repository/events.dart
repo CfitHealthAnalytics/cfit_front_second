@@ -33,7 +33,7 @@ class EventsRepositoryImpl implements EventsRepository {
     final userId = await storage.get(AppConstants.USER_ID);
 
     await client.post(
-      path: AppConstants.CONFIRMATION_HALL_EVENTS,
+      path: AppConstants.CHECKIN_CITY_EVENTS,
       query: {
         "id_event": eventId,
         "user": userId,
