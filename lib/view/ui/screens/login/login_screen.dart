@@ -18,96 +18,101 @@ class LoginScreen extends StatelessWidget {
     final cubit = context.read<LoginCubit>();
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 40),
-        child: Center(
-          child: BlocConsumer<LoginCubit, LoginState>(
-            buildWhen: (previous, current) =>
-                previous.hasError != current.hasError,
-            listenWhen: (previous, current) =>
-                previous.hasError != current.hasError,
-            listener: (context, state) {
-              if (state.hasError) {
-                presentBottomSheet(
-                  context: context,
-                  builder: (_) => const LoginErrorModal(),
-                );
-              }
-            },
-            builder: (context, state) {
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Image.asset(
-                    'assets/images/vamoo_white.png',
-                    height: 200,
-                  ),
-                  const SizedBox(height: 32),
-                  const Padding(
-                    padding: EdgeInsets.only(bottom: 16.0),
-                    child: Text(
-                      'Entrar',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 24,
-                        fontWeight: FontWeight.w600,
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 40),
+          child: Center(
+            child: BlocConsumer<LoginCubit, LoginState>(
+              buildWhen: (previous, current) =>
+                  previous.hasError != current.hasError,
+              listenWhen: (previous, current) =>
+                  previous.hasError != current.hasError,
+              listener: (context, state) {
+                if (state.hasError) {
+                  presentBottomSheet(
+                    context: context,
+                    builder: (_) => const LoginErrorModal(),
+                  );
+                }
+              },
+              builder: (context, state) {
+                return SingleChildScrollView(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Image.asset(
+                        'assets/images/vamoo_white.png',
+                        height: 200,
                       ),
-                    ),
+                      const SizedBox(height: 32),
+                      const Padding(
+                        padding: EdgeInsets.only(bottom: 16.0),
+                        child: Text(
+                          'Entrar',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 24,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8),
+                        child: InputText(
+                          hintText: 'Email',
+                          onChanged: cubit.onChangeEmail,
+                          type: InputTextType.email,
+                          formKey: emailFormKey,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8),
+                        child: InputText(
+                          hintText: 'Senha',
+                          onChanged: cubit.onChangePassword,
+                          type: InputTextType.password,
+                        ),
+                      ),
+                      const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 8),
+                          child: ButtonAction(
+                            text: 'Esqueceu sua senha ?',
+                            type: ButtonActionType.text,
+                          )),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 4),
+                        child: BlocBuilder<LoginCubit, LoginState>(
+                          builder: (context, state) {
+                            return ButtonAction(
+                              text: 'Entrar',
+                              type: ButtonActionType.primary,
+                              onPressed: state.isEnabled
+                                  ? () {
+                                      if (emailFormKey.currentState!
+                                          .validate()) {
+                                        cubit.authentication();
+                                      }
+                                    }
+                                  : null,
+                              loading: state.loadingRequest,
+                            );
+                          },
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 4),
+                        child: ButtonAction(
+                          text: 'Cadastre-se',
+                          type: ButtonActionType.text,
+                          onPressed: cubit.register,
+                        ),
+                      ),
+                    ],
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8),
-                    child: InputText(
-                      hintText: 'Email',
-                      onChanged: cubit.onChangeEmail,
-                      type: InputTextType.email,
-                      formKey: emailFormKey,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8),
-                    child: InputText(
-                      hintText: 'Senha',
-                      onChanged: cubit.onChangePassword,
-                      type: InputTextType.password,
-                    ),
-                  ),
-                  const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 8),
-                      child: ButtonAction(
-                        text: 'Esqueceu sua senha ?',
-                        type: ButtonActionType.text,
-                      )),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 4),
-                    child: BlocBuilder<LoginCubit, LoginState>(
-                      builder: (context, state) {
-                        return ButtonAction(
-                          text: 'Entrar',
-                          type: ButtonActionType.primary,
-                          onPressed: state.isEnabled
-                              ? () {
-                                  if (emailFormKey.currentState!.validate()) {
-                                    cubit.authentication();
-                                  }
-                                }
-                              : null,
-                          loading: state.loadingRequest,
-                        );
-                      },
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 4),
-                    child: ButtonAction(
-                      text: 'Cadastre-se',
-                      type: ButtonActionType.text,
-                      onPressed: cubit.register,
-                    ),
-                  ),
-                ],
-              );
-            },
+                );
+              },
+            ),
           ),
         ),
       ),
