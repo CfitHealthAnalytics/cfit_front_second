@@ -33,6 +33,7 @@ Route<dynamic> onGenerateRoutes(RouteSettings settings) {
       return EventDetailsRoute(
         eventCity: eventDetailsArguments.eventCity,
         alreadyScheduled: eventDetailsArguments.alreadyConfirmed,
+        user: eventDetailsArguments.user,
       ).buildRoute();
     case Routes.eventos_confirmations:
       final myEventArguments = MyEventArguments.fromJson(arguments as String);

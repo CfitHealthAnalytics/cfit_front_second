@@ -1,4 +1,5 @@
 import 'package:cfit/domain/models/events_city.dart';
+import 'package:cfit/domain/models/user.dart';
 import 'package:cfit/util/bottom_sheet.dart';
 import 'package:cfit/util/dates.dart';
 import 'package:cfit/util/extentions.dart';
@@ -20,9 +21,11 @@ class EventDetailsScreen extends StatelessWidget {
   const EventDetailsScreen({
     Key? key,
     required this.eventCity,
+    required this.user,
   }) : super(key: key);
 
   final EventCity eventCity;
+  final User user;
 
   @override
   Widget build(BuildContext context) {
@@ -68,50 +71,73 @@ class EventDetailsScreen extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar: SizedBox(
-        height: 120,
-        width: MediaQuery.of(context).size.width,
-        child: Padding(
-          padding: const EdgeInsets.only(
-            left: 8.0,
-            right: 8.0,
-            bottom: 45,
-          ),
-          child: BlocConsumer<EventDetailsCubit, EventDetailsState>(
-            listener: (context, state) {
-              if (state.status == EventDetailsStatus.failed) {
-                presentBottomSheet(
-                  context: context,
-                  builder: (_) => ScheduleErrorModal(
-                    isUnscheduled: cubit.alreadyScheduled,
-                  ),
-                );
-              }
-              if (state.status == EventDetailsStatus.succeeds) {
-                presentBottomSheet(
-                  context: context,
-                  builder: (_) => ScheduleConfirmation(
-                    isUnscheduled: cubit.alreadyScheduled,
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                );
-              }
-            },
-            builder: (context, state) {
-              return ButtonAction(
-                text: cubit.alreadyScheduled ? 'Desagendar' : 'Agendar',
-                type: ButtonActionType.primary,
-                onPressed: () => cubit.action(eventCity),
-                customBackgroundColor: Theme.of(context).primaryColor,
-                loading: state.loadingRequest,
-              );
-            },
-          ),
-        ),
-      ),
+      bottomNavigationBar: eventCity.usersConfirmation.contains(user.id)
+          ? Container(
+              height: 100,
+              width: MediaQuery.of(context).size.width,
+              alignment: Alignment.center,
+              padding: const EdgeInsets.only(
+                left: 16.0,
+                right: 16.0,
+                bottom: 50,
+              ),
+              decoration: const BoxDecoration(
+                  border: Border(
+                      top: BorderSide(
+                width: 1.0,
+                color: Colors.grey,
+              ))),
+              child: const Text(
+                'Sua presença já foi confirmada pelo professor',
+                style: TextStyle(
+                  color: Colors.grey,
+                ),
+              ),
+            )
+          : SizedBox(
+              height: 120,
+              width: MediaQuery.of(context).size.width,
+              child: Padding(
+                padding: const EdgeInsets.only(
+                  left: 8.0,
+                  right: 8.0,
+                  bottom: 45,
+                ),
+                child: BlocConsumer<EventDetailsCubit, EventDetailsState>(
+                  listener: (context, state) {
+                    if (state.status == EventDetailsStatus.failed) {
+                      presentBottomSheet(
+                        context: context,
+                        builder: (_) => ScheduleErrorModal(
+                          isUnscheduled: cubit.alreadyScheduled,
+                        ),
+                      );
+                    }
+                    if (state.status == EventDetailsStatus.succeeds) {
+                      presentBottomSheet(
+                        context: context,
+                        builder: (_) => ScheduleConfirmation(
+                          isUnscheduled: cubit.alreadyScheduled,
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      );
+                    }
+                  },
+                  builder: (context, state) {
+                    return ButtonAction(
+                      text: cubit.alreadyScheduled ? 'Desagendar' : 'Agendar',
+                      type: ButtonActionType.primary,
+                      onPressed: () => cubit.action(eventCity),
+                      customBackgroundColor: Theme.of(context).primaryColor,
+                      loading: state.loadingRequest,
+                    );
+                  },
+                ),
+              ),
+            ),
     );
   }
 }
@@ -351,11 +377,9 @@ class ScheduleErrorModal extends StatelessWidget {
 }
 
 class ScheduleConfirmation extends StatelessWidget {
-  const ScheduleConfirmation({
-    Key? key,
-    required this.onPressed,
-    required this.isUnscheduled
-  }) : super(key: key);
+  const ScheduleConfirmation(
+      {Key? key, required this.onPressed, required this.isUnscheduled})
+      : super(key: key);
   final VoidCallback onPressed;
   final bool isUnscheduled;
   @override

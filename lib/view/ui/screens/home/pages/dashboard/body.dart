@@ -158,6 +158,7 @@ class _BodyDashboardState extends State<BodyDashboard> {
                   } else {
                     widget.navigation.toEventDetail(
                       event,
+                      widget.user,
                       alreadyConfirmed: event.usersCheckIn
                           .where((user) => user.id == widget.user.id)
                           .isNotEmpty,

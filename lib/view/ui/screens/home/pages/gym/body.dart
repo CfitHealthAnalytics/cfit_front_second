@@ -91,6 +91,7 @@ class _BodyGymState extends State<BodyGym> {
               } else {
                 widget.navigation.toEventDetail(
                   event,
+                  widget.user,
                   alreadyConfirmed: event.usersCheckIn
                       .where((user) => user.id == widget.user.id)
                       .isNotEmpty,

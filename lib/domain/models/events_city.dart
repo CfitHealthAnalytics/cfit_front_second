@@ -44,7 +44,7 @@ class EventCity {
       'street': street,
       'neighborhood': neighborhood,
       'number': number,
-      'startTime': startTime.millisecondsSinceEpoch,
+      'startTime': startTime.toIso8601String(),
       'type': type,
       'countUsers': countUsers,
       'usersCheckIn': usersCheckIn.map((user) => user.toMap()).toList(),
@@ -64,7 +64,7 @@ class EventCity {
       street: map['street'] ?? '',
       neighborhood: map['neighborhood'] ?? '',
       number: map['number'] ?? '',
-      startTime: DateTime.fromMillisecondsSinceEpoch(map['startTime']),
+      startTime: DateTime.parse(map['startTime']),
       type: map['type'] ?? '',
       countUsers: map['countUsers']?.toInt() ?? 0,
       usersCheckIn: List<User>.from(
