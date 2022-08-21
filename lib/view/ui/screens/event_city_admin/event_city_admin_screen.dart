@@ -1,14 +1,16 @@
 import 'package:cfit/domain/models/events_city.dart';
+import 'package:cfit/domain/models/user.dart';
 import 'package:cfit/util/bottom_sheet.dart';
 import 'package:cfit/util/dates.dart';
 import 'package:cfit/util/extentions.dart';
 import 'package:cfit/view/common/button.dart';
+import 'package:cfit/view/common/padding.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
-import 'event_details_cubit.dart';
-import 'event_details_state.dart';
+import 'event_city_admin_cubit.dart';
+import 'event_city_admin_state.dart';
 
 final dateBirthMask = MaskTextInputFormatter(
   mask: '##/##/####',
@@ -16,8 +18,8 @@ final dateBirthMask = MaskTextInputFormatter(
   type: MaskAutoCompletionType.lazy,
 );
 
-class EventDetailsScreen extends StatelessWidget {
-  const EventDetailsScreen({
+class EventCityAdminScreen extends StatelessWidget {
+  const EventCityAdminScreen({
     Key? key,
     required this.eventCity,
   }) : super(key: key);
@@ -26,7 +28,7 @@ class EventDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final cubit = context.read<EventDetailsCubit>();
+    final cubit = context.read<EventCityAdminCubit>();
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -53,20 +55,18 @@ class EventDetailsScreen extends StatelessWidget {
           onPressed: cubit.onBack,
         ),
         title: const Text(
-          'Participar',
+          'Administrador',
           style: TextStyle(
             fontWeight: FontWeight.w500,
           ),
         ),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            CalendarDetails(eventCity: eventCity),
-            const Divider(),
-            Details(eventCity: eventCity)
-          ],
-        ),
+      body: Column(
+        children: [
+          CalendarDetails(eventCity: eventCity),
+          const Divider(),
+          ListUserCheckIn(usersCheckIn: eventCity.usersCheckIn)
+        ],
       ),
       bottomNavigationBar: SizedBox(
         height: 120,
@@ -77,21 +77,20 @@ class EventDetailsScreen extends StatelessWidget {
             right: 8.0,
             bottom: 45,
           ),
-          child: BlocConsumer<EventDetailsCubit, EventDetailsState>(
+          child: BlocConsumer<EventCityAdminCubit, EventCityAdminState>(
+            listenWhen: (oldState, newState) =>
+                oldState.status != newState.status,
             listener: (context, state) {
-              if (state.status == EventDetailsStatus.failed) {
+              if (state.status == EventCityAdminStatus.failed) {
                 presentBottomSheet(
                   context: context,
-                  builder: (_) => ScheduleErrorModal(
-                    isUnscheduled: cubit.alreadyScheduled,
-                  ),
+                  builder: (_) => const ConfirmationErrorModal(),
                 );
               }
-              if (state.status == EventDetailsStatus.succeeds) {
+              if (state.status == EventCityAdminStatus.succeeds) {
                 presentBottomSheet(
                   context: context,
-                  builder: (_) => ScheduleConfirmation(
-                    isUnscheduled: cubit.alreadyScheduled,
+                  builder: (_) => ConfirmationSucceeds(
                     onPressed: () {
                       Navigator.of(context).pop();
                       Navigator.of(context).pop();
@@ -102,9 +101,11 @@ class EventDetailsScreen extends StatelessWidget {
             },
             builder: (context, state) {
               return ButtonAction(
-                text: cubit.alreadyScheduled ? 'Desagendar' : 'Agendar',
+                text: 'Compareceu',
                 type: ButtonActionType.primary,
-                onPressed: () => cubit.action(eventCity),
+                onPressed: state.listSelected.isNotEmpty
+                    ? () => cubit.action(eventCity)
+                    : null,
                 customBackgroundColor: Theme.of(context).primaryColor,
                 loading: state.loadingRequest,
               );
@@ -116,78 +117,67 @@ class EventDetailsScreen extends StatelessWidget {
   }
 }
 
-class Details extends StatelessWidget {
-  const Details({Key? key, required this.eventCity}) : super(key: key);
-  final EventCity eventCity;
+class ListUserCheckIn extends StatelessWidget {
+  const ListUserCheckIn({
+    Key? key,
+    required this.usersCheckIn,
+  }) : super(key: key);
+  final List<User> usersCheckIn;
   @override
   Widget build(BuildContext context) {
+    final cubit = context.read<EventCityAdminCubit>();
     return Padding(
       padding: const EdgeInsets.symmetric(
         vertical: 16.0,
-        horizontal: 16,
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            height: 125,
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage(
-                  'assets/images/AcademiaRecife.png',
-                ),
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 20,
-              vertical: 16,
-            ),
-            child: Column(
+      child: SingleChildScrollView(
+        child: BlocBuilder<EventCityAdminCubit, EventCityAdminState>(
+          builder: (context, state) {
+            return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  eventCity.type.upperOnlyFirstLetter(),
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 22,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: const [
+                    Text('Solicitações'),
+                    Text('Compareceram'),
+                  ],
+                ).withPaddingSymmetric(horizontal: 16.0),
                 const SizedBox(height: 16),
-                SizedBox(
-                  child: Text(
-                    eventCity.description,
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                const Text(
-                  'Duração',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 20,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                const Text(
-                  '1 hora',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
+                ...usersCheckIn
+                    .map(
+                      (user) => CheckboxListTile(
+                        key: Key('user-check-in-${user.id}'),
+                        secondary: CircleAvatar(
+                          backgroundColor: Theme.of(context).primaryColor,
+                          child: const Icon(
+                            Icons.person,
+                            color: Colors.white,
+                          ),
+                        ),
+                        title: Text(
+                          user.name,
+                          style: const TextStyle(
+                            fontSize: 16,
+                            color: Colors.black,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        value: state.listSelected.contains(user.id),
+                        onChanged: (newValue) {
+                          if (newValue == true) {
+                            cubit.setUserInConfirmation(user.id);
+                          } else {
+                            cubit.removeUserInConfirmation(user.id);
+                          }
+                        },
+                      ),
+                    )
+                    .toList()
               ],
-            ),
-          ),
-        ],
+            );
+          },
+        ),
       ),
     );
   }
@@ -296,12 +286,10 @@ class CalendarDetails extends StatelessWidget {
   }
 }
 
-class ScheduleErrorModal extends StatelessWidget {
-  const ScheduleErrorModal({
+class ConfirmationErrorModal extends StatelessWidget {
+  const ConfirmationErrorModal({
     Key? key,
-    required this.isUnscheduled,
   }) : super(key: key);
-  final bool isUnscheduled;
 
   @override
   Widget build(BuildContext context) {
@@ -321,26 +309,22 @@ class ScheduleErrorModal extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 24),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16.0),
           child: Text(
-            isUnscheduled
-                ? 'Falha ao tentar desagendar'
-                : 'Falha no agendamento',
-            style: const TextStyle(
+            'Falha na confirmação',
+            style: TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
             ),
           ),
         ),
         const SizedBox(height: 24),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16.0),
           child: Text(
-            isUnscheduled
-                ? '''Aconteceu algum problema ao fazer o seu desagendamento. Por favor tente novamente mais tarde.'''
-                : '''Aconteceu algum problema ao fazer o seu agendamento. Por favor tente novamente mais tarde.''',
-            style: const TextStyle(
+            '''Aconteceu algum problema ao fazer a confirmação de presença. Por favor tente novamente mais tarde.''',
+            style: TextStyle(
               fontSize: 20,
             ),
           ),
@@ -350,14 +334,12 @@ class ScheduleErrorModal extends StatelessWidget {
   }
 }
 
-class ScheduleConfirmation extends StatelessWidget {
-  const ScheduleConfirmation({
+class ConfirmationSucceeds extends StatelessWidget {
+  const ConfirmationSucceeds({
     Key? key,
     required this.onPressed,
-    required this.isUnscheduled
   }) : super(key: key);
   final VoidCallback onPressed;
-  final bool isUnscheduled;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -376,26 +358,22 @@ class ScheduleConfirmation extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 24),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16.0),
           child: Text(
-            isUnscheduled
-                ? 'Desagendamento realizado!'
-                : 'Agendamento confirmado!',
-            style: const TextStyle(
+            'Confirmação de presença realizada!',
+            style: TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
             ),
           ),
         ),
         const SizedBox(height: 24),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16.0),
           child: Text(
-            isUnscheduled
-                ? ''
-                : '''Não se esqueça de adicionar na sua agenda.''',
-            style: const TextStyle(
+            '''Muito obrigado por realizar a confirmação de presença dos seus alunos, e boa aula''',
+            style: TextStyle(
               fontSize: 20,
             ),
           ),

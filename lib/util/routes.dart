@@ -8,6 +8,8 @@ class Routes {
   static const register = '/cadastro';
   static const eventos = '/eventos';
   static const eventos_favorite = '/eventos/favoritos';
+  static const eventos_confirmations = '/evento/confirmations';
+  static const event_city_admin = '/evento/city/confirmacao';
   static const eventos_editar = '/evento/editar';
   static const event_details = '/event/details';
   static const cadastro_eventos = '/eventos/cadastro';

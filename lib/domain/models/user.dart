@@ -6,6 +6,7 @@ class User {
   final String email;
   final String dateBirth;
   final UserGender gender;
+  final bool isAdmin;
 
   User({
     required this.id,
@@ -13,6 +14,7 @@ class User {
     required this.email,
     required this.dateBirth,
     required this.gender,
+    this.isAdmin = false,
   });
 
   Map<String, dynamic> toMap() {
@@ -22,6 +24,7 @@ class User {
       'email': email,
       'dateBirth': dateBirth,
       'gender': gender.toStringRepresentation(),
+      'is_admin': isAdmin,
     };
   }
 
@@ -32,6 +35,7 @@ class User {
       email: map['email'] ?? '',
       dateBirth: map['dateBirth'] ?? '',
       gender: (map['gender'] as String).toGender(),
+      isAdmin: map['is_admin'] ?? false,
     );
   }
 

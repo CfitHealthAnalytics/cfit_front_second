@@ -10,8 +10,13 @@ class ScheduleEventInCityUseCase {
 
   Future<bool> call({
     required EventCity event,
+    bool unschedule = false,
   }) async {
-    await eventsRepository.scheduleEvent(event.id);
+    if (!unschedule) {
+      await eventsRepository.scheduleEvent(event.id);
+    } else {
+      await eventsRepository.unscheduleEvent(event.id);
+    }
 
     return true;
   }

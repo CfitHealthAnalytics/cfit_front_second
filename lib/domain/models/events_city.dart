@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:cfit/domain/models/user.dart';
+
 import 'coordinates.dart';
 
 class EventCity {
@@ -9,7 +11,7 @@ class EventCity {
   DateTime startTime;
   String type;
   int countUsers;
-  List<String> usersCheckIn;
+  List<User> usersCheckIn;
   List<String> usersConfirmation;
   String description;
   String city;
@@ -45,7 +47,7 @@ class EventCity {
       'startTime': startTime.millisecondsSinceEpoch,
       'type': type,
       'countUsers': countUsers,
-      'usersCheckIn': usersCheckIn,
+      'usersCheckIn': usersCheckIn.map((user) => user.toMap()).toList(),
       'usersConfirmation': usersConfirmation,
       'description': description,
       'city': city,
@@ -65,7 +67,11 @@ class EventCity {
       startTime: DateTime.fromMillisecondsSinceEpoch(map['startTime']),
       type: map['type'] ?? '',
       countUsers: map['countUsers']?.toInt() ?? 0,
-      usersCheckIn: List<String>.from(map['usersCheckIn']),
+      usersCheckIn: List<User>.from(
+        (map['usersCheckIn'] as List)
+            .map((user) => User.fromMap(user))
+            .toList(),
+      ),
       usersConfirmation: List<String>.from(map['usersConfirmation']),
       description: map['description'] ?? '',
       city: map['city'] ?? '',

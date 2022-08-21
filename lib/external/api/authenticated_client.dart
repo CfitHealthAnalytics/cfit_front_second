@@ -172,7 +172,7 @@ class AuthenticatedClient implements ApiClient {
     File? file,
     int retries = 3,
     Map<String, dynamic>? query,
-    bool? isBodyEmpty,
+    bool? isBodyEmpty = false,
   }) async {
     final token = await storage.get<String>(AppConstants.TOKEN);
     if (token == null) {

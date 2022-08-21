@@ -1,8 +1,9 @@
 import 'package:cfit/di/build_context.dart';
 import 'package:cfit/view/ui/screens/home/home_navigation.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'home_controller.dart';
+import 'home_cubit.dart';
 import 'home_screen.dart';
 
 class HomeRoute extends StatelessWidget {
@@ -10,14 +11,15 @@ class HomeRoute extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return HomeScreen(
-      controller: HomeController(
+    return BlocProvider(
+      create: (context) => HomeCubit(
         feedUseCase: context.feedUseCase(),
         eventsInCityUseCase: context.eventsInCityUseCase(),
         navigation: HomeNavigation.fromMaterialNavigation(
           Navigator.of(context),
         ),
       ),
+      child: const HomeScreen(),
     );
   }
 }

@@ -1,32 +1,44 @@
-import 'package:cfit/domain/models/events_city.dart';
-import 'package:cfit/domain/models/feed.dart';
-import 'package:cfit/domain/models/user.dart';
 import 'package:cfit/view/common/loading_box.dart';
+import 'package:cfit/view/ui/screens/home/home_navigation.dart';
+import 'package:cfit/view/ui/screens/home/home_state.dart';
+import 'package:cfit/view/ui/screens/home/pages/dashboard/body.dart';
 import 'package:cfit/view/ui/screens/home/pages/gym/app_bar.dart';
-import 'package:cfit/view/ui/screens/home/pages/gym/navigation.dart';
 import 'package:cfit/view/ui/screens/home/pages/profile/body.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 
-import 'home_controller.dart';
+import 'home_cubit.dart';
 import 'pages/dashboard/app_bar.dart';
 import 'pages/gym/body.dart';
 import 'pages/profile/app_bar.dart';
 import 'pages/profile/navigation.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({
     Key? key,
-    required this.controller,
   }) : super(key: key);
 
-  final HomeController controller;
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() {
+    final cubit = context.read<HomeCubit>();
+    cubit.init();
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<Feed?>(
-      future: controller.init(),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) {
+    final cubit = context.read<HomeCubit>();
+
+    return BlocBuilder<HomeCubit, HomeState>(
+      builder: (context, state) {
+        if (state.loadingRequestInit) {
           return Scaffold(
             appBar: AppBar(
               backgroundColor: Colors.transparent,
@@ -64,11 +76,38 @@ class HomeScreen extends StatelessWidget {
             ),
           );
         }
-        final user = snapshot.data!.user;
+        if (state.feed == null) {
+          return Scaffold(
+            body: SafeArea(
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.sentiment_dissatisfied_outlined,
+                      size: 60,
+                      color: Theme.of(context).primaryColor,
+                    ),
+                    const SizedBox(height: 16),
+                    const Padding(
+                      padding: EdgeInsets.all(24.0),
+                      child: Text(
+                        '''Infelizmente não conseguimos buscar suas informações. Mas tente novamente mais tarde''',
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.w500,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),
+          );
+        }
         return HomeLoaded(
-          user: user,
-          qrData: controller.qrData,
-          getCityEvents: controller.getEventsCity,
+          navigation: cubit.navigation,
         );
       },
     );
@@ -78,17 +117,10 @@ class HomeScreen extends StatelessWidget {
 class HomeLoaded extends StatefulWidget {
   const HomeLoaded({
     Key? key,
-    required this.user,
-    required this.qrData,
-    required this.getCityEvents,
+    required this.navigation,
   }) : super(key: key);
 
-  final User user;
-  final String qrData;
-  final Future<List<EventCity>> Function({
-    DateTime? endTime,
-    required DateTime startTime,
-  }) getCityEvents;
+  final HomeNavigation navigation;
 
   @override
   State<HomeLoaded> createState() => _HomeLoadedState();
@@ -97,13 +129,38 @@ class HomeLoaded extends StatefulWidget {
 class _HomeLoadedState extends State<HomeLoaded> {
   int currentIndex = 0;
 
-  HomeLoadedContent buildContent() {
+  @override
+  void dispose() {
+    final cubit = context.read<HomeCubit>();
+    cubit.setNotAlreadyLoaded();
+    super.dispose();
+  }
+
+  HomeLoadedContent buildContent(BuildContext context) {
+    final cubit = context.read<HomeCubit>();
     switch (currentIndex) {
       case 0:
         return HomeLoadedContent(
-          body: Container(),
+          body: VisibilityDetector(
+            key: const Key('body-dashboard'),
+            onVisibilityChanged: (visibility) {
+              if (visibility.visibleFraction > 0 && !cubit.alreadyLoaded) {
+                cubit.setAlreadyLoaded();
+                cubit.getConfirmedEvent();
+              } else {
+                cubit.setNotAlreadyLoaded();
+              }
+            },
+            child: BodyDashboard(
+              gymCityEvents: cubit.confirmedEvents,
+              myEvents: const [],
+              publicEvents: const [],
+              user: cubit.user!,
+              navigation: widget.navigation,
+            ),
+          ),
           appBar: PreferredSize(
-            child: AppBarDashboard(user: widget.user),
+            child: AppBarDashboard(user: cubit.user!),
             preferredSize: Size(
               MediaQuery.of(context).size.width,
               60,
@@ -113,10 +170,9 @@ class _HomeLoadedState extends State<HomeLoaded> {
       case 1:
         return HomeLoadedContent(
           body: BodyGym(
-            getEventsCity: widget.getCityEvents,
-            navigation: GymNavigation.fromMaterialNavigator(
-              Navigator.of(context),
-            ),
+            user: cubit.user!,
+            getEventsCity: cubit.getEventsCity,
+            navigation: widget.navigation,
           ),
           appBar: PreferredSize(
             child: const AppBarGym(),
@@ -129,8 +185,8 @@ class _HomeLoadedState extends State<HomeLoaded> {
       case 2:
         return HomeLoadedContent(
           body: BodyProfile(
-            user: widget.user,
-            qrData: widget.qrData,
+            user: cubit.user!,
+            qrData: cubit.qrData!,
             navigation: ProfileNavigation.fromMaterialNavigator(
               Navigator.of(context),
             ),
@@ -147,7 +203,7 @@ class _HomeLoadedState extends State<HomeLoaded> {
         return HomeLoadedContent(
           body: Container(),
           appBar: PreferredSize(
-            child: AppBarDashboard(user: widget.user),
+            child: AppBarDashboard(user: cubit.user!),
             preferredSize: Size(
               MediaQuery.of(context).size.width,
               60,
@@ -159,7 +215,7 @@ class _HomeLoadedState extends State<HomeLoaded> {
 
   @override
   Widget build(BuildContext context) {
-    final content = buildContent();
+    final content = buildContent(context);
     return Scaffold(
       appBar: content.appBar,
       body: content.body,

@@ -34,6 +34,7 @@ class AppConstants {
   static const String REGISTER_URI = '/register_user/';
   static const String LOGIN_URI = '/authentication/';
   static const String GET_USER = '/get_user_info/';
+  static const String GET_USERS_ADMIN = '/get_users_admin';
   static const String REFRESH_TOKEN = '/refreshtoken/';
 
   static const String CHECKOUT_CITY_EVENTS = '/checkout_city_events/';

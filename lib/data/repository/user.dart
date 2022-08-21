@@ -1,3 +1,4 @@
+import 'package:cfit/data/entity/events_city.dart';
 import 'package:cfit/data/entity/feed.dart';
 import 'package:cfit/data/models/user.dart';
 import 'package:cfit/external/models/api.dart';
@@ -22,5 +23,32 @@ class UserRepositoryImpl implements UserRepository {
     );
     final userId = await storage.get(AppConstants.USER_ID);
     return UserBodyResponse.fromMap({...response.data, 'id': userId});
+  }
+
+  @override
+  Future<List<EventCityResponse>?> getUserEvents() async {
+    final userId = await storage.get(AppConstants.USER_ID);
+    try {
+      final response = await client.get(
+        path: AppConstants.GET_MY_CITY_EVENTS,
+        query: {'user_id': userId},
+      );
+
+      return (response.data['responses'] as List)
+          .where((element) => element != null)
+          .map((event) => EventCityResponse.fromMap(event!))
+          .toList();
+    } catch (e) {
+      return null;
+    }
+  }
+
+  @override
+  Future<List<String>> getAdmins() async {
+    final response = await client.get(path: AppConstants.GET_USERS_ADMIN);
+
+    return (response.data['responses'][0]['users'] as List)
+        .map((e) => e.toString())
+        .toList();
   }
 }

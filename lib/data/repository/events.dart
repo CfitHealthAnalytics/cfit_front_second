@@ -1,3 +1,4 @@
+import 'package:cfit/data/entity/confirmation_event.dart';
 import 'package:cfit/data/entity/events_city.dart';
 import 'package:cfit/data/models/events.dart';
 import 'package:cfit/external/models/api.dart';
@@ -39,6 +40,36 @@ class EventsRepositoryImpl implements EventsRepository {
         "user": userId,
       },
       isBodyEmpty: true,
+    );
+    return true;
+  }
+
+  @override
+  Future<bool> unscheduleEvent(String eventId) async {
+    final userId = await storage.get(AppConstants.USER_ID);
+
+    await client.post(
+      path: AppConstants.CHECKOUT_CITY_EVENTS,
+      query: {
+        "id_event": eventId,
+        "user": userId,
+      },
+      isBodyEmpty: true,
+    );
+    return true;
+  }
+
+  @override
+  Future<bool> confirmUsersInEvent(
+      ConfirmationEventCityRequest confirmationEvent) async {
+    await client.post(
+      path: AppConstants.CONFIRMATION_HALL_EVENTS,
+      query: {
+        "id_event": confirmationEvent.eventId,
+      },
+      body: {
+        'users_ids': confirmationEvent.usersConfirmed,
+      },
     );
     return true;
   }

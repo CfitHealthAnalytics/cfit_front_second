@@ -1,21 +1,21 @@
 import 'package:cfit/util/routes.dart';
 import 'package:flutter/widgets.dart';
 
-class EventDetailsNavigation {
+class EventCityAdminNavigation {
   final void Function() toHome;
   final void Function() onBack;
   final void Function() toLogin;
 
-  EventDetailsNavigation({
+  EventCityAdminNavigation({
     required this.onBack,
     required this.toHome,
     required this.toLogin,
   });
 
-  factory EventDetailsNavigation.fromMaterialNavigation(
+  factory EventCityAdminNavigation.fromMaterialNavigation(
     NavigatorState navigator,
   ) {
-    return EventDetailsNavigation(
+    return EventCityAdminNavigation(
       onBack: () => navigator.pop(true),
       toHome: () => navigator.pushReplacementNamed(Routes.home),
       toLogin: () => navigator.pushReplacementNamed(Routes.login),

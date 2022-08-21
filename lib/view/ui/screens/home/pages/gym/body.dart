@@ -1,15 +1,19 @@
 import 'package:cfit/domain/models/events_city.dart';
+import 'package:cfit/domain/models/user.dart';
 import 'package:cfit/util/dates.dart';
 import 'package:cfit/util/extentions.dart';
 import 'package:cfit/view/common/loading_box.dart';
+import 'package:cfit/view/ui/screens/home/home_cubit.dart';
+import 'package:cfit/view/ui/screens/home/home_navigation.dart';
 import 'package:flutter/material.dart';
-
-import 'navigation.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 
 class BodyGym extends StatefulWidget {
   const BodyGym({
     Key? key,
     required this.getEventsCity,
+    required this.user,
     required this.navigation,
   }) : super(key: key);
 
@@ -17,7 +21,8 @@ class BodyGym extends StatefulWidget {
     DateTime? endTime,
     required DateTime startTime,
   }) getEventsCity;
-  final GymNavigation navigation;
+  final HomeNavigation navigation;
+  final User user;
 
   @override
   State<BodyGym> createState() => _BodyGymState();
@@ -33,43 +38,68 @@ class _BodyGymState extends State<BodyGym> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Container(
-          color: Colors.white,
-          child: CalendarShort(
-            onChange: (newSelectedDate) {
-              setState(() {
-                selectedDate = newSelectedDate;
-              });
-            },
-          ),
-        ),
-        Container(
-          color: Colors.white,
-          width: double.maxFinite,
-          padding: const EdgeInsets.symmetric(
-            horizontal: 8.0,
-            vertical: 16,
-          ),
-          child: const Text(
-            'Resultados',
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 18,
-              fontWeight: FontWeight.w500,
+    final cubit = context.read<HomeCubit>();
+    return VisibilityDetector(
+      key: const Key('gym-resuts'),
+      onVisibilityChanged: (visibility) {
+        if (visibility.visibleFraction > 0 && !cubit.alreadyLoaded) {
+          cubit.setAlreadyLoaded();
+          widget.getEventsCity(
+            startTime: selectedDate,
+          );
+        } else {
+          cubit.setNotAlreadyLoaded();
+        }
+      },
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            color: Colors.white,
+            child: CalendarShort(
+              onChange: (newSelectedDate) {
+                setState(() {
+                  selectedDate = newSelectedDate;
+                });
+              },
             ),
           ),
-        ),
-        ResultsEvents(
-          getEventsCity: widget.getEventsCity,
-          selectedDate: selectedDate,
-          onPressed: (event) => widget.navigation.toEventDetail(
-            event,
+          Container(
+            color: Colors.white,
+            width: double.maxFinite,
+            padding: const EdgeInsets.symmetric(
+              horizontal: 8.0,
+              vertical: 16,
+            ),
+            child: const Text(
+              'Resultados',
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 18,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
           ),
-        )
-      ],
+          ResultsEvents(
+            getEventsCity: widget.getEventsCity,
+            selectedDate: selectedDate,
+            onPressed: (event) {
+              if (widget.user.isAdmin) {
+                widget.navigation.toEventCityAdmin(
+                  event,
+                );
+              } else {
+                widget.navigation.toEventDetail(
+                  event,
+                  alreadyConfirmed: event.usersCheckIn
+                      .where((user) => user.id == widget.user.id)
+                      .isNotEmpty,
+                );
+              }
+            },
+          )
+        ],
+      ),
     );
   }
 }
@@ -120,6 +150,11 @@ class ResultsEvents extends StatelessWidget {
             child: ListEventCity(
               onPressed: onPressed,
               events: snapshot.data!,
+              onRefresh: () {
+                return getEventsCity(
+                  startTime: selectedDate,
+                );
+              },
             ),
           );
         });
@@ -179,123 +214,128 @@ class ListEventCity extends StatelessWidget {
   const ListEventCity({
     Key? key,
     required this.onPressed,
+    required this.onRefresh,
     required this.events,
   }) : super(key: key);
 
   final void Function(EventCity event) onPressed;
+  final Future<void> Function() onRefresh;
   final List<EventCity> events;
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      children: events
-          .map(
-            (event) => Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 8.0,
-                vertical: 10,
-              ),
-              child: ListTile(
-                tileColor: Colors.white,
-                title: Container(
-                  child: Text(
-                    event.type.upperOnlyFirstLetter(),
-                    style: const TextStyle(
-                      fontSize: 14,
+    return RefreshIndicator(
+      onRefresh: onRefresh,
+      child: ListView(
+        children: events
+            .map(
+              (event) => Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 8.0,
+                  vertical: 10,
+                ),
+                child: ListTile(
+                  tileColor: Colors.white,
+                  title: Container(
+                    child: Text(
+                      event.type.upperOnlyFirstLetter(),
+                      style: const TextStyle(
+                        fontSize: 14,
+                      ),
                     ),
                   ),
-                ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
-                  side: const BorderSide(
-                    color: Colors.grey,
-                  ),
-                ),
-                contentPadding: const EdgeInsets.all(0),
-                leading: Container(
-                  alignment: Alignment.centerRight,
-                  decoration: BoxDecoration(
-                    color: Colors.black,
+                  shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16),
+                    side: const BorderSide(
+                      color: Colors.grey,
+                    ),
                   ),
-                  width: 105,
-                  child: Container(
-                    color: Colors.white,
-                    width: 95,
-                    padding: const EdgeInsets.symmetric(horizontal: 4),
+                  contentPadding: const EdgeInsets.all(0),
+                  leading: Container(
+                    alignment: Alignment.centerRight,
+                    decoration: BoxDecoration(
+                      color: Colors.black,
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    width: 105,
+                    child: Container(
+                      color: Colors.white,
+                      width: 95,
+                      padding: const EdgeInsets.symmetric(horizontal: 4),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const SizedBox(width: 8),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                event.startTime.getCustomHour(),
+                                style: const TextStyle(
+                                  fontSize: 18,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              Text(
+                                event.startTime.getCustomDate(),
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              )
+                            ],
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                  trailing: SizedBox(
+                    width: 105,
                     child: Row(
-                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        const SizedBox(width: 8),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              event.startTime.getCustomHour(),
+                        const Icon(
+                          Icons.person,
+                          color: Colors.black,
+                        ),
+                        const SizedBox(width: 4),
+                        RichText(
+                          text: TextSpan(
+                              text: event.usersCheckIn.length.toString(),
                               style: const TextStyle(
-                                fontSize: 18,
                                 color: Colors.black,
-                                fontWeight: FontWeight.w500,
                               ),
-                            ),
-                            Text(
-                              event.startTime.getCustomDate(),
-                              style: const TextStyle(
-                                fontSize: 16,
-                                color: Colors.black,
-                                fontWeight: FontWeight.w400,
-                              ),
-                            )
-                          ],
-                        )
+                              children: [
+                                const TextSpan(
+                                  text: '/',
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                TextSpan(
+                                  text: event.countMaxUsers.toString(),
+                                  style: const TextStyle(
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ]),
+                        ),
+                        const Icon(
+                          Icons.arrow_forward_ios,
+                          size: 20,
+                        ),
+                        const SizedBox(width: 4),
                       ],
                     ),
                   ),
+                  onTap: () => onPressed(event),
                 ),
-                trailing: SizedBox(
-                  width: 105,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      const Icon(
-                        Icons.person,
-                        color: Colors.black,
-                      ),
-                      const SizedBox(width: 4),
-                      RichText(
-                        text: TextSpan(
-                            text: event.usersConfirmation.length.toString(),
-                            style: const TextStyle(
-                              color: Colors.black,
-                            ),
-                            children: [
-                              const TextSpan(
-                                text: '/',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                ),
-                              ),
-                              TextSpan(
-                                text: event.countMaxUsers.toString(),
-                                style: const TextStyle(
-                                  color: Colors.black,
-                                ),
-                              ),
-                            ]),
-                      ),
-                      const Icon(
-                        Icons.arrow_forward_ios,
-                        size: 20,
-                      ),
-                      const SizedBox(width: 4),
-                    ],
-                  ),
-                ),
-                onTap: () => onPressed(event),
               ),
-            ),
-          )
-          .toList(),
+            )
+            .toList(),
+      ),
     );
   }
 }

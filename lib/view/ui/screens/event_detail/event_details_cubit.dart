@@ -6,29 +6,31 @@ import 'event_details_navigation.dart';
 import 'event_details_state.dart';
 
 class EventDetailsCubit extends Cubit<EventDetailsState> {
-  EventDetailsCubit(
-    this._navigation,
-    this._scheduleEventsInCityUseCase,
-  ) : super(EventDetailsState.empty());
+  EventDetailsCubit(this._navigation, this._scheduleEventsInCityUseCase,
+      {required this.alreadyScheduled})
+      : super(EventDetailsState.empty());
 
   final ScheduleEventInCityUseCase _scheduleEventsInCityUseCase;
 
   final EventDetailsNavigation _navigation;
+  final bool alreadyScheduled;
 
   void onBack() {
     _navigation.onBack();
   }
 
-  void schedule(EventCity event) async {
+  void action(EventCity event) async {
     emit(
       state.copyWith(
-          loadingRequest: true,
-          errorMessage: null,
-          status: EventDetailsStatus.none),
+        loadingRequest: true,
+        errorMessage: null,
+        status: EventDetailsStatus.none,
+      ),
     );
     try {
       await _scheduleEventsInCityUseCase(
         event: event,
+        unschedule: alreadyScheduled 
       );
       emit(
         state.copyWith(

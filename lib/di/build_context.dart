@@ -4,6 +4,7 @@ import 'package:cfit/data/models/user.dart';
 import 'package:cfit/data/repository/auth.dart';
 import 'package:cfit/data/repository/events.dart';
 import 'package:cfit/data/repository/user.dart';
+import 'package:cfit/domain/use_cases/confirmation_event_in_city_use_case.dart';
 import 'package:cfit/domain/use_cases/events_in_city_use_case.dart';
 import 'package:cfit/domain/use_cases/feed_use_case.dart';
 import 'package:cfit/domain/use_cases/initialization_use_case.dart';
@@ -101,6 +102,12 @@ extension DependencyInjection on BuildContext {
 
   ScheduleEventInCityUseCase scheduleEventsInCityUseCase() {
     return ScheduleEventInCityUseCase(
+      eventsRepository: eventsRepository(),
+    );
+  }
+
+  ConfirmationEventInCityUseCase confirmationEventInCityUseCase() {
+    return ConfirmationEventInCityUseCase(
       eventsRepository: eventsRepository(),
     );
   }

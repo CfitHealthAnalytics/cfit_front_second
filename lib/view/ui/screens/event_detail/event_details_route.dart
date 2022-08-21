@@ -11,8 +11,10 @@ class EventDetailsRoute extends StatelessWidget {
   const EventDetailsRoute({
     Key? key,
     required this.eventCity,
+    required this.alreadyScheduled,
   }) : super(key: key);
   final EventCity eventCity;
+  final bool alreadyScheduled;
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -21,6 +23,7 @@ class EventDetailsRoute extends StatelessWidget {
           Navigator.of(context),
         ),
         context.scheduleEventsInCityUseCase(),
+        alreadyScheduled: alreadyScheduled,
       ),
       child: EventDetailsScreen(
         eventCity: eventCity,

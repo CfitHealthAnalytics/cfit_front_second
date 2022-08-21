@@ -1,0 +1,143 @@
+import 'package:bloc/bloc.dart';
+import 'package:cfit/domain/erros/rules.dart';
+import 'package:cfit/domain/models/events_city.dart';
+import 'package:cfit/domain/models/feed.dart';
+import 'package:cfit/domain/models/user.dart';
+import 'package:cfit/domain/use_cases/events_in_city_use_case.dart';
+import 'package:cfit/domain/use_cases/feed_use_case.dart';
+import 'package:cfit/view/ui/screens/home/home_navigation.dart';
+import 'package:cfit/view/ui/screens/home/home_state.dart';
+import 'package:get/get_connect/http/src/exceptions/exceptions.dart';
+
+class HomeCubit extends Cubit<HomeState> {
+  HomeCubit({
+    required this.feedUseCase,
+    required this.eventsInCityUseCase,
+    required this.navigation,
+  }) : super(HomeState.empty());
+
+  final HomeNavigation navigation;
+  final FeedUseCase feedUseCase;
+  final EventsInCityUseCase eventsInCityUseCase;
+
+  bool alreadyTried = false;
+  User? get user => state.feed?.user;
+  List<EventCity> get confirmedEvents => state.feed?.confirmedEvents ?? [];
+
+  String? get qrData =>
+      'CF*${user?.id}*${user?.dateBirth.replaceAll('/', '')}*${user?.gender.abbreviation()}';
+
+  bool get alreadyLoaded => state.alreadyLoaded;
+
+  void setAlreadyLoaded() {
+    emit(state.copyWith(alreadyLoaded: true));
+  }
+
+  void setNotAlreadyLoaded() {
+    emit(state.copyWith(alreadyLoaded: false));
+  }
+
+  Future<void> init() async {
+    try {
+      emit(
+        state.copyWith(loadingRequestInit: true),
+      );
+      final user = await feedUseCase.getUser();
+      final confirmedEvents = await feedUseCase.getConfirmedEvents();
+      emit(state.copyWith(
+        loadingRequestInit: false,
+        feed: Feed(
+          user: user,
+          confirmedEvents: confirmedEvents,
+        ),
+        alreadyLoaded: true,
+      ));
+    } on UnauthorizedException catch (_) {
+      emit(state.copyWith(
+        loadingRequestInit: false,
+        alreadyLoaded: true,
+      ));
+      navigation.toLogin();
+    } on NotLoggedUser catch (_) {
+      emit(state.copyWith(
+        loadingRequestInit: false,
+        alreadyLoaded: true,
+      ));
+      navigation.toLogin();
+    } catch (e) {
+      emit(state.copyWith(
+        loadingRequestInit: false,
+        alreadyLoaded: true,
+      ));
+      if (alreadyTried == false) {
+        alreadyTried = true;
+        return await init();
+      }
+    }
+  }
+
+  Future<List<EventCity>?> getConfirmedEvent() async {
+    try {
+      emit(
+        state.copyWith(loadingRequestGetEvents: true),
+      );
+      final confirmedEvents = await feedUseCase.getConfirmedEvents();
+      emit(state.copyWith(
+        loadingRequestGetEvents: false,
+        feed: Feed(
+          user: state.feed!.user,
+          confirmedEvents: confirmedEvents,
+        ),
+        alreadyLoaded: true,
+      ));
+      return confirmedEvents;
+    } on UnauthorizedException catch (_) {
+      emit(state.copyWith(
+        loadingRequestGetEvents: false,
+        alreadyLoaded: true,
+      ));
+      navigation.toLogin();
+    } on NotLoggedUser catch (_) {
+      emit(state.copyWith(
+        loadingRequestGetEvents: false,
+        alreadyLoaded: true,
+      ));
+      navigation.toLogin();
+    } catch (e) {
+      emit(state.copyWith(
+        loadingRequestGetEvents: false,
+        alreadyLoaded: true,
+      ));
+      if (alreadyTried == false) {
+        alreadyTried = true;
+        return await getConfirmedEvent();
+      }
+    }
+    return null;
+  }
+
+  Future<List<EventCity>> getEventsCity({
+    required DateTime startTime,
+    DateTime? endTime,
+  }) async {
+    late DateTime _endTime;
+    if (endTime == null) {
+      _endTime = DateTime(
+        startTime.year,
+        startTime.month,
+        startTime.day,
+        23,
+        59,
+      );
+    } else {
+      _endTime = endTime;
+    }
+
+    final events = await eventsInCityUseCase(
+      startTime: startTime,
+      endTime: _endTime,
+    );
+
+    return events;
+  }
+}

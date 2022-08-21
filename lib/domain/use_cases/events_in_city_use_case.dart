@@ -2,6 +2,8 @@ import 'package:cfit/data/entity/events_city.dart';
 import 'package:cfit/data/models/events.dart';
 import 'package:cfit/domain/models/events_city.dart';
 
+import '../models/user.dart';
+
 class EventsInCityUseCase {
   final EventsRepository eventsRepository;
 
@@ -28,7 +30,13 @@ class EventsInCityUseCase {
             startTime: DateTime.parse(event.startTime),
             type: event.type,
             countUsers: event.countUsers,
-            usersCheckIn: event.usersCheckIn,
+            usersCheckIn: event.usersCheckIn
+                .map(
+                  (user) => User.fromMap(
+                    user.toMap(),
+                  ),
+                )
+                .toList(),
             usersConfirmation: event.usersConfirmation,
             description: event.description,
             city: event.city,

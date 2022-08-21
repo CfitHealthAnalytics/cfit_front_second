@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:cfit/data/entity/feed.dart';
 import 'package:cfit/domain/models/coordinates.dart';
 
 class EventCityRequest {
@@ -46,7 +47,7 @@ class EventCityResponse {
   String startTime;
   String type;
   int countUsers;
-  List<String> usersCheckIn;
+  List<UserBodyResponse> usersCheckIn;
   List<String> usersConfirmation;
   String description;
   String city;
@@ -102,7 +103,11 @@ class EventCityResponse {
       startTime: map['horario_de_inicio'] ?? '',
       type: map['tipo'] ?? '',
       countUsers: map['qtd_user']?.toInt() ?? 0,
-      usersCheckIn: List<String>.from(map['users_checkin']),
+      usersCheckIn: List<UserBodyResponse>.from(
+        (map['users_checkin'] as List)
+            .map((user) => UserBodyResponse.fromMap(user))
+            .toList(),
+      ),
       usersConfirmation: List<String>.from(map['users_confirmation']),
       description: map['descricao'] ?? '',
       city: map['cidade'] ?? '',
