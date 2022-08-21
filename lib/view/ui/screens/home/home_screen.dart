@@ -141,23 +141,23 @@ class _HomeLoadedState extends State<HomeLoaded> {
     switch (currentIndex) {
       case 0:
         return HomeLoadedContent(
-          body: VisibilityDetector(
-            key: const Key('body-dashboard'),
-            onVisibilityChanged: (visibility) {
-              if (visibility.visibleFraction > 0 && !cubit.alreadyLoaded) {
-                cubit.setAlreadyLoaded();
-                cubit.getConfirmedEvent();
-              } else {
-                cubit.setNotAlreadyLoaded();
-              }
+          body: BlocBuilder<HomeCubit, HomeState>(
+            builder: (context, state) {
+              return VisibilityDetector(
+                key: const Key('body-dashboard'),
+                onVisibilityChanged: (visibility) {
+                  if (visibility.visibleFraction > 0 && !cubit.alreadyLoaded) {
+                    cubit.setAlreadyLoaded();
+                    cubit.getConfirmedEvent();
+                  } else {
+                    cubit.setNotAlreadyLoaded();
+                  }
+                },
+                child: BodyDashboard(
+                  navigation: widget.navigation,
+                ),
+              );
             },
-            child: BodyDashboard(
-              gymCityEvents: cubit.confirmedEvents,
-              myEvents: const [],
-              publicEvents: const [],
-              user: cubit.user!,
-              navigation: widget.navigation,
-            ),
           ),
           appBar: PreferredSize(
             child: AppBarDashboard(user: cubit.user!),

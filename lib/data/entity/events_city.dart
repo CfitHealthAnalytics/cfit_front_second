@@ -113,7 +113,7 @@ class EventCityResponse {
       city: map['cidade'] ?? '',
       coordinates: Coordinates.fromMap(map['coordenadas']),
       createdAt: map['created_at'] ?? '',
-      name: map['nome'] ?? '',
+      name: map['name'] ?? '',
       countMaxUsers: map['qtd_max_user']?.toInt() ?? 0,
       id: map['id'] ?? '',
     );

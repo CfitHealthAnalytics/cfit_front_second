@@ -21,7 +21,7 @@ class FeedUseCase {
         isAdmin: listAdmin.contains(userResponse.id));
   }
 
-  Future<List<EventCity>?> getConfirmedEvents() async {
+  Future<List<EventCity>?> getGymCityEvents() async {
     final userEvents = await userRepository.getUserEvents();
     List<EventCity>? confirmedEvents;
     if (userEvents != null) {

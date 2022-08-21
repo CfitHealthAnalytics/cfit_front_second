@@ -239,7 +239,7 @@ class ListEventCity extends StatelessWidget {
                   tileColor: Colors.white,
                   title: Container(
                     child: Text(
-                      event.type.upperOnlyFirstLetter(),
+                      event.name.upperOnlyFirstLetter(),
                       style: const TextStyle(
                         fontSize: 14,
                       ),

@@ -2,7 +2,6 @@ import 'package:cfit/domain/models/events_city.dart';
 import 'package:cfit/util/extentions.dart';
 import 'package:cfit/view/common/button.dart';
 import 'package:cfit/view/common/padding.dart';
-import 'package:cfit/view/ui/screens/home/pages/dashboard/body.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
@@ -172,6 +171,38 @@ class Details extends StatelessWidget {
     );
   }
 }
+
+
+class ChipCFit extends StatelessWidget {
+  const ChipCFit({
+    Key? key,
+    required this.label,
+    required this.isSelected,
+    required this.onPressed,
+  }) : super(key: key);
+
+  final String label;
+  final bool isSelected;
+  final void Function() onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return InputChip(
+      label: Text(
+        label,
+        style: const TextStyle(
+          color: Colors.white,
+          fontWeight: FontWeight.w400,
+        ),
+      ),
+      backgroundColor: isSelected
+          ? Theme.of(context).primaryColor
+          : Theme.of(context).primaryColorDark,
+      onPressed: onPressed,
+    );
+  }
+}
+
 
 class CountConfirmed extends StatelessWidget {
   const CountConfirmed({

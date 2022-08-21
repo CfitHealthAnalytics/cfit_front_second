@@ -22,7 +22,6 @@ class HomeCubit extends Cubit<HomeState> {
 
   bool alreadyTried = false;
   User? get user => state.feed?.user;
-  List<EventCity> get confirmedEvents => state.feed?.confirmedEvents ?? [];
 
   String? get qrData =>
       'CF*${user?.id}*${user?.dateBirth.replaceAll('/', '')}*${user?.gender.abbreviation()}';
@@ -37,18 +36,24 @@ class HomeCubit extends Cubit<HomeState> {
     emit(state.copyWith(alreadyLoaded: false));
   }
 
+  void setFilterDashboard(HomeStateEventsFilter filter) {
+    emit(state.copyWith(filter: filter));
+  }
+
   Future<void> init() async {
     try {
       emit(
         state.copyWith(loadingRequestInit: true),
       );
       final user = await feedUseCase.getUser();
-      final confirmedEvents = await feedUseCase.getConfirmedEvents();
+      final gymCityEvents = await feedUseCase.getGymCityEvents();
       emit(state.copyWith(
         loadingRequestInit: false,
         feed: Feed(
           user: user,
-          confirmedEvents: confirmedEvents,
+          gymCity: gymCityEvents ?? [],
+          publicEvents: [],
+          myEvents: [],
         ),
         alreadyLoaded: true,
       ));
@@ -81,16 +86,18 @@ class HomeCubit extends Cubit<HomeState> {
       emit(
         state.copyWith(loadingRequestGetEvents: true),
       );
-      final confirmedEvents = await feedUseCase.getConfirmedEvents();
+      final gymCityEvents = await feedUseCase.getGymCityEvents();
       emit(state.copyWith(
         loadingRequestGetEvents: false,
         feed: Feed(
           user: state.feed!.user,
-          confirmedEvents: confirmedEvents,
+          gymCity: gymCityEvents ?? [],
+          publicEvents: [],
+          myEvents: [],
         ),
         alreadyLoaded: true,
       ));
-      return confirmedEvents;
+      return gymCityEvents;
     } on UnauthorizedException catch (_) {
       emit(state.copyWith(
         loadingRequestGetEvents: false,

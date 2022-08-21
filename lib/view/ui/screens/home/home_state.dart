@@ -1,3 +1,4 @@
+import 'package:cfit/domain/models/events_city.dart';
 import 'package:cfit/domain/models/feed.dart';
 
 class HomeState {
@@ -5,17 +6,21 @@ class HomeState {
   final bool loadingRequestInit;
   final bool loadingRequestGetEvents;
   final bool alreadyLoaded;
+  final HomeStateEventsFilter filter;
+
   HomeState({
     this.feed,
     required this.loadingRequestInit,
     required this.loadingRequestGetEvents,
     required this.alreadyLoaded,
+    required this.filter,
   });
   factory HomeState.empty() {
     return HomeState(
       loadingRequestInit: false,
       loadingRequestGetEvents: false,
       alreadyLoaded: false,
+      filter: HomeStateEventsFilter.all,
     );
   }
   HomeState copyWith({
@@ -23,6 +28,7 @@ class HomeState {
     bool? loadingRequestInit,
     bool? loadingRequestGetEvents,
     bool? alreadyLoaded,
+    HomeStateEventsFilter? filter,
   }) {
     return HomeState(
       feed: feed ?? this.feed,
@@ -30,6 +36,7 @@ class HomeState {
       loadingRequestGetEvents:
           loadingRequestGetEvents ?? this.loadingRequestGetEvents,
       alreadyLoaded: alreadyLoaded ?? this.alreadyLoaded,
+      filter: filter ?? this.filter,
     );
   }
 
@@ -41,7 +48,8 @@ class HomeState {
         other.feed == feed &&
         other.loadingRequestInit == loadingRequestInit &&
         other.loadingRequestGetEvents == loadingRequestGetEvents &&
-        other.alreadyLoaded == alreadyLoaded;
+        other.alreadyLoaded == alreadyLoaded &&
+        other.filter == filter;
   }
 
   @override
@@ -49,6 +57,37 @@ class HomeState {
     return feed.hashCode ^
         loadingRequestInit.hashCode ^
         loadingRequestGetEvents.hashCode ^
-        alreadyLoaded.hashCode;
+        alreadyLoaded.hashCode ^
+        filter.hashCode;
+  }
+}
+
+enum HomeStateEventsFilter { all, gymCity, my, public }
+
+extension HomeStateEventsHandler on HomeState {
+  List<EventCity> get events {
+    switch (filter) {
+      case HomeStateEventsFilter.all:
+        return [
+          ...feed?.gymCity ?? [],
+          ...feed?.myEvents ?? [],
+          ...feed?.publicEvents ?? [],
+        ];
+
+      case HomeStateEventsFilter.gymCity:
+        return [
+          ...feed?.gymCity ?? [],
+        ];
+
+      case HomeStateEventsFilter.my:
+        return [
+          ...feed?.myEvents ?? [],
+        ];
+
+      case HomeStateEventsFilter.public:
+        return [
+          ...feed?.publicEvents ?? [],
+        ];
+    }
   }
 }

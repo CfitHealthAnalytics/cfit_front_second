@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:cfit/domain/models/user.dart';
+import 'package:flutter/foundation.dart';
 
 import 'coordinates.dart';
 
@@ -87,4 +88,45 @@ class EventCity {
 
   factory EventCity.fromJson(String source) =>
       EventCity.fromMap(json.decode(source));
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is EventCity &&
+        other.street == street &&
+        other.neighborhood == neighborhood &&
+        other.number == number &&
+        other.startTime == startTime &&
+        other.type == type &&
+        other.countUsers == countUsers &&
+        listEquals(other.usersCheckIn, usersCheckIn) &&
+        listEquals(other.usersConfirmation, usersConfirmation) &&
+        other.description == description &&
+        other.city == city &&
+        other.coordinates == coordinates &&
+        other.createdAt == createdAt &&
+        other.name == name &&
+        other.countMaxUsers == countMaxUsers &&
+        other.id == id;
+  }
+
+  @override
+  int get hashCode {
+    return street.hashCode ^
+        neighborhood.hashCode ^
+        number.hashCode ^
+        startTime.hashCode ^
+        type.hashCode ^
+        countUsers.hashCode ^
+        usersCheckIn.hashCode ^
+        usersConfirmation.hashCode ^
+        description.hashCode ^
+        city.hashCode ^
+        coordinates.hashCode ^
+        createdAt.hashCode ^
+        name.hashCode ^
+        countMaxUsers.hashCode ^
+        id.hashCode;
+  }
 }

@@ -1,5 +1,4 @@
 import 'package:cfit/domain/models/events_city.dart';
-import 'package:cfit/domain/models/user.dart';
 import 'package:cfit/util/dates.dart';
 import 'package:cfit/util/extentions.dart';
 import 'package:cfit/view/common/loading_box.dart';
@@ -10,45 +9,18 @@ import 'package:cfit/view/ui/screens/home/home_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class BodyDashboard extends StatefulWidget {
+class BodyDashboard extends StatelessWidget {
   const BodyDashboard({
     Key? key,
-    required this.gymCityEvents,
-    required this.myEvents,
-    required this.publicEvents,
-    required this.user,
     required this.navigation,
   }) : super(key: key);
 
-  final List<EventCity> gymCityEvents;
-  final List<EventCity> myEvents;
-  final List<EventCity> publicEvents;
-  final User user;
+  
   final HomeNavigation navigation;
 
   @override
-  State<BodyDashboard> createState() => _BodyDashboardState();
-}
-
-class _BodyDashboardState extends State<BodyDashboard> {
-  late DateTime selectedDate;
-  late List<EventCity> events;
-  late BodyDashboardFilter filterActive;
-  final pageController = PageController();
-  @override
-  void initState() {
-    selectedDate = DateTime.now();
-    events = [
-      ...widget.gymCityEvents,
-      ...widget.myEvents,
-      ...widget.publicEvents,
-    ];
-    filterActive = BodyDashboardFilter.all;
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final cubit = context.read<HomeCubit>();
     return BlocBuilder<HomeCubit, HomeState>(
       buildWhen: (oldState, newState) =>
           oldState.loadingRequestGetEvents != newState.loadingRequestGetEvents,
@@ -91,55 +63,29 @@ class _BodyDashboardState extends State<BodyDashboard> {
                       children: [
                         ChipCFit(
                           label: 'Todos',
-                          onPressed: () {
-                            setState(() {
-                              events = [
-                                ...widget.gymCityEvents,
-                                ...widget.myEvents,
-                                ...widget.publicEvents,
-                              ];
-                              filterActive = BodyDashboardFilter.all;
-                            });
-                          },
-                          isSelected: filterActive == BodyDashboardFilter.all,
+                          onPressed: cubit.setFilterDashboard,
+                          isSelected: state.filter == HomeStateEventsFilter.all,
+                          value: HomeStateEventsFilter.all,
                         ).withPaddingSymmetric(horizontal: 4.0),
                         ChipCFit(
                           label: 'Criados por mim',
-                          onPressed: () {
-                            setState(() {
-                              events = [
-                                ...widget.myEvents,
-                              ];
-                              filterActive = BodyDashboardFilter.my;
-                            });
-                          },
-                          isSelected: filterActive == BodyDashboardFilter.my,
+                          onPressed: cubit.setFilterDashboard,
+                          isSelected: state.filter == HomeStateEventsFilter.my,
+                          value: HomeStateEventsFilter.my,
                         ).withPaddingSymmetric(horizontal: 4.0),
                         ChipCFit(
                           label: 'Academia Recife',
-                          onPressed: () {
-                            setState(() {
-                              events = [
-                                ...widget.gymCityEvents,
-                              ];
-                              filterActive = BodyDashboardFilter.gymCity;
-                            });
-                          },
+                          onPressed: cubit.setFilterDashboard,
                           isSelected:
-                              filterActive == BodyDashboardFilter.gymCity,
+                              state.filter == HomeStateEventsFilter.gymCity,
+                          value: HomeStateEventsFilter.gymCity,
                         ).withPaddingSymmetric(horizontal: 4.0),
                         ChipCFit(
                           label: 'Público',
-                          onPressed: () {
-                            setState(() {
-                              events = [
-                                ...widget.publicEvents,
-                              ];
-                              filterActive = BodyDashboardFilter.public;
-                            });
-                          },
+                          onPressed: cubit.setFilterDashboard,
                           isSelected:
-                              filterActive == BodyDashboardFilter.public,
+                              state.filter == HomeStateEventsFilter.public,
+                          value: HomeStateEventsFilter.public,
                         ).withPaddingSymmetric(horizontal: 4.0),
                       ],
                     ),
@@ -149,18 +95,18 @@ class _BodyDashboardState extends State<BodyDashboard> {
             ).withPaddingSymmetric(vertical: 8),
             Expanded(
               child: ListEventCity(
-                events: events,
+                events: state.events,
                 onPressed: (event) {
-                  if (widget.user.isAdmin) {
-                    widget.navigation.toEventCityAdmin(
+                  if (state.feed!.user.isAdmin) {
+                    navigation.toEventCityAdmin(
                       event,
                     );
                   } else {
-                    widget.navigation.toEventDetail(
+                    navigation.toEventDetail(
                       event,
-                      widget.user,
+                      state.feed!.user,
                       alreadyConfirmed: event.usersCheckIn
-                          .where((user) => user.id == widget.user.id)
+                          .where((user) => user.id == state.feed!.user.id)
                           .isNotEmpty,
                     );
                   }
@@ -180,11 +126,13 @@ class ChipCFit extends StatelessWidget {
     required this.label,
     required this.isSelected,
     required this.onPressed,
+    required this.value,
   }) : super(key: key);
 
   final String label;
   final bool isSelected;
-  final void Function()? onPressed;
+  final void Function(HomeStateEventsFilter filter) onPressed;
+  final HomeStateEventsFilter value;
 
   @override
   Widget build(BuildContext context) {
@@ -199,7 +147,7 @@ class ChipCFit extends StatelessWidget {
       backgroundColor: isSelected
           ? Theme.of(context).primaryColor
           : Theme.of(context).primaryColorDark,
-      onPressed: onPressed,
+      onPressed: () => onPressed(value),
     );
   }
 }
@@ -398,5 +346,3 @@ class LoadingEventsCity extends StatelessWidget {
     );
   }
 }
-
-enum BodyDashboardFilter { all, gymCity, my, public }
