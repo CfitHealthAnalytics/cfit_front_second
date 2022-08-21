@@ -203,7 +203,7 @@ class Details extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
                 const Text(
-                  '1 hora',
+                  '40 mins',
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: 16,
