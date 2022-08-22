@@ -2,15 +2,9 @@ import 'package:cfit/domain/models/user.dart';
 import 'package:cfit/util/extentions.dart';
 import 'package:cfit/view/common/button.dart';
 import 'package:cfit/view/common/list_tile.dart';
+import 'package:cfit/view/common/padding.dart';
 import 'package:cfit/view/ui/screens/my_datas/my_datas_controller.dart';
 import 'package:flutter/material.dart';
-import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
-
-final dateBirthMask = MaskTextInputFormatter(
-  mask: '##/##/####',
-  filter: {"#": RegExp(r'[0-9]')},
-  type: MaskAutoCompletionType.lazy,
-);
 
 class MyDatasScreen extends StatelessWidget {
   const MyDatasScreen({
@@ -61,100 +55,70 @@ class MyDatasScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisSize: MainAxisSize.max,
           children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 16.0,
-                vertical: 16.0,
-              ),
-              child: ListTileCfit(
-                title: 'Nome',
-                subtitle: user.name,
-                onPressed: () {},
-                customPadding: 8.0,
-                leading: CircleAvatar(
-                  backgroundColor: Theme.of(context).primaryColorDark,
-                  child: const Icon(
-                    Icons.person,
-                    color: Colors.white,
-                  ),
+            ListTileCfit(
+              title: 'Nome',
+              subtitle: user.name,
+              onPressed: () {},
+              customPadding: 8.0,
+              leading: CircleAvatar(
+                backgroundColor: Theme.of(context).primaryColorDark,
+                child: const Icon(
+                  Icons.person,
+                  color: Colors.white,
                 ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 16.0,
-                vertical: 16.0,
-              ),
-              child: ListTileCfit(
-                title: 'Data de Nascimento',
-                subtitle: user.dateBirth,
-                onPressed: () {},
-                customPadding: 8.0,
-                leading: CircleAvatar(
-                  backgroundColor: Theme.of(context).primaryColorDark,
-                  child: const Icon(
-                    Icons.lock,
-                    color: Colors.white,
-                  ),
+            ).withPaddingSymmetric(horizontal: 16.0, vertical: 16.0),
+            ListTileCfit(
+              title: 'Data de Nascimento',
+              subtitle: user.dateBirth,
+              onPressed: () {},
+              customPadding: 8.0,
+              leading: CircleAvatar(
+                backgroundColor: Theme.of(context).primaryColorDark,
+                child: const Icon(
+                  Icons.lock,
+                  color: Colors.white,
                 ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 16.0,
-                vertical: 16.0,
-              ),
-              child: ListTileCfit(
-                title: 'Gênero',
-                subtitle:
-                    user.gender.toStringRepresentation().upperOnlyFirstLetter(),
-                onPressed: () {},
-                customPadding: 8.0,
-                leading: CircleAvatar(
-                  backgroundColor: Theme.of(context).primaryColorDark,
-                  child: const Icon(
-                    Icons.lock,
-                    color: Colors.white,
-                  ),
+            ).withPaddingSymmetric(horizontal: 16.0, vertical: 16.0),
+            ListTileCfit(
+              title: 'Gênero',
+              subtitle:
+                  user.gender.toStringRepresentation().upperOnlyFirstLetter(),
+              onPressed: () {},
+              customPadding: 8.0,
+              leading: CircleAvatar(
+                backgroundColor: Theme.of(context).primaryColorDark,
+                child: const Icon(
+                  Icons.lock,
+                  color: Colors.white,
                 ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 16.0,
-                vertical: 16.0,
-              ),
-              child: ListTileCfit(
-                title: 'Email',
-                subtitle: user.email,
-                onPressed: () {},
-                customPadding: 8.0,
-                leading: CircleAvatar(
-                  backgroundColor: Theme.of(context).primaryColorDark,
-                  child: const Icon(
-                    Icons.email,
-                    color: Colors.white,
-                  ),
+            ).withPaddingSymmetric(horizontal: 16.0, vertical: 16.0),
+            ListTileCfit(
+              title: 'Email',
+              subtitle: user.email,
+              onPressed: () {},
+              customPadding: 8.0,
+              leading: CircleAvatar(
+                backgroundColor: Theme.of(context).primaryColorDark,
+                child: const Icon(
+                  Icons.email,
+                  color: Colors.white,
                 ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 16.0,
-                vertical: 16.0,
-              ),
-              child: ListTileCfit(
-                title: 'Senha',
-                onPressed: () {},
-                leading: CircleAvatar(
-                  backgroundColor: Theme.of(context).primaryColorDark,
-                  child: const Icon(
-                    Icons.lock,
-                    color: Colors.white,
-                  ),
+            ).withPaddingSymmetric(horizontal: 16.0, vertical: 16.0),
+            ListTileCfit(
+              title: 'Senha',
+              onPressed: () {},
+              leading: CircleAvatar(
+                backgroundColor: Theme.of(context).primaryColorDark,
+                child: const Icon(
+                  Icons.lock,
+                  color: Colors.white,
                 ),
               ),
-            ),
+            ).withPaddingSymmetric(horizontal: 16.0, vertical: 16.0),
           ],
         ),
       ),

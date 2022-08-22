@@ -1,6 +1,7 @@
 import 'package:cfit/util/bottom_sheet.dart';
 import 'package:cfit/view/common/button.dart';
 import 'package:cfit/view/common/input_text.dart';
+import 'package:cfit/view/common/modais.dart';
 import 'package:cfit/view/ui/screens/login/login_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -31,7 +32,13 @@ class LoginScreen extends StatelessWidget {
                 if (state.hasError) {
                   presentBottomSheet(
                     context: context,
-                    builder: (_) => const LoginErrorModal(),
+                    modal: LoginErrorModal(
+                      context: context,
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        cubit.authentication();
+                      },
+                    ),
                   );
                 }
               },
@@ -120,50 +127,43 @@ class LoginScreen extends StatelessWidget {
   }
 }
 
-class LoginErrorModal extends StatelessWidget {
-  const LoginErrorModal({
-    Key? key,
-  }) : super(key: key);
+class LoginErrorModal implements Modal {
+  LoginErrorModal({
+    required this.onPressed,
+    required this.context,
+  });
+
+  final VoidCallback onPressed;
+  final BuildContext context;
 
   @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8.0),
-          child: Align(
-            alignment: Alignment.centerLeft,
-            child: IconButton(
-              onPressed: () => Navigator.pop(context),
-              icon: const Icon(
-                Icons.close,
-              ),
-            ),
-          ),
+  double get fraction => 0.5;
+
+  @override
+  Widget? get primaryAction => ButtonAction(
+        text: 'Tentar novamente',
+        type: ButtonActionType.primary,
+        onPressed: onPressed,
+        customBackgroundColor: Theme.of(context).primaryColor,
+      );
+
+  @override
+  Widget? get secondaryAction => null;
+
+  @override
+  Widget? get subtitle => const Text(
+        '''Aconteceu algum problema com as informações inseridas. Por favor verifique os valores inseridos, e tente novamente.''',
+        style: TextStyle(
+          fontSize: 20,
         ),
-        const SizedBox(height: 24),
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16.0),
-          child: Text(
-            'Falha no login',
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
+      );
+
+  @override
+  Widget get title => const Text(
+        'Falha no login',
+        style: TextStyle(
+          fontSize: 24,
+          fontWeight: FontWeight.bold,
         ),
-        const SizedBox(height: 24),
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16.0),
-          child: Text(
-            '''Aconteceu algum problema com as informações inseridas. Por favor verifique os valores inseridos, e tente novamente.''',
-            style: TextStyle(
-              fontSize: 20,
-            ),
-          ),
-        )
-      ],
-    );
-  }
+      );
 }

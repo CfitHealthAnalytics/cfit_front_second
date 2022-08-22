@@ -1,4 +1,5 @@
 import 'package:cfit/domain/models/user.dart';
+import 'package:cfit/util/bottom_sheet.dart';
 import 'package:cfit/util/extentions.dart';
 import 'package:cfit/view/common/button.dart';
 import 'package:cfit/view/common/input_text.dart';
@@ -8,6 +9,7 @@ import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 import 'register_cubit.dart';
 import 'register_state.dart';
+import 'widgets/widgets.dart';
 
 final dateBirthMask = MaskTextInputFormatter(
   mask: '##/##/####',
@@ -258,137 +260,13 @@ class RegisterScreen extends StatelessWidget {
   void presentShowError(
     BuildContext context, {
     required bool accountExists,
-    VoidCallback? onPressed,
+    required VoidCallback onPressed,
   }) {
-    showModalBottomSheet(
+    presentBottomSheet(
       context: context,
-      isDismissible: true,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(
-          Radius.circular(20),
-        ),
-      ),
-      constraints: BoxConstraints.loose(
-        Size(
-          double.infinity,
-          MediaQuery.of(context).size.height * 0.45,
-        ),
-      ),
-      builder: (context) => accountExists
-          ? RegisterErrorAlreadyExistsModal(onPressed: onPressed!)
-          : const RegisterErrorModal(),
-      elevation: 5,
-    );
-  }
-}
-
-class RegisterErrorModal extends StatelessWidget {
-  const RegisterErrorModal({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8.0),
-          child: Align(
-            alignment: Alignment.centerLeft,
-            child: IconButton(
-              onPressed: () => Navigator.pop(context),
-              icon: const Icon(
-                Icons.close,
-              ),
-            ),
-          ),
-        ),
-        const SizedBox(height: 24),
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16.0),
-          child: Text(
-            'Falha no Register',
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-        const SizedBox(height: 24),
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16.0),
-          child: Text(
-            '''Aconteceu algum problema com as informações inseridas. Por favor verifique os valores inseridos, e tente novamente.''',
-            style: TextStyle(
-              fontSize: 20,
-            ),
-          ),
-        )
-      ],
-    );
-  }
-}
-
-class RegisterErrorAlreadyExistsModal extends StatelessWidget {
-  const RegisterErrorAlreadyExistsModal({
-    Key? key,
-    required this.onPressed,
-  }) : super(key: key);
-
-  final VoidCallback onPressed;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8.0),
-          child: Align(
-            alignment: Alignment.centerLeft,
-            child: IconButton(
-              onPressed: () => Navigator.pop(context),
-              icon: const Icon(
-                Icons.close,
-              ),
-            ),
-          ),
-        ),
-        const SizedBox(height: 24),
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16.0),
-          child: Text(
-            'Parece que esse email já existe',
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-        const SizedBox(height: 24),
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16.0),
-          child: Text(
-            '''Esse email já está cadastrado nos nossos sistemas. Tente usar o outro email, para realizar o cadastro, ou tente fazer o login usando esse email pressionando o botão abaixo''',
-            style: TextStyle(
-              fontSize: 20,
-            ),
-          ),
-        ),
-        const SizedBox(height: 24),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: ButtonAction(
-            text: 'Entrar',
-            type: ButtonActionType.primary,
-            onPressed: () {
-              Navigator.of(context).pop();
-              onPressed();
-            },
-          ),
-        )
-      ],
+      modal: accountExists
+          ? RegisterErrorAlreadyExistsModal(onPressed: onPressed)
+          : RegisterErrorModal(context: context, onPressed: onPressed),
     );
   }
 }
