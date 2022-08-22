@@ -23,7 +23,9 @@ class BodyDashboard extends StatelessWidget {
     final cubit = context.read<HomeCubit>();
     return BlocBuilder<HomeCubit, HomeState>(
       buildWhen: (oldState, newState) =>
-          oldState.loadingRequestGetEvents != newState.loadingRequestGetEvents,
+          (oldState.loadingRequestGetEvents !=
+              newState.loadingRequestGetEvents) ||
+          (oldState.filter != newState.filter),
       builder: (context, state) {
         if (state.loadingRequestGetEvents) {
           return const LoadingEventsCity();

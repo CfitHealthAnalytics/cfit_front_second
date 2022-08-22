@@ -7,6 +7,7 @@ class ApiResponseFactory {
   ApiResponse fromHttpResponse(http.Response response) {
     if (response.statusCode >= 200 && response.statusCode < 300) {
       final data = jsonDecode(utf8.decode(response.bodyBytes));
+
       return ApiResponse(
         data: data is List ? {'responses': data} : data,
         status: response.statusCode,
@@ -25,7 +26,7 @@ class ApiResponseFactory {
     if (error.statusCode == 400) {
       return BadRequestException(error);
     }
-    
+
     if (error.statusCode == 401) {
       return UnauthorizedException(error);
     }

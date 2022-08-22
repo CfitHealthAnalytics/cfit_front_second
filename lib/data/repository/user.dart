@@ -33,9 +33,14 @@ class UserRepositoryImpl implements UserRepository {
         path: AppConstants.GET_MY_CITY_EVENTS,
         query: {'user_id': userId},
       );
-
-      return (response.data['responses'] as List)
+      final cleanList = (response.data['responses'] as List)
           .where((element) => element != null)
+          .toList();
+      // TODO: remove this when dont have events with user_checkin as string only
+      cleanList.removeWhere(
+          (element) => (element['users_checkin'] as List).first is String);
+
+      return cleanList
           .map((event) => EventCityResponse.fromMap(event!))
           .toList();
     } catch (e) {
