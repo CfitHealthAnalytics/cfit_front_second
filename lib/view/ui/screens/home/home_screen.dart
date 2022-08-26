@@ -4,6 +4,8 @@ import 'package:cfit/view/ui/screens/home/home_state.dart';
 import 'package:cfit/view/ui/screens/home/pages/dashboard/body.dart';
 import 'package:cfit/view/ui/screens/home/pages/gym/app_bar.dart';
 import 'package:cfit/view/ui/screens/home/pages/profile/body.dart';
+import 'package:cfit/view/ui/screens/home/pages/public_events/app_bar.dart';
+import 'package:cfit/view/ui/screens/home/pages/public_events/body.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:visibility_detector/visibility_detector.dart';
@@ -184,6 +186,21 @@ class _HomeLoadedState extends State<HomeLoaded> {
         );
       case 2:
         return HomeLoadedContent(
+          body: BodyPublicEvents(
+            getEventsPublic: cubit.getEventsPublic,
+            getAddress: cubit.getAddress,
+            user: cubit.user!,
+          ),
+          appBar: PreferredSize(
+            child: const AppBarPublicEvents(),
+            preferredSize: Size(
+              MediaQuery.of(context).size.width,
+              60,
+            ),
+          ),
+        );
+      case 3:
+        return HomeLoadedContent(
           body: BodyProfile(
             user: cubit.user!,
             qrData: cubit.qrData!,
@@ -228,6 +245,10 @@ class _HomeLoadedState extends State<HomeLoaded> {
           BottomNavigationBarItem(
             icon: Icon(Icons.fitness_center),
             label: 'Academia Recife',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.calendar_today),
+            label: 'Eventos',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),

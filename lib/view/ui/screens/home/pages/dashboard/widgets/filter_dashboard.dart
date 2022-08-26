@@ -14,7 +14,7 @@ class FiltersDashboard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<HomeCubit>();
-    final state = cubit.state;
+
     return SizedBox(
       height: 32,
       child: Row(
@@ -29,37 +29,39 @@ class FiltersDashboard extends StatelessWidget {
             left: 16.0,
             right: 8.0,
           ),
-          Expanded(
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              children: [
-                ChipCFit(
-                  label: 'Todos',
-                  onPressed: cubit.setFilterDashboard,
-                  isSelected: state.filter == HomeStateEventsFilter.all,
-                  value: HomeStateEventsFilter.all,
-                ).withPaddingSymmetric(horizontal: 4.0),
-                ChipCFit(
-                  label: 'Criados por mim',
-                  onPressed: cubit.setFilterDashboard,
-                  isSelected: state.filter == HomeStateEventsFilter.my,
-                  value: HomeStateEventsFilter.my,
-                ).withPaddingSymmetric(horizontal: 4.0),
-                ChipCFit(
-                  label: 'Academia Recife',
-                  onPressed: cubit.setFilterDashboard,
-                  isSelected: state.filter == HomeStateEventsFilter.gymCity,
-                  value: HomeStateEventsFilter.gymCity,
-                ).withPaddingSymmetric(horizontal: 4.0),
-                ChipCFit(
-                  label: 'Público',
-                  onPressed: cubit.setFilterDashboard,
-                  isSelected: state.filter == HomeStateEventsFilter.public,
-                  value: HomeStateEventsFilter.public,
-                ).withPaddingSymmetric(horizontal: 4.0),
-              ],
-            ),
-          ),
+          BlocBuilder<HomeCubit, HomeState>(builder: (context, state) {
+            return Expanded(
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                children: [
+                  ChipCFit(
+                    label: 'Todos',
+                    onPressed: cubit.setFilterDashboard,
+                    isSelected: state.filter == HomeStateEventsFilter.all,
+                    value: HomeStateEventsFilter.all,
+                  ).withPaddingSymmetric(horizontal: 4.0),
+                  ChipCFit(
+                    label: 'Criados por mim',
+                    onPressed: cubit.setFilterDashboard,
+                    isSelected: state.filter == HomeStateEventsFilter.my,
+                    value: HomeStateEventsFilter.my,
+                  ).withPaddingSymmetric(horizontal: 4.0),
+                  ChipCFit(
+                    label: 'Academia Recife',
+                    onPressed: cubit.setFilterDashboard,
+                    isSelected: state.filter == HomeStateEventsFilter.gymCity,
+                    value: HomeStateEventsFilter.gymCity,
+                  ).withPaddingSymmetric(horizontal: 4.0),
+                  ChipCFit(
+                    label: 'Público',
+                    onPressed: cubit.setFilterDashboard,
+                    isSelected: state.filter == HomeStateEventsFilter.public,
+                    value: HomeStateEventsFilter.public,
+                  ).withPaddingSymmetric(horizontal: 4.0),
+                ],
+              ),
+            );
+          }),
         ],
       ),
     ).withPaddingSymmetric(vertical: 8);

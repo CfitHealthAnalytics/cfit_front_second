@@ -8,6 +8,9 @@ class ButtonAction extends StatefulWidget {
     this.onPressed,
     this.loading,
     this.customBackgroundColor,
+    this.width,
+    this.height,
+    this.textStyle,
   }) : super(key: key);
 
   final String text;
@@ -15,6 +18,9 @@ class ButtonAction extends StatefulWidget {
   final bool? loading;
   final ButtonActionType type;
   final Color? customBackgroundColor;
+  final double? width;
+  final double? height;
+  final TextStyle? textStyle;
 
   @override
   State<ButtonAction> createState() => _ButtonActionState();
@@ -39,7 +45,8 @@ class _ButtonActionState extends State<ButtonAction> {
       case ButtonActionType.primary:
         return TextButton(
           child: Container(
-            width: double.maxFinite,
+            width: widget.width ?? double.maxFinite,
+            height: widget.height,
             decoration: BoxDecoration(
               color: _getColor(),
               borderRadius: const BorderRadius.all(
@@ -60,7 +67,8 @@ class _ButtonActionState extends State<ButtonAction> {
                       )
                     : Text(
                         widget.text,
-                        style: TextStyle(
+                        style: widget.textStyle ??
+                            TextStyle(
                           color: widget.onPressed == null
                               ? Colors.white.withAlpha(100)
                               : Colors.white,
@@ -78,7 +86,8 @@ class _ButtonActionState extends State<ButtonAction> {
         return TextButton(
           child: Text(
             widget.text,
-            style: const TextStyle(
+            style: widget.textStyle ??
+                const TextStyle(
               color: Colors.white,
               fontSize: 16,
               fontWeight: FontWeight.w500,
@@ -86,8 +95,24 @@ class _ButtonActionState extends State<ButtonAction> {
           ),
           onPressed: widget.onPressed,
         );
+
+      case ButtonActionType.chip:
+        return InputChip(
+          label: Text(
+            widget.text,
+            style: widget.textStyle ??
+                const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w400,
+                ),
+          ),
+          backgroundColor: widget.onPressed == null
+              ? Theme.of(context).primaryColorDark
+              : Theme.of(context).primaryColor,
+          onPressed: widget.onPressed,
+        );
     }
   }
 }
 
-enum ButtonActionType { primary, text }
+enum ButtonActionType { primary, text, chip }

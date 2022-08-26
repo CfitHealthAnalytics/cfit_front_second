@@ -1,5 +1,6 @@
 import 'package:cfit/data/entity/confirmation_event.dart';
 import 'package:cfit/data/entity/events_city.dart';
+import 'package:cfit/data/entity/events_public.dart';
 import 'package:cfit/data/models/events.dart';
 import 'package:cfit/external/models/api.dart';
 import 'package:cfit/external/models/storage.dart';
@@ -30,7 +31,7 @@ class EventsRepositoryImpl implements EventsRepository {
   }
 
   @override
-  Future<bool> scheduleEvent(String eventId) async {
+  Future<bool> scheduleEventCity(String eventId) async {
     final userId = await storage.get(AppConstants.USER_ID);
 
     await client.post(
@@ -45,11 +46,41 @@ class EventsRepositoryImpl implements EventsRepository {
   }
 
   @override
-  Future<bool> unscheduleEvent(String eventId) async {
+  Future<bool> unscheduleEventCity(String eventId) async {
     final userId = await storage.get(AppConstants.USER_ID);
 
     await client.post(
       path: AppConstants.CHECKOUT_CITY_EVENTS,
+      query: {
+        "id_event": eventId,
+        "user": userId,
+      },
+      isBodyEmpty: true,
+    );
+    return true;
+  }
+
+  @override
+  Future<bool> scheduleEventPublic(String eventId) async {
+    final userId = await storage.get(AppConstants.USER_ID);
+
+    await client.post(
+      path: AppConstants.CHECKIN_PUBLIC_EVENTS,
+      query: {
+        "id_event": eventId,
+        "user": userId,
+      },
+      isBodyEmpty: true,
+    );
+    return true;
+  }
+
+  @override
+  Future<bool> unscheduleEventPublic(String eventId) async {
+    final userId = await storage.get(AppConstants.USER_ID);
+
+    await client.post(
+      path: AppConstants.CHECKOUT_PUBLIC_EVENTS,
       query: {
         "id_event": eventId,
         "user": userId,
@@ -72,5 +103,55 @@ class EventsRepositoryImpl implements EventsRepository {
       },
     );
     return true;
+  }
+
+  @override
+  Future<List<EventPublicResponse>> getEventsPublic() async {
+    final response = await client.get(
+      path: AppConstants.GET_PUBLIC_EVENTS,
+    );
+    final cleanList = (response.data['responses'] as List)
+        .where((element) => element != null)
+        .toList();
+    // TODO: remove this when dont have events with user_checkin as string only
+    // cleanList.removeWhere(
+    // (element) => (element['users_checkin'] as List).first is String);
+
+    return cleanList
+        .map((response) => EventPublicResponse.fromMap(response))
+        .toList();
+  }
+
+  @override
+  Future<bool> createEventPublic(
+    CreateEventPublicRequest createEventPublicRequest,
+    String userId,
+  ) async {
+    try {
+      final response = await client.post(
+          path: AppConstants.REGISTER_EVENT,
+          body: createEventPublicRequest.toMap(),
+          query: {
+            'user_id': userId,
+          });
+
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  @override
+  Future<List<String>> getEventsCategories() async {
+    final response = await client.get(
+      path: AppConstants.GET_MODALIDADES_EVENTS,
+    );
+
+    final cleanList = (response.data['responses'] as List)
+        .where((element) => element != null)
+        .cast<String>()
+        .toList();
+
+    return cleanList;
   }
 }

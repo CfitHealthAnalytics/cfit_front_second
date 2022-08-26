@@ -2,6 +2,7 @@ import 'package:cfit/util/bottom_sheet.dart';
 import 'package:cfit/view/common/button.dart';
 import 'package:cfit/view/common/input_text.dart';
 import 'package:cfit/view/common/modais.dart';
+import 'package:cfit/view/common/padding.dart';
 import 'package:cfit/view/ui/screens/login/login_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -33,9 +34,8 @@ class LoginScreen extends StatelessWidget {
                   presentBottomSheet(
                     context: context,
                     modal: LoginErrorModal(
-                      context: context,
                       onPressed: () {
-                        Navigator.of(context).pop();
+                        Navigator.pop(context);
                         cubit.authentication();
                       },
                     ),
@@ -127,43 +127,65 @@ class LoginScreen extends StatelessWidget {
   }
 }
 
-class LoginErrorModal implements Modal {
-  LoginErrorModal({
+class LoginErrorModal extends Modal {
+  const LoginErrorModal({
+    Key? key,
     required this.onPressed,
-    required this.context,
-  });
-
+  }) : super(key: key);
   final VoidCallback onPressed;
-  final BuildContext context;
 
   @override
   double get fraction => 0.5;
 
   @override
-  Widget? get primaryAction => ButtonAction(
-        text: 'Tentar novamente',
-        type: ButtonActionType.primary,
-        onPressed: onPressed,
-        customBackgroundColor: Theme.of(context).primaryColor,
-      );
-
-  @override
-  Widget? get secondaryAction => null;
-
-  @override
-  Widget? get subtitle => const Text(
-        '''Aconteceu algum problema com as informações inseridas. Por favor verifique os valores inseridos, e tente novamente.''',
-        style: TextStyle(
-          fontSize: 20,
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          onPressed: Navigator.of(context).pop,
+          icon: const Icon(
+            Icons.close,
+            color: Colors.grey,
+          ),
         ),
-      );
-
-  @override
-  Widget get title => const Text(
-        'Falha no login',
-        style: TextStyle(
-          fontSize: 24,
-          fontWeight: FontWeight.bold,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+      ),
+      body: Container(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Falha no login',
+              style: TextStyle(
+                fontSize: 22,
+                color: Colors.black,
+                fontWeight: FontWeight.w500,
+              ),
+            ).withPaddingOnly(bottom: 16),
+            const Expanded(
+              child: Text(
+                '''Aconteceu algum problema com as informações inseridas. Por favor verifique os valores inseridos, e tente novamente.''',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.black,
+                  fontWeight: FontWeight.w300,
+                ),
+              ),
+            ),
+          ],
         ),
-      );
+      ),
+      bottomNavigationBar: SizedBox(
+        height: 115,
+        child: ButtonAction(
+          text: 'Tentar novamente',
+          type: ButtonActionType.primary,
+          onPressed: onPressed,
+          customBackgroundColor: Theme.of(context).primaryColor,
+        ).withPaddingOnly(bottom: 36),
+      ),
+    );
+  }
 }

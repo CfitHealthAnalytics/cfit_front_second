@@ -15,6 +15,7 @@ class InputText extends StatefulWidget {
     this.formKey,
     this.inputFormatter,
     this.validator,
+    this.controller,
   }) : super(key: key);
 
   final String hintText;
@@ -22,6 +23,7 @@ class InputText extends StatefulWidget {
   final InputTextType type;
   final GlobalKey<FormState>? formKey;
   final List<TextInputFormatter>? inputFormatter;
+  final TextEditingController? controller;
   final String? Function(String?)? validator;
 
   @override
@@ -69,6 +71,7 @@ class _InputTextState extends State<InputText> {
         return Form(
           key: _formKey,
           child: TextFormField(
+            controller: widget.controller,
             decoration: InputDecoration(
               hintText: widget.hintText,
               fillColor: Colors.white,
@@ -94,6 +97,7 @@ class _InputTextState extends State<InputText> {
         return Form(
           key: _formKey,
           child: TextFormField(
+            controller: widget.controller,
             decoration: InputDecoration(
               hintText: widget.hintText,
               fillColor: Colors.white,
@@ -128,6 +132,7 @@ class _InputTextState extends State<InputText> {
             Form(
               key: _formKey,
               child: TextFormField(
+                controller: widget.controller,
                 focusNode: _focusNode,
                 decoration: InputDecoration(
                   hintText: widget.hintText,
@@ -170,8 +175,87 @@ class _InputTextState extends State<InputText> {
             )
           ],
         );
+      case InputTextType.textArea:
+        return Form(
+          key: _formKey,
+          child: TextFormField(
+            controller: widget.controller,
+            decoration: InputDecoration(
+              hintText: widget.hintText,
+              fillColor: Colors.white,
+              filled: true,
+              border: const OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(24)),
+              ),
+              errorBorder: InputBorder.none,
+              errorStyle: const TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            validator: widget.validator,
+            inputFormatters: widget.inputFormatter,
+            focusNode: _focusNode,
+            onChanged: widget.onChanged,
+            cursorColor: Colors.grey,
+            minLines: 4,
+            maxLines: 5,
+          ),
+        );
+      case InputTextType.number:
+        return Form(
+          key: _formKey,
+          child: TextFormField(
+            controller: widget.controller,
+            decoration: InputDecoration(
+              hintText: widget.hintText,
+              fillColor: Colors.white,
+              filled: true,
+              border: const OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(24)),
+              ),
+              errorBorder: InputBorder.none,
+              errorStyle: const TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            validator: widget.validator,
+            inputFormatters: widget.inputFormatter,
+            focusNode: _focusNode,
+            onChanged: widget.onChanged,
+            cursorColor: Colors.grey,
+            keyboardType: TextInputType.number,
+          ),
+        );
+      case InputTextType.date:
+        return Form(
+          key: _formKey,
+          child: TextFormField(
+            controller: widget.controller,
+            decoration: InputDecoration(
+              hintText: widget.hintText,
+              fillColor: Colors.white,
+              filled: true,
+              border: const OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(24)),
+              ),
+              errorBorder: InputBorder.none,
+              errorStyle: const TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            validator: widget.validator,
+            inputFormatters: widget.inputFormatter,
+            focusNode: _focusNode,
+            onChanged: widget.onChanged,
+            cursorColor: Colors.grey,
+            keyboardType: TextInputType.datetime,
+          ),
+        );
     }
   }
 }
 
-enum InputTextType { email, text, password }
+enum InputTextType { email, text, password, textArea, number, date }

@@ -39,6 +39,9 @@ class AppConstants {
 
   static const String CHECKOUT_CITY_EVENTS = '/checkout_city_events/';
   static const String CHECKIN_CITY_EVENTS = '/checkin_city_events/';
+  
+  static const String CHECKOUT_PUBLIC_EVENTS = '/checkout_public_events/';
+  static const String CHECKIN_PUBLIC_EVENTS = '/checkin_public_events/';
 
   static const String REGISTER_EVENT = '/create_public_events/';
 
@@ -53,6 +56,8 @@ class AppConstants {
   static const String GET_PUBLIC_EVENTS = '/get_public_events/';
   static const String GET_MODALIDADES_EVENTS = '/modalidades';
   static const String GET_MY_CITY_EVENTS = '/get_city_events/my_city_events';
+  static const String GET_MY_PUBLIC_EVENTS =
+      '/get_public_events/my_public_events';
 
   static const String TOKEN_URI = '/api/v1/customer/cm-firebase-token';
   static const String PLACE_ORDER_URI = '/api/v1/customer/order/place';

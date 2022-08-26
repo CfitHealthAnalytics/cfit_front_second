@@ -4,13 +4,17 @@ import 'package:cfit/data/models/user.dart';
 import 'package:cfit/data/repository/auth.dart';
 import 'package:cfit/data/repository/events.dart';
 import 'package:cfit/data/repository/user.dart';
+import 'package:cfit/domain/use_cases/categories_event_use_case.dart';
 import 'package:cfit/domain/use_cases/confirmation_event_in_city_use_case.dart';
+import 'package:cfit/domain/use_cases/create_event_public_use_case.dart';
 import 'package:cfit/domain/use_cases/events_in_city_use_case.dart';
+import 'package:cfit/domain/use_cases/events_public_use_case.dart';
 import 'package:cfit/domain/use_cases/feed_use_case.dart';
 import 'package:cfit/domain/use_cases/initialization_use_case.dart';
 import 'package:cfit/domain/use_cases/logout_use_case.dart';
 import 'package:cfit/domain/use_cases/register_use_case.dart';
 import 'package:cfit/domain/use_cases/schedule_event_in_city_use_case.dart';
+import 'package:cfit/domain/use_cases/schedule_event_public_use_case.dart';
 import 'package:cfit/external/api/authenticated_client.dart';
 import 'package:cfit/external/api/unauthenticated_client.dart';
 import 'package:cfit/external/factory/api.dart';
@@ -93,15 +97,21 @@ extension DependencyInjection on BuildContext {
       authRepository(),
     );
   }
-  
+
   EventsInCityUseCase eventsInCityUseCase() {
     return EventsInCityUseCase(
       eventsRepository: eventsRepository(),
     );
   }
 
-  ScheduleEventInCityUseCase scheduleEventsInCityUseCase() {
-    return ScheduleEventInCityUseCase(
+  ScheduleEventCityInCityUseCase scheduleEventsInCityUseCase() {
+    return ScheduleEventCityInCityUseCase(
+      eventsRepository: eventsRepository(),
+    );
+  }
+
+  ScheduleEventPublicInCityUseCase scheduleEventsPublicUseCase() {
+    return ScheduleEventPublicInCityUseCase(
       eventsRepository: eventsRepository(),
     );
   }
@@ -109,6 +119,24 @@ extension DependencyInjection on BuildContext {
   ConfirmationEventInCityUseCase confirmationEventInCityUseCase() {
     return ConfirmationEventInCityUseCase(
       eventsRepository: eventsRepository(),
+    );
+  }
+
+  EventsPublicUseCase eventsPublicUseCase() {
+    return EventsPublicUseCase(
+      eventsRepository: eventsRepository(),
+    );
+  }
+
+  CategoriesEventUseCase categoriesEventUseCase() {
+    return CategoriesEventUseCase(
+      eventsRepository: eventsRepository(),
+    );
+  }
+
+  CreateEventPublicUseCase createEventPublicUseCase() {
+    return CreateEventPublicUseCase(
+      eventsRepository(),
     );
   }
 }

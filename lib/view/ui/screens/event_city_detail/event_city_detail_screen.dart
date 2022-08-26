@@ -6,8 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
-import 'event_details_cubit.dart';
-import 'event_details_state.dart';
+import 'event_city_detail_cubit.dart';
+import 'event_city_detail_state.dart';
 import 'widgets/widgets.dart';
 
 final dateBirthMask = MaskTextInputFormatter(
@@ -16,8 +16,8 @@ final dateBirthMask = MaskTextInputFormatter(
   type: MaskAutoCompletionType.lazy,
 );
 
-class EventDetailsScreen extends StatelessWidget {
-  const EventDetailsScreen({
+class EventCityDetailsScreen extends StatelessWidget {
+  const EventCityDetailsScreen({
     Key? key,
     required this.eventCity,
     required this.user,
@@ -28,7 +28,7 @@ class EventDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final cubit = context.read<EventDetailsCubit>();
+    final cubit = context.read<EventCityDetailsCubit>();
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -104,31 +104,30 @@ class EventDetailsScreen extends StatelessWidget {
                   right: 8.0,
                   bottom: 45,
                 ),
-                child: BlocConsumer<EventDetailsCubit, EventDetailsState>(
+                child:
+                    BlocConsumer<EventCityDetailsCubit, EventCityDetailsState>(
                   listener: (context, state) {
-                    if (state.status == EventDetailsStatus.failed) {
+                    if (state.status == EventCityDetailsStatus.failed) {
                       presentBottomSheet(
                         context: context,
                         modal: ScheduleErrorModal(
-                            isUnscheduled: cubit.alreadyScheduled,
-                            context: context,
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                              cubit.action(eventCity);
-                            }),
+                          onPressed: () {
+                            Navigator.pop(context);
+                            cubit.action(eventCity);
+                          },
+                          isUnscheduled: cubit.alreadyScheduled,
+                        ),
                       );
                     }
-                    if (state.status == EventDetailsStatus.succeeds) {
+                    if (state.status == EventCityDetailsStatus.succeeds) {
                       presentBottomSheet(
                         context: context,
                         modal: ScheduleConfirmation(
-                          onPressed: () {
-                            Navigator.of(context)
-                              ..pop()
-                              ..pop();
-                          },
                           isUnscheduled: cubit.alreadyScheduled,
-                          context: context,
+                          onPressed: () {
+                            Navigator.pop(context);
+                            Navigator.pop(context);
+                          },
                         ),
                       );
                     }

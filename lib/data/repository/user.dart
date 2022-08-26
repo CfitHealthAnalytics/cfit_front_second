@@ -1,4 +1,5 @@
 import 'package:cfit/data/entity/events_city.dart';
+import 'package:cfit/data/entity/events_public.dart';
 import 'package:cfit/data/entity/feed.dart';
 import 'package:cfit/data/models/user.dart';
 import 'package:cfit/external/models/api.dart';
@@ -26,7 +27,7 @@ class UserRepositoryImpl implements UserRepository {
   }
 
   @override
-  Future<List<EventCityResponse>?> getUserEvents() async {
+  Future<List<EventCityResponse>?> getUserEventsCity() async {
     final userId = await storage.get(AppConstants.USER_ID);
     try {
       final response = await client.get(
@@ -55,5 +56,28 @@ class UserRepositoryImpl implements UserRepository {
     return (response.data['responses'][0]['users'] as List)
         .map((e) => e.toString())
         .toList();
+  }
+
+  @override
+  Future<List<EventPublicResponse>?> getUserEventsPublic() async {
+    final userId = await storage.get(AppConstants.USER_ID);
+    try {
+      final response = await client.get(
+        path: AppConstants.GET_MY_PUBLIC_EVENTS,
+        query: {'user_id': userId},
+      );
+      final cleanList = (response.data['responses'] as List)
+          .where((element) => element != null)
+          .toList();
+      // TODO: remove this when dont have events with user_checkin as string only
+      cleanList.removeWhere(
+          (element) => (element['users_checkin'] as List).first is String);
+
+      return cleanList
+          .map((event) => EventPublicResponse.fromMap(event!))
+          .toList();
+    } catch (e) {
+      return null;
+    }
   }
 }

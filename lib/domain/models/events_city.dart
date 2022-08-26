@@ -4,22 +4,38 @@ import 'package:cfit/domain/models/user.dart';
 import 'package:flutter/foundation.dart';
 
 import 'coordinates.dart';
+import 'events.dart';
 
-class EventCity {
+class EventCity implements Event {
+  @override
   String street;
+  @override
   String neighborhood;
+  @override
   String number;
+  @override
   DateTime startTime;
+  @override
   String type;
+  @override
   int countUsers;
+  @override
   List<User> usersCheckIn;
+  @override
   List<String> usersConfirmation;
+  @override
   String description;
+  @override
   String city;
+  @override
   Coordinates coordinates;
+  @override
   DateTime createdAt;
+  @override
   String name;
+  @override
   int countMaxUsers;
+  @override
   String id;
 
   EventCity({

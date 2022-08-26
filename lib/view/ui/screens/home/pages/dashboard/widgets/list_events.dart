@@ -1,4 +1,4 @@
-import 'package:cfit/domain/models/events_city.dart';
+import 'package:cfit/domain/models/events.dart';
 import 'package:cfit/util/dates.dart';
 import 'package:cfit/util/extentions.dart';
 import 'package:cfit/view/common/loading_box.dart';
@@ -11,8 +11,8 @@ class ListEventCity extends StatelessWidget {
     required this.events,
   }) : super(key: key);
 
-  final void Function(EventCity event) onPressed;
-  final List<EventCity> events;
+  final void Function(Event event) onPressed;
+  final List<Event> events;
 
   @override
   Widget build(BuildContext context) {

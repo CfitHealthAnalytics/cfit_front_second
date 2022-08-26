@@ -9,9 +9,10 @@ class Routes {
   static const eventos = '/eventos';
   static const eventos_favorite = '/eventos/favoritos';
   static const eventos_confirmations = '/evento/confirmations';
-  static const event_city_admin = '/evento/city/confirmacao';
+  static const event_city_admin = '/event/city/confirmation';
   static const eventos_editar = '/evento/editar';
-  static const event_details = '/event/details';
+  static const event_city_details = '/evento/city/details';
+  static const event_public_details = '/evento/public/details';
   static const cadastro_eventos = '/eventos/cadastro';
   static const eventos_search = '/eventos/pesquisa';
   static const perfil = '/perfil';
@@ -19,5 +20,5 @@ class Routes {
   static const mymeasures = '/mymeasures';
   static const qrcode = '/qrcode';
 
-  static const mapa = '/mapa';
+  static const map = '/map';
 }

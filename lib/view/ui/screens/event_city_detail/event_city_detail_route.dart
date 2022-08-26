@@ -4,12 +4,12 @@ import 'package:cfit/domain/models/user.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'event_details_cubit.dart';
-import 'event_details_navigation.dart';
-import 'event_details_screen.dart';
+import 'event_city_detail_cubit.dart';
+import 'event_city_detail_navigation.dart';
+import 'event_city_detail_screen.dart';
 
-class EventDetailsRoute extends StatelessWidget {
-  const EventDetailsRoute({
+class EventCityDetailsRoute extends StatelessWidget {
+  const EventCityDetailsRoute({
     Key? key,
     required this.eventCity,
     required this.user,
@@ -21,17 +21,14 @@ class EventDetailsRoute extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => EventDetailsCubit(
-        EventDetailsNavigation.fromMaterialNavigation(
+      create: (context) => EventCityDetailsCubit(
+        EventCityDetailsNavigation.fromMaterialNavigation(
           Navigator.of(context),
         ),
         context.scheduleEventsInCityUseCase(),
         alreadyScheduled: alreadyScheduled,
       ),
-      child: EventDetailsScreen(
-        eventCity: eventCity,
-        user: user
-      ),
+      child: EventCityDetailsScreen(eventCity: eventCity, user: user),
     );
   }
 }

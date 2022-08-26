@@ -24,10 +24,17 @@ final theme = ThemeData(
         fontFamily: 'Rubik'),
   ),
   inputDecorationTheme: const InputDecorationTheme(
-    enabledBorder:
-        UnderlineInputBorder(borderSide: BorderSide(color: primaryColorLight)),
-    focusedBorder:
-        UnderlineInputBorder(borderSide: BorderSide(color: primaryColor)),
+    enabledBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: Colors.grey),
+        borderRadius: BorderRadius.all(Radius.circular(8))),
+    focusedBorder: OutlineInputBorder(
+      borderSide: BorderSide(color: primaryColor),
+      borderRadius: BorderRadius.all(Radius.circular(8)),
+    ),
+    border: OutlineInputBorder(
+      borderSide: BorderSide(color: Colors.grey),
+      borderRadius: BorderRadius.all(Radius.circular(8)),
+    ),
     alignLabelWithHint: true,
   ),
   buttonTheme: ButtonThemeData(
@@ -38,6 +45,13 @@ final theme = ThemeData(
     textTheme: ButtonTextTheme.primary,
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(10),
+    ),
+  ),
+  textButtonTheme: TextButtonThemeData(
+    style: ButtonStyle(
+      overlayColor: MaterialStateProperty.resolveWith<Color>((states) {
+        return primaryColor.withOpacity(0.1);
+      }),
     ),
   ),
   checkboxTheme: CheckboxThemeData(

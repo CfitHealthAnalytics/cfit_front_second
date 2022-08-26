@@ -83,12 +83,13 @@ class _BodyGymState extends State<BodyGym> {
             getEventsCity: widget.getEventsCity,
             selectedDate: selectedDate,
             onPressed: (event) {
+              cubit.setNotAlreadyLoaded();
               if (widget.user.isAdmin) {
                 widget.navigation.toEventCityAdmin(
                   event,
                 );
               } else {
-                widget.navigation.toEventDetail(
+                widget.navigation.toEventCityDetail(
                   event,
                   widget.user,
                   alreadyConfirmed: event.usersCheckIn

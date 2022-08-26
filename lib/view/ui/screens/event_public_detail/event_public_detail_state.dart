@@ -1,27 +1,27 @@
-class EventDetailsState {
+class EventPublicDetailsState {
   final bool loadingRequest;
   final String? errorMessage;
-  final EventDetailsStatus status;
+  final EventPublicDetailsStatus status;
 
-  EventDetailsState({
+  EventPublicDetailsState({
     required this.loadingRequest,
     this.errorMessage,
     required this.status,
   });
 
-  factory EventDetailsState.empty() {
-    return EventDetailsState(
+  factory EventPublicDetailsState.empty() {
+    return EventPublicDetailsState(
       loadingRequest: false,
       errorMessage: null,
-      status: EventDetailsStatus.none,
+      status: EventPublicDetailsStatus.none,
     );
   }
-  EventDetailsState copyWith({
+  EventPublicDetailsState copyWith({
     bool? loadingRequest,
     String? errorMessage,
-    EventDetailsStatus? status,
+    EventPublicDetailsStatus? status,
   }) {
-    return EventDetailsState(
+    return EventPublicDetailsState(
       loadingRequest: loadingRequest ?? this.loadingRequest,
       errorMessage: errorMessage ?? this.errorMessage,
       status: status ?? this.status,
@@ -32,7 +32,7 @@ class EventDetailsState {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is EventDetailsState &&
+    return other is EventPublicDetailsState &&
         other.loadingRequest == loadingRequest &&
         other.errorMessage == errorMessage &&
         other.status == status;
@@ -43,4 +43,4 @@ class EventDetailsState {
       loadingRequest.hashCode ^ errorMessage.hashCode ^ status.hashCode;
 }
 
-enum EventDetailsStatus { none, failed, succeeds }
+enum EventPublicDetailsStatus { none, failed, succeeds }

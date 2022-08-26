@@ -1,12 +1,12 @@
-import 'package:cfit/domain/models/events_city.dart';
+import 'package:cfit/domain/models/events.dart';
 import 'package:cfit/domain/models/user.dart';
 import 'package:flutter/foundation.dart';
 
 class Feed {
   final User user;
-  final List<EventCity> myEvents;
-  final List<EventCity> gymCity;
-  final List<EventCity> publicEvents;
+  final List<Event> myEvents;
+  final List<Event> gymCity;
+  final List<Event> publicEvents;
 
   Feed({
     required this.user,
@@ -15,7 +15,7 @@ class Feed {
     required this.publicEvents,
   });
 
-  List<EventCity> get all => [...myEvents, ...gymCity, ...publicEvents];
+  List<Event> get all => [...myEvents, ...gymCity, ...publicEvents];
 
   @override
   bool operator ==(Object other) {

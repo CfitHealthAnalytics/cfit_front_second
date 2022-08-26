@@ -1,3 +1,4 @@
+import 'package:cfit/domain/models/events_city.dart';
 import 'package:cfit/view/ui/screens/home/home_cubit.dart';
 import 'package:cfit/view/ui/screens/home/home_navigation.dart';
 import 'package:cfit/view/ui/screens/home/home_state.dart';
@@ -16,13 +17,13 @@ class BodyDashboard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cubit = context.read<HomeCubit>();
     return BlocBuilder<HomeCubit, HomeState>(
       buildWhen: (oldState, newState) =>
           (oldState.loadingRequestGetEvents !=
               newState.loadingRequestGetEvents) ||
           (oldState.filter != newState.filter),
       builder: (context, state) {
-        
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -46,18 +47,23 @@ class BodyDashboard extends StatelessWidget {
                 child: ListEventCity(
                   events: state.events,
                   onPressed: (event) {
+                    cubit.setNotAlreadyLoaded();
                     if (state.feed!.user.isAdmin) {
-                      navigation.toEventCityAdmin(
-                        event,
-                      );
+                      if (event is EventCity) {
+                        navigation.toEventCityAdmin(
+                          event,
+                        );
+                      }
                     } else {
-                      navigation.toEventDetail(
-                        event,
-                        state.feed!.user,
-                        alreadyConfirmed: event.usersCheckIn
-                            .where((user) => user.id == state.feed!.user.id)
-                            .isNotEmpty,
-                      );
+                      if (event is EventCity) {
+                        navigation.toEventCityDetail(
+                          event,
+                          state.feed!.user,
+                          alreadyConfirmed: event.usersCheckIn
+                              .where((user) => user.id == state.feed!.user.id)
+                              .isNotEmpty,
+                        );
+                      }
                     }
                   },
                 ),

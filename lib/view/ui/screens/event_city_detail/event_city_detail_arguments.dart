@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'package:cfit/domain/models/events_city.dart';
 import 'package:cfit/domain/models/user.dart';
 
-class EventDetailsArguments {
-  EventDetailsArguments({
+class EventCityDetailsArguments {
+  EventCityDetailsArguments({
     required this.eventCity,
     required this.user,
     required this.alreadyConfirmed,
@@ -21,8 +21,8 @@ class EventDetailsArguments {
     };
   }
 
-  factory EventDetailsArguments.fromMap(Map<String, dynamic> map) {
-    return EventDetailsArguments(
+  factory EventCityDetailsArguments.fromMap(Map<String, dynamic> map) {
+    return EventCityDetailsArguments(
       eventCity: EventCity.fromMap(map['event_city']),
       user: User.fromMap(map['user']),
       alreadyConfirmed: map['already_confirmed'],
@@ -31,6 +31,6 @@ class EventDetailsArguments {
 
   String toJson() => json.encode(toMap());
 
-  factory EventDetailsArguments.fromJson(String source) =>
-      EventDetailsArguments.fromMap(json.decode(source));
+  factory EventCityDetailsArguments.fromJson(String source) =>
+      EventCityDetailsArguments.fromMap(json.decode(source));
 }

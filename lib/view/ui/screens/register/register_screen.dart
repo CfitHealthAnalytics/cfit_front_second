@@ -265,8 +265,18 @@ class RegisterScreen extends StatelessWidget {
     presentBottomSheet(
       context: context,
       modal: accountExists
-          ? RegisterErrorAlreadyExistsModal(onPressed: onPressed)
-          : RegisterErrorModal(context: context, onPressed: onPressed),
+          ? RegisterErrorAlreadyExistsModal(
+              onPressed: () {
+                Navigator.pop(context);
+                context.read<RegisterCubit>().goToLogin();
+              },
+            )
+          : RegisterErrorModal(
+              onPressed: () {
+                Navigator.pop(context);
+                context.read<RegisterCubit>().register();
+              },
+            ),
     );
   }
 }

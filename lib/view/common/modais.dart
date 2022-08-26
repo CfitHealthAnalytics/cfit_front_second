@@ -1,17 +1,10 @@
 import 'package:flutter/material.dart';
 
-abstract class Modal {
-  final Widget title;
-  final Widget? subtitle;
-  final Widget? primaryAction;
-  final Widget? secondaryAction;
+abstract class Modal extends StatelessWidget {
   final double fraction;
-
-  Modal({
-    required this.title,
-    this.subtitle,
-    this.primaryAction,
-    this.secondaryAction,
+  
+  const Modal({
+    Key? key,
     this.fraction = 0.5,
-  });
+  }) : super(key: key);
 }

@@ -1,10 +1,10 @@
 import 'package:cfit/data/models/events.dart';
 import 'package:cfit/domain/models/events_city.dart';
 
-class ScheduleEventInCityUseCase {
+class ScheduleEventCityInCityUseCase {
   final EventsRepository eventsRepository;
 
-  ScheduleEventInCityUseCase({
+  ScheduleEventCityInCityUseCase({
     required this.eventsRepository,
   });
 
@@ -13,9 +13,9 @@ class ScheduleEventInCityUseCase {
     bool unschedule = false,
   }) async {
     if (!unschedule) {
-      await eventsRepository.scheduleEvent(event.id);
+      await eventsRepository.scheduleEventCity(event.id);
     } else {
-      await eventsRepository.unscheduleEvent(event.id);
+      await eventsRepository.unscheduleEventCity(event.id);
     }
 
     return true;

@@ -1,10 +1,11 @@
-import 'package:cfit/domain/models/events_city.dart';
+import 'package:cfit/domain/models/events.dart';
 import 'package:cfit/domain/models/feed.dart';
 
 class HomeState {
   final Feed? feed;
   final bool loadingRequestInit;
   final bool loadingRequestGetEvents;
+  final bool loadingRequestGetEventsPublic;
   final bool alreadyLoaded;
   final HomeStateEventsFilter filter;
 
@@ -12,6 +13,7 @@ class HomeState {
     this.feed,
     required this.loadingRequestInit,
     required this.loadingRequestGetEvents,
+    required this.loadingRequestGetEventsPublic,
     required this.alreadyLoaded,
     required this.filter,
   });
@@ -19,6 +21,7 @@ class HomeState {
     return HomeState(
       loadingRequestInit: false,
       loadingRequestGetEvents: false,
+      loadingRequestGetEventsPublic: false,
       alreadyLoaded: false,
       filter: HomeStateEventsFilter.all,
     );
@@ -27,6 +30,7 @@ class HomeState {
     Feed? feed,
     bool? loadingRequestInit,
     bool? loadingRequestGetEvents,
+    bool? loadingRequestGetEventsPublic,
     bool? alreadyLoaded,
     HomeStateEventsFilter? filter,
   }) {
@@ -35,6 +39,8 @@ class HomeState {
       loadingRequestInit: loadingRequestInit ?? this.loadingRequestInit,
       loadingRequestGetEvents:
           loadingRequestGetEvents ?? this.loadingRequestGetEvents,
+      loadingRequestGetEventsPublic:
+          loadingRequestGetEventsPublic ?? this.loadingRequestGetEventsPublic,
       alreadyLoaded: alreadyLoaded ?? this.alreadyLoaded,
       filter: filter ?? this.filter,
     );
@@ -48,6 +54,7 @@ class HomeState {
         other.feed == feed &&
         other.loadingRequestInit == loadingRequestInit &&
         other.loadingRequestGetEvents == loadingRequestGetEvents &&
+        other.loadingRequestGetEventsPublic == loadingRequestGetEventsPublic &&
         other.alreadyLoaded == alreadyLoaded &&
         other.filter == filter;
   }
@@ -57,6 +64,7 @@ class HomeState {
     return feed.hashCode ^
         loadingRequestInit.hashCode ^
         loadingRequestGetEvents.hashCode ^
+        loadingRequestGetEventsPublic.hashCode ^
         alreadyLoaded.hashCode ^
         filter.hashCode;
   }
@@ -65,7 +73,7 @@ class HomeState {
 enum HomeStateEventsFilter { all, gymCity, my, public }
 
 extension HomeStateEventsHandler on HomeState {
-  List<EventCity> get events {
+  List<Event> get events {
     switch (filter) {
       case HomeStateEventsFilter.all:
         return [

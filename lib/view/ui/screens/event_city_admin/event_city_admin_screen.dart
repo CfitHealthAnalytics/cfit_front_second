@@ -88,7 +88,6 @@ class EventCityAdminScreen extends StatelessWidget {
                 presentBottomSheet(
                   context: context,
                   modal: ConfirmationSucceeds(
-                    context: context,
                     onPressed: () {
                       Navigator.of(context).pop();
                       Navigator.of(context).pop();

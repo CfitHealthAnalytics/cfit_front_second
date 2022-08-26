@@ -15,6 +15,7 @@ class HomeRoute extends StatelessWidget {
       create: (context) => HomeCubit(
         feedUseCase: context.feedUseCase(),
         eventsInCityUseCase: context.eventsInCityUseCase(),
+        eventsPublicUseCase: context.eventsPublicUseCase(),
         navigation: HomeNavigation.fromMaterialNavigation(
           Navigator.of(context),
         ),
