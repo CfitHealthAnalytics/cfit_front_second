@@ -71,6 +71,14 @@ class BodyDashboard extends StatelessWidget {
                             event,
                             state.feed!.user,
                           );
+                        } else {
+                          navigation.toEventPublicDetail(
+                            event,
+                            state.feed!.user,
+                            alreadyConfirmed: event.usersCheckIn
+                                .where((user) => user.id == state.feed!.user.id)
+                                .isNotEmpty,
+                          );
                         }
                       }
                     }

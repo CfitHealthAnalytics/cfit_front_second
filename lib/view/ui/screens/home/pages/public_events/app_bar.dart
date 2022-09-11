@@ -24,6 +24,7 @@ class AppBarPublicEvents extends StatelessWidget {
       backgroundColor: Theme.of(context).primaryColor,
       elevation: 5,
       leadingWidth: 0,
+      automaticallyImplyLeading: false,
       actions: [
         IconButton(
           onPressed: cubit.toCreateEvent,

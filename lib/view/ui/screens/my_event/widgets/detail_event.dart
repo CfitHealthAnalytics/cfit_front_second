@@ -148,7 +148,7 @@ class CountConfirmed extends StatelessWidget {
         const SizedBox(width: 4),
         RichText(
           text: TextSpan(
-            text: eventPublic.usersConfirmation.length.toString(),
+            text: eventPublic.usersCheckIn.length.toString(),
             style: const TextStyle(color: Colors.black),
             children: [
               const TextSpan(text: '/'),
