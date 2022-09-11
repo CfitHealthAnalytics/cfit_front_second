@@ -1,20 +1,26 @@
 import 'dart:convert';
 
+import 'package:cfit/domain/models/user.dart';
+
 class SelectLocalizationArguments {
   SelectLocalizationArguments({
     required this.toCreateEvent,
+    required this.user,
   });
   final bool toCreateEvent;
+  final User user;
 
   Map<String, dynamic> toMap() {
     return {
-      'to_create_event': toCreateEvent,
+      'toCreateEvent': toCreateEvent,
+      'user': user.toMap(),
     };
   }
 
   factory SelectLocalizationArguments.fromMap(Map<String, dynamic> map) {
     return SelectLocalizationArguments(
-      toCreateEvent: map['to_create_event'],
+      toCreateEvent: map['toCreateEvent'] ?? false,
+      user: User.fromMap(map['user']),
     );
   }
 

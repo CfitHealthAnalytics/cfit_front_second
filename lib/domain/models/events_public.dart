@@ -32,7 +32,7 @@ class EventPublic implements Event {
   String type;
   @override
   String name;
-  String userIdCreate;
+  User userCreator;
   @override
   DateTime createdAt;
   @override
@@ -55,7 +55,7 @@ class EventPublic implements Event {
     required this.neighborhood,
     required this.type,
     required this.name,
-    required this.userIdCreate,
+    required this.userCreator,
     required this.createdAt,
     required this.countMaxUsers,
     required this.description,
@@ -77,7 +77,7 @@ class EventPublic implements Event {
       'neighborhood': neighborhood,
       'type': type,
       'name': name,
-      'userIdCreate': userIdCreate,
+      'userCreator': userCreator.toMap(),
       'createdAt': startTime.toIso8601String(),
       'countMaxUsers': countMaxUsers,
       'description': description,
@@ -101,7 +101,14 @@ class EventPublic implements Event {
       neighborhood: map['neighborhood'] ?? '',
       type: map['type'] ?? '',
       name: map['name'] ?? '',
-      userIdCreate: map['userIdCreate'] ?? '',
+      userCreator: User.fromMap(map['userCreator']) ??
+          User(
+            id: '',
+            name: '',
+            email: '',
+            dateBirth: '',
+            gender: UserGender.male,
+          ),
       createdAt: DateTime.parse(map['createdAt']),
       countMaxUsers: map['countMaxUsers']?.toInt() ?? 0,
       description: map['description'] ?? '',
@@ -132,7 +139,7 @@ class EventPublic implements Event {
         other.neighborhood == neighborhood &&
         other.type == type &&
         other.name == name &&
-        other.userIdCreate == userIdCreate &&
+        other.userCreator == userCreator &&
         other.createdAt == createdAt &&
         other.countMaxUsers == countMaxUsers &&
         other.description == description;
@@ -154,7 +161,7 @@ class EventPublic implements Event {
         neighborhood.hashCode ^
         type.hashCode ^
         name.hashCode ^
-        userIdCreate.hashCode ^
+        userCreator.hashCode ^
         createdAt.hashCode ^
         countMaxUsers.hashCode ^
         description.hashCode;

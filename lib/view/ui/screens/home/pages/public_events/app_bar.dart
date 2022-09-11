@@ -1,5 +1,7 @@
 import 'package:cfit/view/common/padding.dart';
+import 'package:cfit/view/ui/screens/home/home_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AppBarPublicEvents extends StatelessWidget {
   const AppBarPublicEvents({
@@ -8,6 +10,7 @@ class AppBarPublicEvents extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cubit = context.read<HomeCubit>();
     return AppBar(
       title: const Text(
         'Todos eventos',
@@ -23,7 +26,7 @@ class AppBarPublicEvents extends StatelessWidget {
       leadingWidth: 0,
       actions: [
         IconButton(
-          onPressed: () {},
+          onPressed: cubit.toCreateEvent,
           icon: const Icon(
             Icons.location_on,
           ),

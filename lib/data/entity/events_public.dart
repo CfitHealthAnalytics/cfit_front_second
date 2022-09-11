@@ -9,7 +9,7 @@ class EventPublicResponse {
   String number;
   String startTime;
   String type;
-  String userIdCreate;
+  UserBodyResponse userCreator;
   int countUsers;
   List<UserBodyResponse> usersCheckIn;
   List<String> usersConfirmation;
@@ -41,7 +41,7 @@ class EventPublicResponse {
     required this.countMaxUsers,
     required this.id,
     required this.status,
-    required this.userIdCreate,
+    required this.userCreator,
   });
 
   Map<String, dynamic> toMap() {
@@ -63,7 +63,7 @@ class EventPublicResponse {
       'countMaxUsers': countMaxUsers,
       'id': id,
       'status': status,
-      'userIdCreate': userIdCreate,
+      'user_create_info': userCreator.toMap(),
     };
   }
 
@@ -90,7 +90,14 @@ class EventPublicResponse {
       countMaxUsers: map['qtd_max_user']?.toInt() ?? 0,
       id: map['id'] ?? '',
       status: map['status'] ?? true,
-      userIdCreate: map['user_id_create'] ?? '',
+      userCreator: UserBodyResponse.fromMap(map['user_create_info']) ??
+          UserBodyResponse(
+            id: '',
+            name: '',
+            email: '',
+            dateBirth: '',
+            gender: 'masculino',
+          ),
     );
   }
 

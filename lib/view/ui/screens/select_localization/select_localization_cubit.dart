@@ -20,27 +20,31 @@ class SelectLocalizationCubit extends Cubit<SelectLocalizationState> {
     _navigation.onBack();
   }
 
+  Future<Address> buildAddress(LatLng selectedPosition) async {
+    final addresses = await placemarkFromCoordinates(
+      selectedPosition.latitude,
+      selectedPosition.longitude,
+    );
+    final infoStreet = addresses.first.street?.split(',') ?? ['', 's/n'];
+    final street = infoStreet[0];
+    final number = infoStreet[1];
+    return Address(
+      street: street,
+      neighborhood: addresses.first.subLocality ?? '',
+      number: number.trim(),
+      city: addresses.first.locality ?? '',
+      coordinates: Coordinates(
+        lat: selectedPosition.latitude,
+        long: selectedPosition.longitude,
+      ),
+    );
+  }
+
   void action(LatLng selectedPosition) async {
-    try {
-      final addresses = await placemarkFromCoordinates(
-        selectedPosition.latitude,
-        selectedPosition.longitude,
-      );
-      final infoStreet = addresses.first.street?.split(',') ?? ['', 's/n'];
-      final street = infoStreet[0];
-      final number = infoStreet[1];
-      _navigation.onBack(Address(
-        street: street,
-        neighborhood: addresses.first.subLocality ?? '',
-        number: number.trim(),
-        city: addresses.first.locality ?? '',
-        coordinates: Coordinates(
-          lat: selectedPosition.latitude,
-          long: selectedPosition.longitude,
-        ),
-      ));
-    } catch (e) {
-      print(e);
+    if (toCreateEvent) {
+      _navigation.goToCreateEvent(await buildAddress(selectedPosition));
+    } else {
+      _navigation.onBack(await buildAddress(selectedPosition));
     }
   }
 }

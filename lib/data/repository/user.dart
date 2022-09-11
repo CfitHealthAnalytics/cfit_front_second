@@ -80,4 +80,27 @@ class UserRepositoryImpl implements UserRepository {
       return null;
     }
   }
+
+  @override
+  Future<List<EventPublicResponse>?> getUserEventsCreator() async {
+    try {
+      final userId = await storage.get(AppConstants.USER_ID);
+      final response = await client.get(
+        path: AppConstants.GET_MY_EVENTS,
+        query: {'user_id': userId},
+      );
+      final cleanList = (response.data['responses'] as List)
+          .where((element) => element != null)
+          .toList();
+      // TODO: remove this when dont have events with user_checkin as string only
+      // cleanList.removeWhere(
+      //     (element) => (element['users_checkin'] as List).first is String);
+
+      return cleanList
+          .map((event) => EventPublicResponse.fromMap(event!))
+          .toList();
+    } catch (e) {
+      return null;
+    }
+  }
 }

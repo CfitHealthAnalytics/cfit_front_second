@@ -48,9 +48,12 @@ Route<dynamic> onGenerateRoutes(RouteSettings settings) {
         alreadyScheduled: eventDetailsArguments.alreadyConfirmed,
         user: eventDetailsArguments.user,
       ).buildRoute();
-    case Routes.eventos_confirmations:
+    case Routes.event_public_admin:
       final myEventArguments = MyEventArguments.fromJson(arguments as String);
-      return MyEventRoute(eventCity: myEventArguments.eventCity).buildRoute();
+      return MyEventRoute(
+        eventPublic: myEventArguments.eventPublic,
+        user: myEventArguments.user,
+      ).buildRoute();
     case Routes.event_city_admin:
       final eventCityAdminArguments =
           EventCityAdminArguments.fromJson(arguments as String);
@@ -61,6 +64,7 @@ Route<dynamic> onGenerateRoutes(RouteSettings settings) {
           SelectLocalizationArguments.fromJson(arguments as String);
       return SelectLocalizationRoute(
         toCreateEvent: selectLocationArguments.toCreateEvent,
+        user: selectLocationArguments.user,
       ).buildRoute<Address?>();
     default:
   }

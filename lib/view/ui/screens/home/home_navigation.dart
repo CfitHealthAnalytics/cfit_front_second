@@ -6,6 +6,7 @@ import 'package:cfit/util/routes.dart';
 import 'package:cfit/view/ui/screens/event_city_admin/event_city_admin_arguments.dart';
 import 'package:cfit/view/ui/screens/event_city_detail/event_city_detail_arguments.dart';
 import 'package:cfit/view/ui/screens/event_public_detail/event_public_detail_arguments.dart';
+import 'package:cfit/view/ui/screens/my_event/my_event_arguments.dart';
 import 'package:cfit/view/ui/screens/select_localization/select_localization_arguments.dart';
 import 'package:flutter/widgets.dart';
 
@@ -23,7 +24,11 @@ class HomeNavigation {
     required bool alreadyConfirmed,
   }) toEventPublicDetail;
   final void Function(EventCity event) toEventCityAdmin;
-  final Future<Address?> Function() toMap;
+  final void Function(EventPublic event, User user) toEventPublicAdmin;
+  final Future<Address?> Function({
+    required bool toCreateEvent,
+    required User user,
+  }) toMap;
 
   HomeNavigation({
     required this.toLogin,
@@ -31,6 +36,7 @@ class HomeNavigation {
     required this.toEventCityDetail,
     required this.toEventPublicDetail,
     required this.toEventCityAdmin,
+    required this.toEventPublicAdmin,
     required this.toMap,
   });
 
@@ -72,11 +78,19 @@ class HomeNavigation {
           'event_city': event.toMap(),
         }).toJson(),
       ),
-      toMap: () async {
+      toEventPublicAdmin: (EventPublic event, User user) => navigator.pushNamed(
+        Routes.event_public_admin,
+        arguments: MyEventArguments(eventPublic: event, user: user).toJson(),
+      ),
+      toMap: ({
+        required bool toCreateEvent,
+        required User user,
+      }) async {
         final address = await navigator.pushNamed<Address?>(
           Routes.map,
           arguments: SelectLocalizationArguments(
-            toCreateEvent: false,
+            toCreateEvent: toCreateEvent,
+            user: user,
           ).toJson(),
         );
         return address;

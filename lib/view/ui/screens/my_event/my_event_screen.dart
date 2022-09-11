@@ -1,18 +1,21 @@
-import 'package:cfit/domain/models/events_city.dart';
+import 'package:cfit/domain/models/user.dart';
+import 'package:cfit/view/common/loading_box.dart';
 import 'package:cfit/view/common/padding.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'my_event_cubit.dart';
+import 'my_event_state.dart';
 import 'widgets/widgets.dart';
 
 class MyEventScreen extends StatelessWidget {
   const MyEventScreen({
     Key? key,
-    required this.eventCity,
+    required this.user,
   }) : super(key: key);
 
-  final EventCity eventCity;
+  
+  final User user;
 
   @override
   Widget build(BuildContext context) {
@@ -49,55 +52,107 @@ class MyEventScreen extends StatelessWidget {
           ),
         ),
       ),
-      body: Flex(
-        direction: Axis.vertical,
-        children: [
-          Details(eventCity: eventCity),
-          Expanded(
-            child: Container(
-              padding: const EdgeInsets.all(16),
-              color: Colors.grey.shade300,
-              child: ListView(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [
-                      Text(
-                        "Solicitações",
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      Text(
-                        "Aceitar/Recusar",
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                    ],
-                  ).withPaddingOnly(bottom: 16),
-                  ...eventCity.usersConfirmation
-                      .map(
-                        (user) => Row(
-                          children: [
-                            CircleAvatar(
-                              backgroundColor:
-                                  Theme.of(context).primaryColorDark,
-                              child: const Icon(Icons.person),
+      body: BlocBuilder<MyEventCubit, MyEventState>(
+        builder: (context, state) {
+          if (state.loadingRequest) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                LoadingBox(
+                  height: 40,
+                  customWidth: MediaQuery.of(context).size.width,
+                ).withPaddingOnly(
+                  bottom: 8,
+                  top: 8,
+                ),
+                LoadingBox(
+                  height: 40,
+                  customWidth: MediaQuery.of(context).size.width,
+                ).withPaddingOnly(
+                  bottom: 8,
+                  top: 8,
+                ),
+                LoadingBox(
+                  height: 40,
+                  customWidth: MediaQuery.of(context).size.width * 0.75,
+                ).withPaddingOnly(
+                  bottom: 8,
+                  top: 8,
+                ),
+                LoadingBox(
+                  height: 40,
+                  customWidth: MediaQuery.of(context).size.width * 0.75,
+                ).withPaddingOnly(
+                  bottom: 8,
+                  top: 8,
+                ),
+                LoadingBox(
+                  height: 40,
+                  customWidth: MediaQuery.of(context).size.width * 0.5,
+                ).withPaddingOnly(
+                  bottom: 8,
+                  top: 8,
+                ),
+                LoadingBox(
+                  height: 40,
+                  customWidth: MediaQuery.of(context).size.width * 0.5,
+                ).withPaddingOnly(
+                  bottom: 8,
+                  top: 8,
+                ),
+              ],
+            ).withPaddingSymmetric(horizontal: 16);
+          }
+          return Flex(
+            direction: Axis.vertical,
+            children: [
+              Details(eventPublic: state.event),
+              Expanded(
+                child: Container(
+                  padding: const EdgeInsets.all(16),
+                  color: Colors.grey.shade300,
+                  child: ListView(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: const [
+                          Text(
+                            "Solicitações",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
                             ),
-                          ],
-                        ),
-                      )
-                      .toList()
-                ],
+                          ),
+                          Text(
+                            "Aceitar/Recusar",
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ],
+                      ).withPaddingOnly(bottom: 16),
+                      ...state.event.usersConfirmation
+                          .map(
+                            (user) => Row(
+                              children: [
+                                CircleAvatar(
+                                  backgroundColor:
+                                      Theme.of(context).primaryColorDark,
+                                  child: const Icon(Icons.person),
+                                ),
+                              ],
+                            ),
+                          )
+                          .toList()
+                    ],
+                  ),
+                ),
               ),
-            ),
-          ),
-        ],
+            ],
+          );
+        },
       ),
     );
   }
 }
-

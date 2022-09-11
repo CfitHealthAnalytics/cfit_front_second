@@ -1,5 +1,7 @@
 import 'package:cfit/domain/models/address.dart';
 import 'package:cfit/domain/models/coordinates.dart';
+import 'package:cfit/domain/models/events_public.dart';
+import 'package:cfit/util/extentions.dart';
 
 class CreatePublicEventState {
   final bool loadingRequest;
@@ -41,6 +43,42 @@ class CreatePublicEventState {
       hour: '',
       address: Address(
         coordinates: Coordinates(),
+      ),
+    );
+  }
+  
+  factory CreatePublicEventState.emptyOnlyAddress(Address address) {
+    return CreatePublicEventState(
+      loadingRequest: false,
+      editLocalization: false,
+      status: CreatePublicEventStatus.none,
+      name: '',
+      type: '',
+      description: '',
+      countMax: 1,
+      date: '',
+      hour: '',
+      address: address,
+    );
+  }
+
+  factory CreatePublicEventState.fromEvent(EventPublic event) {
+    return CreatePublicEventState(
+      loadingRequest: false,
+      editLocalization: false,
+      status: CreatePublicEventStatus.none,
+      name: event.name,
+      type: event.type,
+      description: event.description,
+      countMax: event.countMaxUsers,
+      date: event.startTime.getCustomDate(withYear: true),
+      hour: event.startTime.getCustomHour(),
+      address: Address(
+        coordinates: event.coordinates,
+        city: event.city,
+        neighborhood: event.neighborhood,
+        number: event.number,
+        street: event.street,
       ),
     );
   }

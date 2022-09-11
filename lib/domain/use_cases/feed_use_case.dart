@@ -87,11 +87,54 @@ class FeedUseCase {
               id: event.id,
               status: event.status,
               usersLike: event.usersLike,
-              userIdCreate: event.userIdCreate,
+              userCreator: User.fromMap(
+                event.userCreator.toMap(),
+              ),
             ),
           )
           .toList();
     }
+    return confirmedEvents;
+  }
+
+  Future<List<EventPublic>?> getMyEvents() async {
+    final userEvents = await userRepository.getUserEventsCreator();
+    if (userEvents == null) {
+      return [];
+    }
+    List<EventPublic>? confirmedEvents;
+    confirmedEvents = userEvents
+        .map(
+          (event) => EventPublic(
+            street: event.street,
+            neighborhood: event.neighborhood,
+            number: event.number,
+            startTime: DateTime.parse(event.startTime),
+            type: event.type,
+            countUsers: event.countUsers,
+            usersCheckIn: event.usersCheckIn
+                .map(
+                  (user) => User.fromMap(
+                    user.toMap(),
+                  ),
+                )
+                .toList(),
+            usersConfirmation: event.usersConfirmation,
+            description: event.description,
+            city: event.city,
+            coordinates: event.coordinates,
+            createdAt: DateTime.parse(event.createdAt),
+            name: event.name,
+            countMaxUsers: event.countMaxUsers,
+            id: event.id,
+            status: event.status,
+            usersLike: event.usersLike,
+            userCreator: User.fromMap(
+              event.userCreator.toMap(),
+            ),
+          ),
+        )
+        .toList();
     return confirmedEvents;
   }
 }

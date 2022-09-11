@@ -1,4 +1,6 @@
 import 'package:cfit/di/build_context.dart';
+import 'package:cfit/domain/models/address.dart';
+import 'package:cfit/domain/models/events_public.dart';
 import 'package:cfit/domain/models/user.dart';
 import 'package:cfit/view/common/modais.dart';
 import 'package:cfit/view/ui/screens/create_public_event/create_public_event_cubit.dart';
@@ -12,10 +14,16 @@ class CreatePublicEventModal extends Modal {
     Key? key,
     required this.user,
     required this.onCreate,
+    this.event,
+    this.address,
+    this.isEdit = false,
   }) : super(key: key);
+
   final User user;
   final void Function(bool) onCreate;
-
+  final EventPublic? event;
+  final Address? address;
+  final bool isEdit;
   @override
   double get fraction => 0.8;
 
@@ -25,13 +33,20 @@ class CreatePublicEventModal extends Modal {
       create: (context) => CreatePublicEventCubit(
         navigation: CreatePublicEventNavigation.fromMaterialNavigation(
           Navigator.of(context),
+            user: user,
         ),
         categoriesEventUseCase: context.categoriesEventUseCase(),
         createEventPublicUseCase: context.createEventPublicUseCase(),
+          editEventPublicUseCase: context.editEventPublicUseCase(),
         user: user,
         onCreate: onCreate,
+          event: event,
+          isEdit: isEdit,
+          address: address
       ),
-      child: CreatePublicEventScreen(),
+      child: CreatePublicEventScreen(
+        event: event,
+      ),
     );
   }
 }

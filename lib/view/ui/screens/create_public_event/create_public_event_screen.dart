@@ -1,3 +1,4 @@
+import 'package:cfit/domain/models/events_public.dart';
 import 'package:cfit/theme.dart';
 import 'package:cfit/util/extentions.dart';
 import 'package:cfit/view/common/button.dart';
@@ -23,15 +24,25 @@ final hourEventMask = MaskTextInputFormatter(
 );
 
 class CreatePublicEventScreen extends StatelessWidget {
-  CreatePublicEventScreen({Key? key}) : super(key: key);
+  CreatePublicEventScreen({
+    Key? key,
+    this.event,
+  })  : hourController = TextEditingController(
+            text: event != null ? event.startTime.getCustomHour() : ''),
+        dateController = TextEditingController(
+            text: event != null
+                ? event.startTime.getCustomDate(withYear: true)
+                : ''),
+        super(key: key);
 
+  final EventPublic? event;
   final nameFormKey = GlobalKey<FormState>();
   final descriptionFormKey = GlobalKey<FormState>();
   final numberMaxFormKey = GlobalKey<FormState>();
   final dateFormKey = GlobalKey<FormState>();
-  final dateController = TextEditingController();
+  final TextEditingController dateController;
   final hourFormKey = GlobalKey<FormState>();
-  final hourController = TextEditingController();
+  final TextEditingController hourController;
   final localizationFormKey = GlobalKey<FormState>();
 
   bool isDateValid() {
@@ -57,9 +68,9 @@ class CreatePublicEventScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Criar Evento',
-          style: TextStyle(
+        title: Text(
+          cubit.isEdit ? 'Editar Evento' : 'Criar Evento',
+          style: const TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.w600,
             color: Colors.black,
@@ -77,6 +88,7 @@ class CreatePublicEventScreen extends StatelessWidget {
               hintText: 'Nome do Evento',
               onChanged: cubit.onChangeName,
               type: InputTextType.text,
+              initialValue: cubit.state.name,
               validator: (name) {
                 if (name == null || name.isEmpty) {
                   return 'O nome do evento é necessário';
@@ -97,7 +109,9 @@ class CreatePublicEventScreen extends StatelessWidget {
                     ).withPaddingOnly(bottom: 16);
                   }
                   final categories = snapshot.data!;
-                  cubit.onChangeType(categories.first);
+                  if (!categories.contains(cubit.state.type)) {
+                    cubit.onChangeType(categories.first);
+                  }
                   return DropdownButtonFormField<String>(
                     items: categories
                         .map(
@@ -111,7 +125,10 @@ class CreatePublicEventScreen extends StatelessWidget {
                         .toList(),
                     onChanged: cubit.onChangeType,
                     elevation: 0,
-                    value: categories.first,
+                    value: categories.contains(cubit.state.type)
+                        ? categories.firstWhere(
+                            (category) => category == cubit.state.type)
+                        : categories.first,
                     decoration: const InputDecoration(
                       hintText: "Tipo de evento",
                       filled: true,
@@ -127,6 +144,7 @@ class CreatePublicEventScreen extends StatelessWidget {
               hintText: 'Descreva o evento',
               onChanged: cubit.onChangeDescription,
               type: InputTextType.textArea,
+              initialValue: cubit.state.description,
               validator: (description) {
                 if (description == null || description.isEmpty) {
                   return 'Uma descrição do evento é necessário';
@@ -142,6 +160,7 @@ class CreatePublicEventScreen extends StatelessWidget {
               hintText: 'Numero máximo de participantes',
               onChanged: cubit.onChangeCountMax,
               type: InputTextType.number,
+              initialValue: cubit.state.countMax.toString(),
               validator: (countMax) {
                 try {
                   if (countMax == null ||
@@ -307,7 +326,7 @@ class CreatePublicEventScreen extends StatelessWidget {
                 previous.loadingRequest != current.loadingRequest,
             builder: (context, state) {
               return ButtonAction(
-                text: 'Criar Evento',
+                text: cubit.isEdit ? 'Editar Evento' : 'Criar Evento',
                 type: ButtonActionType.primary,
                 loading: state.loadingRequest,
                 onPressed: () {

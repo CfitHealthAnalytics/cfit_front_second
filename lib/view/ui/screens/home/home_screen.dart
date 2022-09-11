@@ -60,21 +60,6 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               centerTitle: true,
               leadingWidth: 0,
-              actions: const [
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 20.0,
-                    vertical: 16,
-                  ),
-                  child: SizedBox(
-                    height: 20,
-                    width: 20,
-                    child: LoadingBox(
-                      height: 20,
-                    ),
-                  ),
-                )
-              ],
             ),
           );
         }

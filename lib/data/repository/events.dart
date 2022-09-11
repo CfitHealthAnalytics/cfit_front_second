@@ -114,8 +114,7 @@ class EventsRepositoryImpl implements EventsRepository {
         .where((element) => element != null)
         .toList();
     // TODO: remove this when dont have events with user_checkin as string only
-    // cleanList.removeWhere(
-    // (element) => (element['users_checkin'] as List).first is String);
+    cleanList.removeWhere((element) => element['user_create_info'] is String);
 
     return cleanList
         .map((response) => EventPublicResponse.fromMap(response))
@@ -153,5 +152,34 @@ class EventsRepositoryImpl implements EventsRepository {
         .toList();
 
     return cleanList;
+  }
+
+  @override
+  Future<bool> editEventPublic(
+    CreateEventPublicRequest createEventPublicRequest,
+    String eventId,
+  ) async {
+    try {
+      await client.post(
+        path: '${AppConstants.EDIT_EVENT}/$eventId',
+        body: createEventPublicRequest.toMap(),
+      );
+
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  @override
+  Future<EventPublicResponse> getEventPublic(String eventId) async {
+    final response = await client.get(
+      path: AppConstants.GET_EVENT,
+      query: {
+        'event_id': eventId,
+      },
+    );
+
+    return EventPublicResponse.fromMap(response.data);
   }
 }

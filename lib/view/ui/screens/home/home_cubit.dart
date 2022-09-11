@@ -53,13 +53,14 @@ class HomeCubit extends Cubit<HomeState> {
       final user = await feedUseCase.getUser();
       final gymCityEvents = await feedUseCase.getGymCityEvents();
       final publicEvents = await feedUseCase.getPublicEvents();
+      final myEvents = await feedUseCase.getMyEvents();
       emit(state.copyWith(
         loadingRequestInit: false,
         feed: Feed(
           user: user,
           gymCity: gymCityEvents ?? [],
           publicEvents: publicEvents ?? [],
-          myEvents: [],
+          myEvents: myEvents ?? [],
         ),
         alreadyLoaded: true,
       ));
@@ -94,13 +95,14 @@ class HomeCubit extends Cubit<HomeState> {
       );
       final gymCityEvents = await feedUseCase.getGymCityEvents();
       final publicEvents = await feedUseCase.getPublicEvents();
+      final myEvents = await feedUseCase.getMyEvents();
       emit(state.copyWith(
         loadingRequestGetEvents: false,
         feed: Feed(
           user: state.feed!.user,
           gymCity: gymCityEvents ?? [],
           publicEvents: publicEvents ?? [],
-          myEvents: [],
+          myEvents: myEvents ?? [],
         ),
         alreadyLoaded: true,
       ));
@@ -162,7 +164,17 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
   Future<Address?> getAddress() async {
-    final address = await navigation.toMap();
+    final address = await navigation.toMap(
+      toCreateEvent: false,
+      user: user!,
+    );
     return address;
+  }
+
+  Future<void> toCreateEvent() async {
+    await navigation.toMap(
+      toCreateEvent: true,
+      user: user!,
+    );
   }
 }

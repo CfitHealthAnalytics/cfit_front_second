@@ -39,7 +39,9 @@ class EventsPublicUseCase {
             id: event.id,
             status: event.status,
             usersLike: event.usersLike,
-            userIdCreate: event.userIdCreate,
+            userCreator: User.fromMap(
+              event.userCreator.toMap(),
+            ),
           ),
         )
         .toList();

@@ -7,9 +7,11 @@ import 'package:cfit/data/repository/user.dart';
 import 'package:cfit/domain/use_cases/categories_event_use_case.dart';
 import 'package:cfit/domain/use_cases/confirmation_event_in_city_use_case.dart';
 import 'package:cfit/domain/use_cases/create_event_public_use_case.dart';
+import 'package:cfit/domain/use_cases/edit_event_public_use_case.dart';
 import 'package:cfit/domain/use_cases/events_in_city_use_case.dart';
 import 'package:cfit/domain/use_cases/events_public_use_case.dart';
 import 'package:cfit/domain/use_cases/feed_use_case.dart';
+import 'package:cfit/domain/use_cases/get_event_public_use_case.dart';
 import 'package:cfit/domain/use_cases/initialization_use_case.dart';
 import 'package:cfit/domain/use_cases/logout_use_case.dart';
 import 'package:cfit/domain/use_cases/register_use_case.dart';
@@ -137,6 +139,18 @@ extension DependencyInjection on BuildContext {
   CreateEventPublicUseCase createEventPublicUseCase() {
     return CreateEventPublicUseCase(
       eventsRepository(),
+    );
+  }
+  
+  EditEventPublicUseCase editEventPublicUseCase() {
+    return EditEventPublicUseCase(
+      eventsRepository(),
+    );
+  }
+
+  GetEventPublicUseCase getEventPublicUseCase() {
+    return GetEventPublicUseCase(
+      eventsRepository: eventsRepository(),
     );
   }
 }

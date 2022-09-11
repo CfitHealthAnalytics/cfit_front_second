@@ -43,16 +43,19 @@ class PublicEventCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Flexible(
-                  child: Text(
-                    eventPublic.name.upperOnlyFirstLetter(),
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                    ),
-                    overflow: TextOverflow.ellipsis,
-                  ).withPaddingOnly(left: 4),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.4,
+                  child: Flexible(
+                    child: Text(
+                      eventPublic.name.upperOnlyFirstLetter(),
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ).withPaddingOnly(left: 4),
+                  ),
                 ),
                 const SizedBox(height: 8),
                 SizedBox(

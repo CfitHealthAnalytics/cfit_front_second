@@ -1,4 +1,5 @@
 import 'package:cfit/domain/models/events_city.dart';
+import 'package:cfit/domain/models/events_public.dart';
 import 'package:cfit/view/ui/screens/home/home_cubit.dart';
 import 'package:cfit/view/ui/screens/home/home_navigation.dart';
 import 'package:cfit/view/ui/screens/home/home_state.dart';
@@ -63,6 +64,14 @@ class BodyDashboard extends StatelessWidget {
                               .where((user) => user.id == state.feed!.user.id)
                               .isNotEmpty,
                         );
+                      } else {
+                        if ((event as EventPublic).userCreator.id ==
+                            state.feed!.user.id) {
+                          navigation.toEventPublicAdmin(
+                            event,
+                            state.feed!.user,
+                          );
+                        }
                       }
                     }
                   },

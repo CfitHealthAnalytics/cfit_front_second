@@ -11,7 +11,10 @@ extension DateShow on DateTime {
     return _hours.join(':');
   }
 
-  String getCustomDate() {
+  String getCustomDate({bool withYear = false}) {
+    if (withYear) {
+      return toIso8601String().split(r'T')[0].split('-').reversed.join('/');
+    }
     return toIso8601String()
         .split(r'T')[0]
         .substring(5)

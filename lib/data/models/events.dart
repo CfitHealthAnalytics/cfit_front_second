@@ -10,6 +10,10 @@ abstract class EventsRepository {
 
   Future<List<EventPublicResponse>> getEventsPublic();
 
+  Future<EventPublicResponse> getEventPublic(
+    String eventId,
+  );
+  
   Future<bool> scheduleEventCity(
     String eventId,
   );
@@ -31,6 +35,11 @@ abstract class EventsRepository {
   );
 
   Future<bool> createEventPublic(
+    CreateEventPublicRequest createEventPublicRequest,
+    String userId,
+  );
+
+  Future<bool> editEventPublic(
     CreateEventPublicRequest createEventPublicRequest,
     String userId,
   );

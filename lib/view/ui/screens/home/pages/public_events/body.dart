@@ -87,13 +87,21 @@ class _BodyPublicEventsState extends State<BodyPublicEvents> {
                 setState(() {
                   shown = false;
                 });
-                cubit.navigation.toEventPublicDetail(
-                  eventPublic,
-                  cubit.user!,
-                  alreadyConfirmed: eventPublic.usersCheckIn
-                      .where((userCheckIn) => userCheckIn.id == cubit.user!.id)
-                      .isNotEmpty,
-                );
+                if (eventPublic.userCreator.id == widget.user.id) {
+                  cubit.navigation.toEventPublicAdmin(
+                    eventPublic,
+                    widget.user,
+                  );
+                } else {
+                  cubit.navigation.toEventPublicDetail(
+                    eventPublic,
+                    cubit.user!,
+                    alreadyConfirmed: eventPublic.usersCheckIn
+                        .where(
+                            (userCheckIn) => userCheckIn.id == cubit.user!.id)
+                        .isNotEmpty,
+                  );
+                }
               },
             )
           ],

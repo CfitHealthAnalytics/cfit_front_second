@@ -1,18 +1,21 @@
-import 'package:cfit/domain/models/events_city.dart';
+import 'package:cfit/domain/models/events_public.dart';
 import 'package:cfit/util/extentions.dart';
 import 'package:cfit/view/common/padding.dart';
+import 'package:cfit/view/ui/screens/my_event/my_event_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class Details extends StatelessWidget {
   const Details({
     Key? key,
-    required this.eventCity,
+    required this.eventPublic,
   }) : super(key: key);
 
-  final EventCity eventCity;
+  final EventPublic eventPublic;
 
   @override
   Widget build(BuildContext context) {
+    final cubit = context.read<MyEventCubit>();
     return Container(
       width: MediaQuery.of(context).size.width,
       padding: const EdgeInsets.all(16),
@@ -21,7 +24,7 @@ class Details extends StatelessWidget {
         mainAxisSize: MainAxisSize.max,
         children: [
           Text(
-            eventCity.type.upperOnlyFirstLetter(),
+            eventPublic.type.upperOnlyFirstLetter(),
             style: const TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.w500,
@@ -29,7 +32,7 @@ class Details extends StatelessWidget {
             ),
           ).withPaddingOnly(bottom: 16),
           Text(
-            eventCity.description.upperOnlyFirstLetter(),
+            eventPublic.description.upperOnlyFirstLetter(),
             style: const TextStyle(
               fontWeight: FontWeight.w400,
               color: Colors.black,
@@ -37,26 +40,26 @@ class Details extends StatelessWidget {
           ).withPaddingOnly(bottom: 16),
           CharacteristicEvent(
             label: 'Categoria',
-            value: eventCity.type.upperOnlyFirstLetter(),
+            value: eventPublic.type.upperOnlyFirstLetter(),
           ),
           CharacteristicEvent(
             label: 'Local',
             value:
-                '''${eventCity.street.upperOnlyFirstLetter()} ${eventCity.number}, ${eventCity.neighborhood}, ${eventCity.city}''',
+                '''${eventPublic.street.upperOnlyFirstLetter()} ${eventPublic.number}, ${eventPublic.neighborhood}, ${eventPublic.city}''',
           ),
           CharacteristicEvent(
             label: 'Data / hora',
-            value: eventCity.startTime.formatDateHour(),
+            value: eventPublic.startTime.formatDateHour(),
           ),
           Row(
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              CountConfirmed(eventCity: eventCity),
+              CountConfirmed(eventPublic: eventPublic),
               ChipCFit(
                 label: 'Editar',
                 isSelected: true,
-                onPressed: () {},
+                onPressed: cubit.goToEdit,
               ),
             ],
           ),
@@ -131,10 +134,10 @@ class ChipCFit extends StatelessWidget {
 class CountConfirmed extends StatelessWidget {
   const CountConfirmed({
     Key? key,
-    required this.eventCity,
+    required this.eventPublic,
   }) : super(key: key);
 
-  final EventCity eventCity;
+  final EventPublic eventPublic;
 
   @override
   Widget build(BuildContext context) {
@@ -145,12 +148,12 @@ class CountConfirmed extends StatelessWidget {
         const SizedBox(width: 4),
         RichText(
           text: TextSpan(
-            text: eventCity.usersConfirmation.length.toString(),
+            text: eventPublic.usersConfirmation.length.toString(),
             style: const TextStyle(color: Colors.black),
             children: [
               const TextSpan(text: '/'),
               TextSpan(
-                text: eventCity.countMaxUsers.toString(),
+                text: eventPublic.countMaxUsers.toString(),
               ),
             ],
           ),

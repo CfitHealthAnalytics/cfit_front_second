@@ -7,4 +7,5 @@ abstract class UserRepository {
   Future<List<String>> getAdmins();
   Future<List<EventCityResponse>?> getUserEventsCity();
   Future<List<EventPublicResponse>?> getUserEventsPublic();
+  Future<List<EventPublicResponse>?> getUserEventsCreator();
 }

@@ -16,9 +16,11 @@ class InputText extends StatefulWidget {
     this.inputFormatter,
     this.validator,
     this.controller,
+    this.initialValue,
   }) : super(key: key);
 
   final String hintText;
+  final String? initialValue;
   final ValueChanged<String> onChanged;
   final InputTextType type;
   final GlobalKey<FormState>? formKey;
@@ -72,6 +74,7 @@ class _InputTextState extends State<InputText> {
           key: _formKey,
           child: TextFormField(
             controller: widget.controller,
+            initialValue: widget.initialValue,
             decoration: InputDecoration(
               hintText: widget.hintText,
               fillColor: Colors.white,
@@ -97,6 +100,7 @@ class _InputTextState extends State<InputText> {
         return Form(
           key: _formKey,
           child: TextFormField(
+            initialValue: widget.initialValue,
             controller: widget.controller,
             decoration: InputDecoration(
               hintText: widget.hintText,
@@ -134,6 +138,7 @@ class _InputTextState extends State<InputText> {
               child: TextFormField(
                 controller: widget.controller,
                 focusNode: _focusNode,
+                initialValue: widget.initialValue,
                 decoration: InputDecoration(
                   hintText: widget.hintText,
                   fillColor: Colors.white,
@@ -180,6 +185,7 @@ class _InputTextState extends State<InputText> {
           key: _formKey,
           child: TextFormField(
             controller: widget.controller,
+            initialValue: widget.initialValue,
             decoration: InputDecoration(
               hintText: widget.hintText,
               fillColor: Colors.white,
@@ -207,6 +213,7 @@ class _InputTextState extends State<InputText> {
           key: _formKey,
           child: TextFormField(
             controller: widget.controller,
+            initialValue: widget.initialValue,
             decoration: InputDecoration(
               hintText: widget.hintText,
               fillColor: Colors.white,
@@ -233,6 +240,7 @@ class _InputTextState extends State<InputText> {
           key: _formKey,
           child: TextFormField(
             controller: widget.controller,
+            initialValue: widget.initialValue,
             decoration: InputDecoration(
               hintText: widget.hintText,
               fillColor: Colors.white,

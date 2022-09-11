@@ -83,7 +83,7 @@ class ScheduleConfirmation extends Modal {
   final bool isUnscheduled;
 
   @override
-  double get fraction => 0.75;
+  double get fraction => 0.3;
 
   @override
   Widget build(BuildContext context) {

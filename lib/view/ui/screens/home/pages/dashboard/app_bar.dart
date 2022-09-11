@@ -36,15 +36,6 @@ class AppBarDashboard extends StatelessWidget {
       backgroundColor: Colors.transparent,
       elevation: 0,
       leadingWidth: 0,
-      actions: [
-        IconButton(
-          onPressed: () {},
-          icon: const Icon(
-            Icons.location_on_outlined,
-            color: Colors.black,
-          ),
-        )
-      ],
     );
   }
 }

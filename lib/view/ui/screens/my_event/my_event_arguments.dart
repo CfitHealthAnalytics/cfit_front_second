@@ -1,22 +1,27 @@
 import 'dart:convert';
 
-import 'package:cfit/domain/models/events_city.dart';
+import 'package:cfit/domain/models/events_public.dart';
+import 'package:cfit/domain/models/user.dart';
 
 class MyEventArguments {
   MyEventArguments({
-    required this.eventCity,
+    required this.eventPublic,
+    required this.user,
   });
-  final EventCity eventCity;
+  final EventPublic eventPublic;
+  final User user;
 
   Map<String, dynamic> toMap() {
     return {
-      'event_city': eventCity.toMap(),
+      'eventPublic': eventPublic.toMap(),
+      'user': user.toMap(),
     };
   }
 
   factory MyEventArguments.fromMap(Map<String, dynamic> map) {
     return MyEventArguments(
-      eventCity: EventCity.fromMap(map['event_city']),
+      eventPublic: EventPublic.fromMap(map['eventPublic']),
+      user: User.fromMap(map['user']),
     );
   }
 
