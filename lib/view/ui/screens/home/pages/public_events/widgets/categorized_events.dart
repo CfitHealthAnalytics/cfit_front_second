@@ -15,7 +15,8 @@ class CategorizedEvents extends StatelessWidget {
   final ValueSetter<EventPublic> onTap;
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Flex(
+      direction: Axis.vertical,
       children: categorizedEvents.entries
           .map((category) => Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

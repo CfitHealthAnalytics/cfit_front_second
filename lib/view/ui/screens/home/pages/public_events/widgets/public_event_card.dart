@@ -39,13 +39,14 @@ class PublicEventCard extends StatelessWidget {
                 ),
               ),
             ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.4,
-                  child: Flexible(
+            SizedBox(
+              width: MediaQuery.of(context).size.width * 0.4,
+              child: Flex(
+                direction: Axis.vertical,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Flexible(
                     child: Text(
                       eventPublic.name.upperOnlyFirstLetter(),
                       style: const TextStyle(
@@ -56,11 +57,8 @@ class PublicEventCard extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                     ).withPaddingOnly(left: 4),
                   ),
-                ),
-                const SizedBox(height: 8),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.4,
-                  child: Row(
+                  const SizedBox(height: 8),
+                  Row(
                     children: [
                       const Icon(
                         Icons.person,
@@ -78,11 +76,8 @@ class PublicEventCard extends StatelessWidget {
                       ),
                     ],
                   ),
-                ),
-                const SizedBox(height: 8),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.4,
-                  child: Row(
+                  const SizedBox(height: 8),
+                  Row(
                     children: [
                       const Icon(
                         Icons.location_on_outlined,
@@ -102,9 +97,9 @@ class PublicEventCard extends StatelessWidget {
                       )
                     ],
                   ),
-                ),
-              ],
-            ).withPaddingSymmetric(vertical: 6),
+                ],
+              ).withPaddingSymmetric(vertical: 6),
+            ),
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
