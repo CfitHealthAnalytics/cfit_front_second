@@ -173,7 +173,10 @@ class _HomeLoadedState extends State<HomeLoaded> {
         return HomeLoadedContent(
           body: BodyPublicEvents(
             getEventsPublic: cubit.getEventsPublic,
-            getAddress: cubit.getAddress,
+            getAddress: () async {
+              final response = await cubit.getAddress();
+              return response?.address;
+            },
             user: cubit.user!,
           ),
           appBar: PreferredSize(

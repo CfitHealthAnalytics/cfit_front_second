@@ -169,7 +169,10 @@ extension on List<EventPublic> {
         {},
         (previousValue, element) => {
               ...previousValue,
-              element.type: [...?previousValue[element.type], element]
+              element.type.toLowerCase(): [
+                ...?previousValue[element.type.toLowerCase()],
+                element
+              ]
             });
   }
 }

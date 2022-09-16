@@ -1,4 +1,3 @@
-import 'package:cfit/domain/models/address.dart';
 import 'package:cfit/util/routes.dart';
 import 'package:cfit/view/ui/screens/event_city_admin/event_city_admin_arguments.dart';
 import 'package:cfit/view/ui/screens/event_city_admin/event_city_admin_route.dart';
@@ -14,6 +13,7 @@ import 'package:cfit/view/ui/screens/my_event/my_event_arguments.dart';
 import 'package:cfit/view/ui/screens/my_event/my_event_route.dart';
 import 'package:cfit/view/ui/screens/register/register_route.dart';
 import 'package:cfit/view/ui/screens/select_localization/select_localization_arguments.dart';
+import 'package:cfit/view/ui/screens/select_localization/select_localization_response.dart';
 import 'package:cfit/view/ui/screens/select_localization/select_localization_route.dart';
 import 'package:cfit/view/ui/screens/splash/splash_route.dart';
 import 'package:flutter/material.dart';
@@ -65,7 +65,7 @@ Route<dynamic> onGenerateRoutes(RouteSettings settings) {
       return SelectLocalizationRoute(
         toCreateEvent: selectLocationArguments.toCreateEvent,
         user: selectLocationArguments.user,
-      ).buildRoute<Address?>();
+      ).buildRoute<SelectLocalizationResponse?>();
     default:
   }
   return const LoginRoute().buildRoute();

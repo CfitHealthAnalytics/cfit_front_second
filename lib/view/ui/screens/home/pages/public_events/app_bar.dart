@@ -1,7 +1,10 @@
+import 'package:cfit/util/bottom_sheet.dart';
 import 'package:cfit/view/common/padding.dart';
 import 'package:cfit/view/ui/screens/home/home_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'body.dart';
 
 class AppBarPublicEvents extends StatelessWidget {
   const AppBarPublicEvents({
@@ -27,7 +30,15 @@ class AppBarPublicEvents extends StatelessWidget {
       automaticallyImplyLeading: false,
       actions: [
         IconButton(
-          onPressed: cubit.toCreateEvent,
+          onPressed: () async {
+            final response = await cubit.toCreateEvent();
+            if (response?.createdEvent == true) {
+              presentBottomSheet(
+                context: context,
+                modal: const CreatePublicEventSuccess(),
+              );
+            }
+          },
           icon: const Icon(
             Icons.location_on,
           ),

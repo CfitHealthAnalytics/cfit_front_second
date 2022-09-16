@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'coordinates.dart';
 
 class Address {
@@ -56,4 +58,29 @@ class Address {
       coordinates: coordinates ?? this.coordinates,
     );
   }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'street': street,
+      'neighborhood': neighborhood,
+      'number': number,
+      'city': city,
+      'coordinates': coordinates.toMap(),
+    };
+  }
+
+  factory Address.fromMap(Map<String, dynamic> map) {
+    return Address(
+      street: map['street'] ?? '',
+      neighborhood: map['neighborhood'] ?? '',
+      number: map['number'] ?? '',
+      city: map['city'] ?? '',
+      coordinates: Coordinates.fromMap(map['coordinates']),
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory Address.fromJson(String source) =>
+      Address.fromMap(json.decode(source));
 }

@@ -1,4 +1,5 @@
 import 'package:cfit/domain/models/events_city.dart';
+import 'package:cfit/util/assets_images.dart';
 import 'package:cfit/util/extentions.dart';
 import 'package:flutter/material.dart';
 
@@ -20,10 +21,10 @@ class Details extends StatelessWidget {
         children: [
           Container(
             height: 125,
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
               image: DecorationImage(
                 image: AssetImage(
-                  'assets/images/AcademiaRecife.png',
+                  getImage(eventCity.type),
                 ),
               ),
             ),

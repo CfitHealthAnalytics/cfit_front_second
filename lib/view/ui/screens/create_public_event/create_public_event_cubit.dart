@@ -7,6 +7,7 @@ import 'package:cfit/domain/use_cases/create_event_public_use_case.dart';
 import 'package:cfit/domain/use_cases/edit_event_public_use_case.dart';
 import 'package:cfit/view/ui/screens/create_public_event/create_public_event_navigation.dart';
 import 'package:cfit/view/ui/screens/create_public_event/create_public_event_state.dart';
+import 'package:flutter/foundation.dart';
 
 class CreatePublicEventCubit extends Cubit<CreatePublicEventState> {
   CreatePublicEventCubit({
@@ -35,6 +36,7 @@ class CreatePublicEventCubit extends Cubit<CreatePublicEventState> {
   final EditEventPublicUseCase editEventPublicUseCase;
   final void Function(bool) onCreate;
 
+  bool get isWeb => kIsWeb;
   String? get localization => state.address.formattedAddress;
 
   void onChangeName(String name) {
@@ -61,16 +63,42 @@ class CreatePublicEventCubit extends Cubit<CreatePublicEventState> {
     emit(state.copyWith(hour: hour));
   }
 
-  void onChangeAddress(String formattedAddress) {
-    final street = formattedAddress.split(',')[0].trim();
-    final number = formattedAddress.split(',')[1].split('-')[0].trim();
-    final neighborhood = formattedAddress.split(',')[1].split('-')[1].trim();
-    final address = state.address.copyWith(
-      street: street,
-      number: number,
-      neighborhood: neighborhood,
+  void onChangeStreet(String street) {
+    emit(
+      state.copyWith(
+        address: state.address.copyWith(
+          street: street,
+        ),
+      ),
     );
-    emit(state.copyWith(address: address));
+  }
+
+  void onChangeNumber(String number) {
+    emit(
+      state.copyWith(
+        address: state.address.copyWith(
+          number: number,
+        ),
+      ),
+    );
+  }
+
+  void onChangeNeighborhood(String neighborhood) {
+    emit(
+      state.copyWith(
+        address: state.address.copyWith(
+          neighborhood: neighborhood,
+        ),
+      ),
+    );
+  }
+
+  void onChangeCity(String city) {
+    emit(
+      state.copyWith(
+        address: state.address.copyWith(city: city),
+      ),
+    );
   }
 
   void allowEditLocalization() {
@@ -86,9 +114,13 @@ class CreatePublicEventCubit extends Cubit<CreatePublicEventState> {
   }
 
   Future<void> selectLocation() async {
-    final address = await navigation.toMap();
+    final response = await navigation.toMap();
     emit(
-      state.copyWith(address: address),
+      state.copyWith(
+        address: state.address.copyWith(
+          coordinates: response?.address?.coordinates,
+        ),
+      ),
     );
   }
 

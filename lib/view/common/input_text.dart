@@ -13,6 +13,7 @@ class InputText extends StatefulWidget {
     required this.onChanged,
     required this.type,
     this.formKey,
+    this.label,
     this.inputFormatter,
     this.validator,
     this.controller,
@@ -21,6 +22,7 @@ class InputText extends StatefulWidget {
 
   final String hintText;
   final String? initialValue;
+  final String? label;
   final ValueChanged<String> onChanged;
   final InputTextType type;
   final GlobalKey<FormState>? formKey;
@@ -77,6 +79,16 @@ class _InputTextState extends State<InputText> {
             initialValue: widget.initialValue,
             decoration: InputDecoration(
               hintText: widget.hintText,
+              floatingLabelBehavior: FloatingLabelBehavior.always,
+              label: widget.label != null
+                  ? Text(
+                      widget.label!,
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 18,
+                      ),
+                    )
+                  : null,
               fillColor: Colors.white,
               filled: true,
               border: const OutlineInputBorder(
@@ -104,6 +116,16 @@ class _InputTextState extends State<InputText> {
             controller: widget.controller,
             decoration: InputDecoration(
               hintText: widget.hintText,
+              floatingLabelBehavior: FloatingLabelBehavior.always,
+              label: widget.label != null
+                  ? Text(
+                      widget.label!,
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 18,
+                      ),
+                    )
+                  : null,
               fillColor: Colors.white,
               filled: true,
               border: const OutlineInputBorder(
@@ -141,6 +163,16 @@ class _InputTextState extends State<InputText> {
                 initialValue: widget.initialValue,
                 decoration: InputDecoration(
                   hintText: widget.hintText,
+                  floatingLabelBehavior: FloatingLabelBehavior.always,
+                  label: widget.label != null
+                      ? Text(
+                          widget.label!,
+                          style: const TextStyle(
+                            color: Colors.black,
+                            fontSize: 18,
+                          ),
+                        )
+                      : null,
                   fillColor: Colors.white,
                   filled: true,
                   border: const OutlineInputBorder(
@@ -188,6 +220,16 @@ class _InputTextState extends State<InputText> {
             initialValue: widget.initialValue,
             decoration: InputDecoration(
               hintText: widget.hintText,
+              floatingLabelBehavior: FloatingLabelBehavior.always,
+              label: widget.label != null
+                  ? Text(
+                      widget.label!,
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 18,
+                      ),
+                    )
+                  : null,
               fillColor: Colors.white,
               filled: true,
               border: const OutlineInputBorder(
@@ -216,6 +258,16 @@ class _InputTextState extends State<InputText> {
             initialValue: widget.initialValue,
             decoration: InputDecoration(
               hintText: widget.hintText,
+              floatingLabelBehavior: FloatingLabelBehavior.always,
+              label: widget.label != null
+                  ? Text(
+                      widget.label!,
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 18,
+                      ),
+                    )
+                  : null,
               fillColor: Colors.white,
               filled: true,
               border: const OutlineInputBorder(
@@ -243,6 +295,16 @@ class _InputTextState extends State<InputText> {
             initialValue: widget.initialValue,
             decoration: InputDecoration(
               hintText: widget.hintText,
+              floatingLabelBehavior: FloatingLabelBehavior.always,
+              label: widget.label != null
+                  ? Text(
+                      widget.label!,
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 18,
+                      ),
+                    )
+                  : null,
               fillColor: Colors.white,
               filled: true,
               border: const OutlineInputBorder(

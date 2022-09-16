@@ -1,4 +1,3 @@
-import 'package:cfit/domain/models/address.dart';
 import 'package:cfit/domain/models/events_city.dart';
 import 'package:cfit/domain/models/events_public.dart';
 import 'package:cfit/domain/models/user.dart';
@@ -8,6 +7,7 @@ import 'package:cfit/view/ui/screens/event_city_detail/event_city_detail_argumen
 import 'package:cfit/view/ui/screens/event_public_detail/event_public_detail_arguments.dart';
 import 'package:cfit/view/ui/screens/my_event/my_event_arguments.dart';
 import 'package:cfit/view/ui/screens/select_localization/select_localization_arguments.dart';
+import 'package:cfit/view/ui/screens/select_localization/select_localization_response.dart';
 import 'package:flutter/widgets.dart';
 
 class HomeNavigation {
@@ -25,7 +25,7 @@ class HomeNavigation {
   }) toEventPublicDetail;
   final void Function(EventCity event) toEventCityAdmin;
   final void Function(EventPublic event, User user) toEventPublicAdmin;
-  final Future<Address?> Function({
+  final Future<SelectLocalizationResponse?> Function({
     required bool toCreateEvent,
     required User user,
   }) toMap;
@@ -86,14 +86,14 @@ class HomeNavigation {
         required bool toCreateEvent,
         required User user,
       }) async {
-        final address = await navigator.pushNamed<Address?>(
+        final response = await navigator.pushNamed<SelectLocalizationResponse?>(
           Routes.map,
           arguments: SelectLocalizationArguments(
             toCreateEvent: toCreateEvent,
             user: user,
           ).toJson(),
         );
-        return address;
+        return response;
       },
     );
   }

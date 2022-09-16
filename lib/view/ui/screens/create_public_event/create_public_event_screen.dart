@@ -1,3 +1,4 @@
+import 'package:cfit/domain/models/coordinates.dart';
 import 'package:cfit/domain/models/events_public.dart';
 import 'package:cfit/theme.dart';
 import 'package:cfit/util/extentions.dart';
@@ -43,7 +44,10 @@ class CreatePublicEventScreen extends StatelessWidget {
   final TextEditingController dateController;
   final hourFormKey = GlobalKey<FormState>();
   final TextEditingController hourController;
-  final localizationFormKey = GlobalKey<FormState>();
+  final streetFormKey = GlobalKey<FormState>();
+  final numberFormKey = GlobalKey<FormState>();
+  final neighborhoodFormKey = GlobalKey<FormState>();
+  final cityFormKey = GlobalKey<FormState>();
 
   bool isDateValid() {
     final dateInputted = dateController.value;
@@ -85,7 +89,8 @@ class CreatePublicEventScreen extends StatelessWidget {
           children: [
             InputText(
               formKey: nameFormKey,
-              hintText: 'Nome do Evento',
+              label: 'Nome',
+              hintText: 'Ex: Caminhada da Luz',
               onChanged: cubit.onChangeName,
               type: InputTextType.text,
               initialValue: cubit.state.name,
@@ -132,6 +137,13 @@ class CreatePublicEventScreen extends StatelessWidget {
                     decoration: const InputDecoration(
                       hintText: "Tipo de evento",
                       filled: true,
+                      label: Text(
+                        'Tipo',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 18,
+                        ),
+                      ),
                       fillColor: Colors.white,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(24)),
@@ -141,8 +153,10 @@ class CreatePublicEventScreen extends StatelessWidget {
                 }),
             InputText(
               formKey: descriptionFormKey,
-              hintText: 'Descreva o evento',
+              hintText:
+                  'Ex: Caminhada organizada pelos moradores da comunidade da luz. O objetivo da caminhada é confraternizar entre os nossos membros da comunidade.',
               onChanged: cubit.onChangeDescription,
+              label: 'Descrição',
               type: InputTextType.textArea,
               initialValue: cubit.state.description,
               validator: (description) {
@@ -157,7 +171,8 @@ class CreatePublicEventScreen extends StatelessWidget {
             ).withPaddingOnly(bottom: 16),
             InputText(
               formKey: numberMaxFormKey,
-              hintText: 'Numero máximo de participantes',
+              label: 'Número máximo de participantes',
+              hintText: 'Ex: 100',
               onChanged: cubit.onChangeCountMax,
               type: InputTextType.number,
               initialValue: cubit.state.countMax.toString(),
@@ -179,9 +194,10 @@ class CreatePublicEventScreen extends StatelessWidget {
               children: [
                 Expanded(
                   child: InputText(
+                    label: 'Data',
                     formKey: dateFormKey,
                     controller: dateController,
-                    hintText: 'Data',
+                    hintText: 'Ex: 22/10/2023',
                     onChanged: cubit.onChangeDate,
                     type: InputTextType.date,
                     inputFormatter: [dateEventMask],
@@ -212,8 +228,9 @@ class CreatePublicEventScreen extends StatelessWidget {
                 const SizedBox(width: 24),
                 Expanded(
                   child: InputText(
+                    label: 'Hora',
                     formKey: hourFormKey,
-                    hintText: 'Horário',
+                    hintText: 'Ex: 09:00',
                     controller: hourController,
                     onChanged: cubit.onChangeHour,
                     type: InputTextType.date,
@@ -240,6 +257,64 @@ class CreatePublicEventScreen extends StatelessWidget {
                 )
               ],
             ).withPaddingOnly(bottom: 16),
+            InputText(
+              formKey: streetFormKey,
+              validator: (street) {
+                if (street == null || street.isEmpty) {
+                  return 'Preencha o nome da rua em que o evento acontecerá';
+                }
+                return null;
+              },
+              label: 'Rua',
+              hintText: 'Ex: Rua das flores',
+              onChanged: cubit.onChangeStreet,
+              type: InputTextType.text,
+            ).withPaddingOnly(bottom: 16),
+            InputText(
+              label: 'Número',
+              formKey: numberFormKey,
+              validator: (number) {
+                if (number == null || number.isEmpty) {
+                  return 'Se não tiver numero, preencha com "s/n"';
+                }
+                if (int.tryParse(number) == null ||
+                    int.tryParse(number)! <= 0) {
+                  return 'Se não tiver numero, preencha com "s/n"';
+                }
+                return null;
+              },
+              hintText: 'Ex: 1160',
+              onChanged: cubit.onChangeNumber,
+              type: InputTextType.text,
+            ).withPaddingOnly(bottom: 16),
+            InputText(
+              label: 'Bairro',
+              formKey: neighborhoodFormKey,
+              validator: (neighborhood) {
+                if (neighborhood == null || neighborhood.isEmpty) {
+                  return 'Preencha o bairro onde o evento acontecerá';
+                }
+
+                return null;
+              },
+              hintText: 'Ex: Boa Viagem',
+              onChanged: cubit.onChangeNeighborhood,
+              type: InputTextType.text,
+            ).withPaddingOnly(bottom: 16),
+            InputText(
+              label: 'Cidade',
+              formKey: cityFormKey,
+              validator: (city) {
+                if (city == null || city.isEmpty) {
+                  return 'Preencha a cidade onde o evento acontecerá';
+                }
+
+                return null;
+              },
+              hintText: 'Ex: Recife',
+              onChanged: cubit.onChangeCity,
+              type: InputTextType.text,
+            ).withPaddingOnly(bottom: 16),
             BlocBuilder<CreatePublicEventCubit, CreatePublicEventState>(
               builder: ((context, state) {
                 if (state.errorMessage != null) {
@@ -256,7 +331,7 @@ class CreatePublicEventScreen extends StatelessWidget {
             ),
             BlocBuilder<CreatePublicEventCubit, CreatePublicEventState>(
                 builder: (context, state) {
-              if (cubit.localization == null) {
+              if (!state.address.coordinates.isValidCoordinates) {
                 return ButtonAction(
                   text: 'Selecionar local',
                   type: ButtonActionType.text,
@@ -267,51 +342,7 @@ class CreatePublicEventScreen extends StatelessWidget {
                   ),
                 );
               }
-              return Stack(
-                alignment: Alignment.centerRight,
-                children: [
-                  Form(
-                    key: localizationFormKey,
-                    child: TextFormField(
-                      initialValue: cubit.localization,
-                      enabled: state.editLocalization,
-                      onChanged: cubit.onChangeAddress,
-                      style: TextStyle(
-                        color: state.editLocalization
-                            ? Colors.grey.shade600
-                            : Colors.grey,
-                      ),
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(8),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    right: 0,
-                    top: 12,
-                    child: GestureDetector(
-                      onTap: () {
-                        if (state.editLocalization == false) {
-                          cubit.allowEditLocalization();
-                        } else {
-                          cubit.forbidEditLocalization();
-                        }
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: Icon(
-                          !state.editLocalization ? Icons.edit : Icons.edit_off,
-                          color: Colors.grey.shade600,
-                        ),
-                      ),
-                    ),
-                  )
-                ],
-              );
+              return const SizedBox.shrink();
             }),
           ],
         ).withPaddingSymmetric(
@@ -334,19 +365,16 @@ class CreatePublicEventScreen extends StatelessWidget {
                       descriptionFormKey.currentState!.validate() &&
                       numberMaxFormKey.currentState!.validate() &&
                       dateFormKey.currentState!.validate() &&
-                      hourFormKey.currentState!.validate()) {
-                    if (localizationFormKey.currentState == null ||
-                        !localizationFormKey.currentState!.validate()) {
-                      cubit.setErrorMessage(
-                        'Você precisa selecionar a localização',
-                      );
+                      hourFormKey.currentState!.validate() &&
+                      streetFormKey.currentState!.validate() &&
+                      numberFormKey.currentState!.validate() &&
+                      neighborhoodFormKey.currentState!.validate() &&
+                      cityFormKey.currentState!.validate()) {
+                    if (isDateValid()) {
+                      cubit.action();
                     } else {
-                      if (isDateValid()) {
-                        cubit.action();
-                      } else {
-                        cubit.setErrorMessage(
-                            'Você não pode escolher uma data no passado');
-                      }
+                      cubit.setErrorMessage(
+                          'Você não pode escolher uma data no passado');
                     }
                   }
                 },

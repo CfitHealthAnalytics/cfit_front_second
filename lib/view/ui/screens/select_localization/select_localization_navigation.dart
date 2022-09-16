@@ -1,12 +1,13 @@
-import 'package:cfit/domain/models/address.dart';
 import 'package:cfit/domain/models/user.dart';
 import 'package:cfit/util/bottom_sheet.dart';
 import 'package:cfit/view/ui/screens/create_public_event/create_public_event_modal.dart';
 import 'package:flutter/widgets.dart';
 
+import 'select_localization_response.dart';
+
 class SelectLocalizationNavigation {
-  final void Function([Address address]) onBack;
-  final void Function([Address address]) goToCreateEvent;
+  final void Function([SelectLocalizationResponse response]) onBack;
+  final void Function([SelectLocalizationResponse response]) goToCreateEvent;
 
   SelectLocalizationNavigation({
     required this.onBack,
@@ -19,12 +20,21 @@ class SelectLocalizationNavigation {
   }) {
     return SelectLocalizationNavigation(
       onBack: navigator.pop,
-      goToCreateEvent: ([Address? address]) => presentBottomSheet(
+      goToCreateEvent: ([SelectLocalizationResponse? response]) =>
+          presentBottomSheet(
         context: navigator.context,
         modal: CreatePublicEventModal(
           user: user,
-          onCreate: (created) {},
-          address: address,
+          onCreate: (created) {
+            if (created) {
+              navigator.pop(
+                SelectLocalizationResponse(
+                  createdEvent: true,
+                ),
+              );
+            }
+          },
+          address: response?.address,
         ),
       ),
     );

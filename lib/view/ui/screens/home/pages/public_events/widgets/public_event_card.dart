@@ -1,4 +1,5 @@
 import 'package:cfit/domain/models/events_public.dart';
+import 'package:cfit/util/assets_images.dart';
 import 'package:cfit/util/dates.dart';
 import 'package:cfit/util/extentions.dart';
 import 'package:cfit/view/common/padding.dart';
@@ -31,10 +32,10 @@ class PublicEventCard extends StatelessWidget {
             Container(
               height: 90,
               width: 90,
-              decoration: const BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(8)),
+              decoration: BoxDecoration(
+                borderRadius: const BorderRadius.all(Radius.circular(8)),
                 image: DecorationImage(
-                  image: AssetImage('assets/images/AcademiaRecife.png'),
+                  image: AssetImage(getImage(eventPublic.type)),
                   fit: BoxFit.cover,
                 ),
               ),

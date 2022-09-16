@@ -38,3 +38,7 @@ class Coordinates {
   @override
   int get hashCode => lat.hashCode ^ long.hashCode;
 }
+
+extension CoordinatesCheck on Coordinates {
+  bool get isValidCoordinates => lat != null && long != null;
+}

@@ -1,6 +1,5 @@
 import 'package:bloc/bloc.dart';
 import 'package:cfit/domain/erros/rules.dart';
-import 'package:cfit/domain/models/address.dart';
 import 'package:cfit/domain/models/events_city.dart';
 import 'package:cfit/domain/models/events_public.dart';
 import 'package:cfit/domain/models/feed.dart';
@@ -10,6 +9,7 @@ import 'package:cfit/domain/use_cases/events_public_use_case.dart';
 import 'package:cfit/domain/use_cases/feed_use_case.dart';
 import 'package:cfit/view/ui/screens/home/home_navigation.dart';
 import 'package:cfit/view/ui/screens/home/home_state.dart';
+import 'package:cfit/view/ui/screens/select_localization/select_localization_response.dart';
 import 'package:get/get_connect/http/src/exceptions/exceptions.dart';
 
 class HomeCubit extends Cubit<HomeState> {
@@ -163,16 +163,16 @@ class HomeCubit extends Cubit<HomeState> {
     return events;
   }
 
-  Future<Address?> getAddress() async {
-    final address = await navigation.toMap(
+  Future<SelectLocalizationResponse?> getAddress() async {
+    final response = await navigation.toMap(
       toCreateEvent: false,
       user: user!,
     );
-    return address;
+    return response;
   }
 
-  Future<void> toCreateEvent() async {
-    await navigation.toMap(
+  Future<SelectLocalizationResponse?> toCreateEvent() async {
+    return await navigation.toMap(
       toCreateEvent: true,
       user: user!,
     );
