@@ -1,12 +1,14 @@
 import 'dart:async';
 
 import 'package:cfit/view/common/button.dart';
+import 'package:cfit/view/common/input_text.dart';
 import 'package:cfit/view/common/padding.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:flutter/foundation.dart' show Factory, kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:google_place/google_place.dart';
 
 import 'select_localization_cubit.dart';
 import 'select_localization_state.dart';
@@ -23,6 +25,7 @@ class SelectLocalizationScreen extends StatefulWidget {
 
 class _SelectLocalizationScreenState extends State<SelectLocalizationScreen> {
   final isWeb = kIsWeb;
+  late final GooglePlace googlePlace;
   Completer<GoogleMapController> controller = Completer();
   Marker selectedLocation = const Marker(
     markerId: MarkerId('selected-location'),
@@ -49,6 +52,7 @@ class _SelectLocalizationScreenState extends State<SelectLocalizationScreen> {
   @override
   void initState() {
     super.initState();
+    googlePlace = GooglePlace('AIzaSyCcUXHKcKWROyT4ozJJ-XFP2d0xR8Tjc40');
     _getUserLocation();
   }
 
@@ -82,6 +86,42 @@ class _SelectLocalizationScreenState extends State<SelectLocalizationScreen> {
     } catch (e) {
       print(e);
     }
+  }
+
+  Future<void> goToSearch(String place) async {
+    final cubit = context.read<SelectLocalizationCubit>();
+    cubit.onLoadingPlaces(true);
+    final places =
+        await googlePlace.search.getFindPlace(place, InputType.TextQuery);
+    final mapControl = await controller.future;
+    if (places != null) {
+      final placeFounded = places.candidates?.first;
+      if (placeFounded != null) {
+        final localization =
+            await googlePlace.details.get(placeFounded.placeId!);
+        if (localization != null &&
+            localization.result != null &&
+            localization.result!.geometry != null &&
+            localization.result!.geometry!.location != null &&
+            localization.result!.geometry!.location!.lat != null &&
+            localization.result!.geometry!.location!.lng != null) {
+          mapControl.animateCamera(
+            CameraUpdate.newCameraPosition(
+              CameraPosition(
+                target: LatLng(
+                  localization.result!.geometry!.location!.lat!,
+                  localization.result!.geometry!.location!.lng!,
+                ),
+                zoom: 17,
+              ),
+            ),
+          );
+        }
+      } else {
+        return;
+      }
+    }
+    cubit.onLoadingPlaces(false);
   }
 
   @override
@@ -120,24 +160,74 @@ class _SelectLocalizationScreenState extends State<SelectLocalizationScreen> {
         ),
       ),
       body: BlocBuilder<SelectLocalizationCubit, SelectLocalizationState>(
+        buildWhen: (previous, current) => previous.position != current.position,
         builder: (context, state) {
-          print('rodou build');
           final markers = {
             Marker(
               markerId: MarkerId('marker-id-${state.position.hashCode}'),
               position: state.position,
             )
           };
-          print('markers: $markers');
-          return GoogleMap(
-            initialCameraPosition: kGooglePlex,
-            markers: markers,
-            onMapCreated: (controllerMap) {
-              controller.complete(controllerMap);
-            },
-            compassEnabled: true,
-            onLongPress: cubit.onChangePosition,
-            onTap: cubit.onChangePosition,
+
+          return Stack(
+            alignment: Alignment.topCenter,
+            fit: StackFit.expand,
+            children: [
+              GoogleMap(
+                initialCameraPosition: kGooglePlex,
+                markers: markers,
+                onMapCreated: (controllerMap) {
+                  controller.complete(controllerMap);
+                },
+                compassEnabled: true,
+                onCameraMove: (cameraPosition) {
+                  cubit.onChangePosition(cameraPosition.target);
+                },
+              ),
+              BlocBuilder<SelectLocalizationCubit, SelectLocalizationState>(
+                  buildWhen: (previous, current) =>
+                      (previous.searchText != current.searchText) ||
+                      (previous.loadingPlaces != current.loadingPlaces),
+                  builder: (context, state) {
+                    return Column(
+                      children: [
+                        Stack(
+                          children: [
+                            InputText(
+                              hintText: 'Procurar localização',
+                              onChanged: cubit.onChangeSearch,
+                              type: InputTextType.text,
+                            ).withPaddingOnly(
+                              top: 16,
+                              left: 16,
+                              right: 16,
+                            ),
+                            Positioned(
+                              right: 16,
+                              top: 20,
+                              child: IconButton(
+                                onPressed: () {
+                                  if (state.searchText != null &&
+                                      state.searchText!.isNotEmpty) {
+                                    goToSearch(state.searchText!);
+                                  }
+                                },
+                                icon: const Icon(
+                                  Icons.search,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                        state.loadingPlaces
+                            ? const LinearProgressIndicator()
+                                .withPaddingSymmetric(horizontal: 16)
+                            : const SizedBox.shrink(),
+                      ],
+                    );
+                  }),
+            ],
           );
         },
       ),

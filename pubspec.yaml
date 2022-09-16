@@ -51,6 +51,7 @@ dependencies:
   google_maps: ^6.2.0
   google_maps_flutter: ^2.2.0
   google_maps_flutter_web: ^0.4.0+2
+  google_place: ^0.4.7
   http: ^0.13.4
   image_compression_flutter: ^1.0.2
   image_picker: ^0.8.5+3

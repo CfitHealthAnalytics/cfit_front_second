@@ -24,9 +24,21 @@ class SelectLocalizationCubit extends Cubit<SelectLocalizationState> {
   }
 
   void onChangePosition(LatLng position) {
+    if (state.searchBarPressed) {
+      emit(state.copyWith(searchBarPressed: false));
+      return;
+    }
     if (state.actionPressed == false) {
       emit(state.copyWith(position: position));
     }
+  }
+
+  void onChangeSearch(String search) {
+    emit(state.copyWith(searchText: search));
+  }
+
+  void onLoadingPlaces(bool isLoading) {
+    emit(state.copyWith(loadingPlaces: isLoading));
   }
 
   Future<Address> buildAddress(LatLng selectedPosition) async {
