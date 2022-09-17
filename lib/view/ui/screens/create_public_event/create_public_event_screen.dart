@@ -277,6 +277,11 @@ class CreatePublicEventScreen extends StatelessWidget {
                 if (number == null || number.isEmpty) {
                   return 'Se não tiver numero, preencha com "s/n"';
                 }
+                if (number.trim().contains('s') &&
+                    number.trim().contains('/') &&
+                    number.trim().contains('n')) {
+                  return null;
+                }
                 if (int.tryParse(number) == null ||
                     int.tryParse(number)! <= 0) {
                   return 'Se não tiver numero, preencha com "s/n"';

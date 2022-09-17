@@ -13,6 +13,7 @@ class EventPublicResponse {
   int countUsers;
   List<UserBodyResponse> usersCheckIn;
   List<String> usersConfirmation;
+  List<String> usersRejection;
   List<String> usersLike;
   String description;
   String city;
@@ -33,6 +34,7 @@ class EventPublicResponse {
     required this.usersCheckIn,
     required this.usersLike,
     required this.usersConfirmation,
+    required this.usersRejection,
     required this.description,
     required this.city,
     required this.coordinates,
@@ -55,6 +57,7 @@ class EventPublicResponse {
       'usersCheckIn': usersCheckIn,
       'usersLike': usersLike,
       'usersConfirmation': usersConfirmation,
+      'usersRejection': usersRejection,
       'description': description,
       'city': city,
       'coordinates': coordinates.toMap(),
@@ -81,6 +84,7 @@ class EventPublicResponse {
             .toList(),
       ),
       usersConfirmation: List<String>.from(map['users_confirmation']),
+      usersRejection: List<String>.from(map['users_rejection'] ?? []),
       usersLike: List<String>.from(map['users_like']),
       description: map['descricao'] ?? '',
       city: map['cidade'] ?? '',
@@ -90,14 +94,7 @@ class EventPublicResponse {
       countMaxUsers: map['qtd_max_user']?.toInt() ?? 0,
       id: map['id'] ?? '',
       status: map['status'] ?? true,
-      userCreator: UserBodyResponse.fromMap(map['user_create_info']) ??
-          UserBodyResponse(
-            id: '',
-            name: '',
-            email: '',
-            dateBirth: '',
-            gender: 'masculino',
-          ),
+      userCreator: UserBodyResponse.fromMap(map['user_create_info']),
     );
   }
 

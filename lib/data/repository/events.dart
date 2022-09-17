@@ -126,18 +126,14 @@ class EventsRepositoryImpl implements EventsRepository {
     CreateEventPublicRequest createEventPublicRequest,
     String userId,
   ) async {
-    try {
-      final response = await client.post(
-          path: AppConstants.REGISTER_EVENT,
-          body: createEventPublicRequest.toMap(),
-          query: {
-            'user_id': userId,
-          });
+    final response = await client.post(
+        path: AppConstants.REGISTER_EVENT,
+        body: createEventPublicRequest.toMap(),
+        query: {
+          'user_id': userId,
+        });
 
-      return true;
-    } catch (e) {
-      return false;
-    }
+    return true;
   }
 
   @override
@@ -181,5 +177,40 @@ class EventsRepositoryImpl implements EventsRepository {
     );
 
     return EventPublicResponse.fromMap(response.data);
+  }
+
+  @override
+  Future<bool> deleteEventPublic(String eventId, String userId) async {
+    await client.delete(
+      path: "${AppConstants.DELETE_EVENT}/$eventId",
+      query: {
+        'user_id': userId,
+      },
+    );
+    return true;
+  }
+
+  @override
+  Future<bool> confirmUsersInEventPublic(
+      ConfirmationEventCityRequest confirmationEvent) async {
+    await client.post(
+      path: AppConstants.CONFIRMATION_PUBLIC_EVENTS(confirmationEvent.eventId),
+      body: {
+        'users_ids': confirmationEvent.usersConfirmed,
+      },
+    );
+    return true;
+  }
+
+  @override
+  Future<bool> declineUsersInEventPublic(
+      ConfirmationEventCityRequest confirmationEvent) async {
+    await client.post(
+      path: AppConstants.DECLINE_PUBLIC_EVENTS(confirmationEvent.eventId),
+      body: {
+        'users_ids': confirmationEvent.usersConfirmed,
+      },
+    );
+    return true;
   }
 }

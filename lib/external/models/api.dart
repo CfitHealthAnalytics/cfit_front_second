@@ -8,6 +8,12 @@ abstract class ApiClient {
     int retries = 3,
     Map<String, dynamic>? query,
   });
+  
+  Future<ApiResponse> delete({
+    required String path,
+    int retries = 3,
+    Map<String, dynamic>? query,
+  });
 
   Future<ApiResponse> post({
     required String path,

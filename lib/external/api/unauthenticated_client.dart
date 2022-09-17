@@ -64,4 +64,13 @@ class UnauthenticatedClient implements ApiClient {
     }
     return factory.fromHttpResponse(response);
   }
+
+  @override
+  Future<ApiResponse> delete({
+    required String path,
+    int retries = 3,
+    Map<String, dynamic>? query,
+  }) {
+    throw UnimplementedError();
+  }
 }

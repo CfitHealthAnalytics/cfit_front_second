@@ -63,11 +63,18 @@ class _BodyPublicEventsState extends State<BodyPublicEvents> {
                     context: context,
                     modal: CreatePublicEventModal(
                       user: widget.user,
-                      onCreate: (result) {
+                      onCreate: (result, [String? errorDetail]) {
                         if (result) {
                           presentBottomSheet(
                             context: context,
                             modal: const CreatePublicEventSuccess(),
+                          );
+                        } else {
+                          presentBottomSheet(
+                            context: context,
+                            modal: CreatePublicEventError(
+                              errorDetail: errorDetail,
+                            ),
                           );
                         }
                       },
@@ -214,6 +221,67 @@ class CreatePublicEventSuccess extends Modal {
               child: Text(
                 'Obrigado por criar esse evento, não esqueça de convidar seus amigos para torno ainda melhor',
                 style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.black,
+                  fontWeight: FontWeight.w300,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+      bottomNavigationBar: Container(
+        height: 110,
+        padding: const EdgeInsets.only(bottom: 36),
+        child: ButtonAction(
+          text: 'Fechar',
+          type: ButtonActionType.primary,
+          customBackgroundColor: Theme.of(context).primaryColor,
+          onPressed: Navigator.of(context).pop,
+        ),
+      ),
+    );
+  }
+}
+
+class CreatePublicEventError extends Modal {
+  const CreatePublicEventError({Key? key, this.errorDetail}) : super(key: key);
+  final String? errorDetail;
+  @override
+  double get fraction => 0.35;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          onPressed: Navigator.of(context).pop,
+          icon: const Icon(
+            Icons.close,
+            color: Colors.grey,
+          ),
+        ),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+      ),
+      body: Container(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Falha ao criar o evento',
+              style: TextStyle(
+                fontSize: 22,
+                color: Colors.black,
+                fontWeight: FontWeight.w500,
+              ),
+            ).withPaddingOnly(bottom: 16),
+            Expanded(
+              child: Text(
+                errorDetail ??
+                    'Não conseguimos criar o seu evento, por favor volte a tentar mais tarde',
+                style: const TextStyle(
                   fontSize: 16,
                   color: Colors.black,
                   fontWeight: FontWeight.w300,

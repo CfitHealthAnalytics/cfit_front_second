@@ -32,3 +32,6 @@ const Color googleColor = Color(0xFFDB4437);
 bool isDesktop(BuildContext context) =>
     MediaQuery.of(context).size.width >= 600;
 bool isMobile(BuildContext context) => MediaQuery.of(context).size.width < 600;
+
+const EXCEPTION_MAX_LIMIT =
+    '''Você não pode ter mais de 2 eventos ativos simultaneamente''';

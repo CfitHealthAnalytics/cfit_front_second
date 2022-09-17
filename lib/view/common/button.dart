@@ -3,21 +3,25 @@ import 'package:flutter/material.dart';
 class ButtonAction extends StatefulWidget {
   const ButtonAction({
     Key? key,
-    required this.text,
+    this.text,
     required this.type,
     this.onPressed,
     this.loading,
     this.customBackgroundColor,
+    this.customIconColor,
     this.width,
+    this.icon,
     this.height,
     this.textStyle,
   }) : super(key: key);
 
-  final String text;
+  final String? text;
   final VoidCallback? onPressed;
   final bool? loading;
   final ButtonActionType type;
   final Color? customBackgroundColor;
+  final Color? customIconColor;
+  final IconData? icon;
   final double? width;
   final double? height;
   final TextStyle? textStyle;
@@ -66,15 +70,15 @@ class _ButtonActionState extends State<ButtonAction> {
                         ),
                       )
                     : Text(
-                        widget.text,
+                        widget.text!,
                         style: widget.textStyle ??
                             TextStyle(
-                          color: widget.onPressed == null
-                              ? Colors.white.withAlpha(100)
-                              : Colors.white,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                        ),
+                              color: widget.onPressed == null
+                                  ? Colors.white.withAlpha(100)
+                                  : Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                            ),
                       ),
               ),
             ),
@@ -85,13 +89,13 @@ class _ButtonActionState extends State<ButtonAction> {
       case ButtonActionType.text:
         return TextButton(
           child: Text(
-            widget.text,
+            widget.text!,
             style: widget.textStyle ??
                 const TextStyle(
-              color: Colors.white,
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
-            ),
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                ),
           ),
           onPressed: widget.onPressed,
         );
@@ -99,7 +103,7 @@ class _ButtonActionState extends State<ButtonAction> {
       case ButtonActionType.chip:
         return InputChip(
           label: Text(
-            widget.text,
+            widget.text!,
             style: widget.textStyle ??
                 const TextStyle(
                   color: Colors.white,
@@ -111,8 +115,22 @@ class _ButtonActionState extends State<ButtonAction> {
               : Theme.of(context).primaryColor,
           onPressed: widget.onPressed,
         );
+
+      case ButtonActionType.icon:
+        return IconButton(
+          icon: CircleAvatar(
+            backgroundColor:
+                widget.customBackgroundColor ?? Theme.of(context).primaryColor,
+            child: Icon(
+              widget.icon!,
+              color: widget.customIconColor ?? Colors.white,
+            ),
+          ),
+          padding: const EdgeInsets.all(0),
+          onPressed: widget.onPressed,
+        );
     }
   }
 }
 
-enum ButtonActionType { primary, text, chip }
+enum ButtonActionType { primary, text, chip, icon }

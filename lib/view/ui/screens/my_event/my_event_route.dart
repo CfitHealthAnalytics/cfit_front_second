@@ -27,6 +27,10 @@ class MyEventRoute extends StatelessWidget {
         event: eventPublic,
         user: user,
         getEventPublicUseCase: context.getEventPublicUseCase(),
+        deleteEventPublicUseCase: context.deleteEventPublicUseCase(),
+        confirmationEventPublicUseCase:
+            context.confirmationEventPublicUseCase(),
+        declineEventPublicUseCase: context.declineEventPublicUseCase(),
       ),
       child: MyEventScreen(
         user: user,

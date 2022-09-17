@@ -20,7 +20,7 @@ class CreatePublicEventModal extends Modal {
   }) : super(key: key);
 
   final User user;
-  final void Function(bool) onCreate;
+  final void Function(bool, [String]) onCreate;
   final EventPublic? event;
   final Address? address;
   final bool isEdit;

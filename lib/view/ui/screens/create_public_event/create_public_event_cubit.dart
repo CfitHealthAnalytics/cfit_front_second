@@ -1,10 +1,12 @@
 import 'package:bloc/bloc.dart';
+import 'package:cfit/constants.dart';
 import 'package:cfit/domain/models/address.dart';
 import 'package:cfit/domain/models/events_public.dart';
 import 'package:cfit/domain/models/user.dart';
 import 'package:cfit/domain/use_cases/categories_event_use_case.dart';
 import 'package:cfit/domain/use_cases/create_event_public_use_case.dart';
 import 'package:cfit/domain/use_cases/edit_event_public_use_case.dart';
+import 'package:cfit/external/models/api.dart';
 import 'package:cfit/view/ui/screens/create_public_event/create_public_event_navigation.dart';
 import 'package:cfit/view/ui/screens/create_public_event/create_public_event_state.dart';
 import 'package:flutter/foundation.dart';
@@ -34,7 +36,7 @@ class CreatePublicEventCubit extends Cubit<CreatePublicEventState> {
   final CategoriesEventUseCase categoriesEventUseCase;
   final CreateEventPublicUseCase createEventPublicUseCase;
   final EditEventPublicUseCase editEventPublicUseCase;
-  final void Function(bool) onCreate;
+  final void Function(bool, [String]) onCreate;
 
   bool get isWeb => kIsWeb;
   String? get localization => state.address.formattedAddress;
@@ -139,8 +141,8 @@ class CreatePublicEventCubit extends Cubit<CreatePublicEventState> {
       int.parse(dateArray[2]),
       int.parse(dateArray[1]),
       int.parse(dateArray[0]),
-      int.parse(hourArray[1]),
       int.parse(hourArray[0]),
+      int.parse(hourArray[1]),
     );
     try {
       await createEventPublicUseCase(
@@ -159,6 +161,13 @@ class CreatePublicEventCubit extends Cubit<CreatePublicEventState> {
       ));
       navigation.back();
       onCreate(true);
+    } on ForbiddenException {
+      emit(state.copyWith(
+        loadingRequest: false,
+        status: CreatePublicEventStatus.failed,
+      ));
+      navigation.back();
+      onCreate(false, EXCEPTION_MAX_LIMIT);
     } catch (e) {
       emit(state.copyWith(
         loadingRequest: false,

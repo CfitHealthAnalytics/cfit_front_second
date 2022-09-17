@@ -28,6 +28,7 @@ class GetEventPublicUseCase {
           )
           .toList(),
       usersConfirmation: event.usersConfirmation,
+      usersRejection: event.usersRejection,
       description: event.description,
       city: event.city,
       coordinates: event.coordinates,

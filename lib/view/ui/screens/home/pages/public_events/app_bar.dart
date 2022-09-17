@@ -37,6 +37,13 @@ class AppBarPublicEvents extends StatelessWidget {
                 context: context,
                 modal: const CreatePublicEventSuccess(),
               );
+            } else if (response?.createdEvent == false) {
+              presentBottomSheet(
+                context: context,
+                modal: CreatePublicEventError(
+                  errorDetail: response?.reason,
+                ),
+              );
             }
           },
           icon: const Icon(

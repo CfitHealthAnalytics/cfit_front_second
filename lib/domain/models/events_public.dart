@@ -21,6 +21,7 @@ class EventPublic implements Event {
   bool status;
   @override
   List<String> usersConfirmation;
+  List<String> usersRejection;
   List<String> usersLike;
   @override
   String id;
@@ -49,6 +50,7 @@ class EventPublic implements Event {
     required this.usersCheckIn,
     required this.status,
     required this.usersConfirmation,
+    required this.usersRejection,
     required this.usersLike,
     required this.id,
     required this.startTime,
@@ -71,6 +73,7 @@ class EventPublic implements Event {
       'usersCheckIn': usersCheckIn.map((x) => x.toMap()).toList(),
       'status': status,
       'usersConfirmation': usersConfirmation,
+      'usersRejection': usersRejection,
       'usersLike': usersLike,
       'id': id,
       'startTime': startTime.toIso8601String(),
@@ -95,20 +98,14 @@ class EventPublic implements Event {
           List<User>.from(map['usersCheckIn']?.map((x) => User.fromMap(x))),
       status: map['status'] ?? false,
       usersConfirmation: List<String>.from(map['usersConfirmation']),
+      usersRejection: List<String>.from(map['usersRejection'] ?? []),
       usersLike: List<String>.from(map['usersLike']),
       id: map['id'] ?? '',
       startTime: DateTime.parse(map['startTime']),
       neighborhood: map['neighborhood'] ?? '',
       type: map['type'] ?? '',
       name: map['name'] ?? '',
-      userCreator: User.fromMap(map['userCreator']) ??
-          User(
-            id: '',
-            name: '',
-            email: '',
-            dateBirth: '',
-            gender: UserGender.male,
-          ),
+      userCreator: User.fromMap(map['userCreator']),
       createdAt: DateTime.parse(map['createdAt']),
       countMaxUsers: map['countMaxUsers']?.toInt() ?? 0,
       description: map['description'] ?? '',

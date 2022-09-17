@@ -30,6 +30,10 @@ class ApiResponseFactory {
     if (error.statusCode == 401) {
       return UnauthorizedException(error);
     }
+    if (error.statusCode == 403) {
+      return ForbiddenException(error);
+    }
+    
     if (error.statusCode == 422) {
       if (error.body.toLowerCase().contains('email_exists')) {
         return ForbiddenException(error);

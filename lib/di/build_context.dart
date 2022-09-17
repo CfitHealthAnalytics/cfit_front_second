@@ -6,7 +6,10 @@ import 'package:cfit/data/repository/events.dart';
 import 'package:cfit/data/repository/user.dart';
 import 'package:cfit/domain/use_cases/categories_event_use_case.dart';
 import 'package:cfit/domain/use_cases/confirmation_event_in_city_use_case.dart';
+import 'package:cfit/domain/use_cases/confirmation_event_public_use_case.dart';
 import 'package:cfit/domain/use_cases/create_event_public_use_case.dart';
+import 'package:cfit/domain/use_cases/decline_event_public_use_case.dart';
+import 'package:cfit/domain/use_cases/delete_event_public_use_case.dart';
 import 'package:cfit/domain/use_cases/edit_event_public_use_case.dart';
 import 'package:cfit/domain/use_cases/events_in_city_use_case.dart';
 import 'package:cfit/domain/use_cases/events_public_use_case.dart';
@@ -150,6 +153,24 @@ extension DependencyInjection on BuildContext {
 
   GetEventPublicUseCase getEventPublicUseCase() {
     return GetEventPublicUseCase(
+      eventsRepository: eventsRepository(),
+    );
+  }
+
+  DeleteEventPublicUseCase deleteEventPublicUseCase() {
+    return DeleteEventPublicUseCase(
+      eventsRepository: eventsRepository(),
+    );
+  }
+
+  ConfirmationEventPublicUseCase confirmationEventPublicUseCase() {
+    return ConfirmationEventPublicUseCase(
+      eventsRepository: eventsRepository(),
+    );
+  }
+
+  DeclineEventPublicUseCase declineEventPublicUseCase() {
+    return DeclineEventPublicUseCase(
       eventsRepository: eventsRepository(),
     );
   }

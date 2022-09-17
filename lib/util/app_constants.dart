@@ -39,13 +39,20 @@ class AppConstants {
 
   static const String CHECKOUT_CITY_EVENTS = '/checkout_city_events/';
   static const String CHECKIN_CITY_EVENTS = '/checkin_city_events/';
-  
+
   static const String CHECKOUT_PUBLIC_EVENTS = '/checkout_public_events/';
   static const String CHECKIN_PUBLIC_EVENTS = '/checkin_public_events/';
+
+  static String CONFIRMATION_PUBLIC_EVENTS(String eventId) =>
+      '/public_events/$eventId/comfirmation';
+
+  static String DECLINE_PUBLIC_EVENTS(String eventId) =>
+      '/public_events/$eventId/reject_user';
 
   static const String REGISTER_EVENT = '/create_public_events/';
   static const String EDIT_EVENT = '/update_public_events';
   static const String GET_EVENT = '/get_public_event_by_id';
+  static const String DELETE_EVENT = '/delete_public_events';
 
   static const String REGISTER_EVENT2 =
       '/create_city_events_collection_in_district/';
@@ -53,7 +60,7 @@ class AppConstants {
   /// City Events
 
   static const String GET_HALL_EVENTS = '/city_hall_events';
-  static const String CONFIRMATION_HALL_EVENTS = '/comfirmation_in_events/';
+  static const String CONFIRMATION_HALL_EVENTS = '/comfirmation_in_events';
   static const String GET_CITY_EVENTS = '/get_city_events/';
   static const String GET_PUBLIC_EVENTS = '/get_public_events/';
   static const String GET_MODALIDADES_EVENTS = '/modalidades';
@@ -134,7 +141,7 @@ class AppConstants {
   static const String USER_GENDER = 'user_gender';
   static const String USER_NAME = 'user_name';
   static const String USER_ID = 'user_id';
-  
+
   static const String NOTIFICATION = 'notification';
   static const String SEARCH_HISTORY = 'search_history';
   static const String INTRO = 'intro';
@@ -144,5 +151,4 @@ class AppConstants {
   static const String LOCALIZATION_KEY = 'X-localization';
 
   static const String USER_NUMBER = 'cfit_user_number';
-
 }

@@ -62,4 +62,8 @@ final theme = ThemeData(
     return Colors.black;
   })),
   colorScheme: ColorScheme.fromSwatch().copyWith(secondary: primaryColor),
+  progressIndicatorTheme: const ProgressIndicatorThemeData(
+    linearTrackColor: primaryColorDark,
+    color: primaryColor,
+  ),
 );

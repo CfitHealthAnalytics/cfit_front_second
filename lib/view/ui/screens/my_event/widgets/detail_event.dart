@@ -1,9 +1,12 @@
 import 'package:cfit/domain/models/events_public.dart';
+import 'package:cfit/util/bottom_sheet.dart';
 import 'package:cfit/util/extentions.dart';
 import 'package:cfit/view/common/padding.dart';
 import 'package:cfit/view/ui/screens/my_event/my_event_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'confirmation_delete.dart';
 
 class Details extends StatelessWidget {
   const Details({
@@ -56,10 +59,38 @@ class Details extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               CountConfirmed(eventPublic: eventPublic),
-              ChipCFit(
-                label: 'Editar',
-                isSelected: true,
-                onPressed: cubit.goToEdit,
+              Row(
+                children: [
+                  ChipCFit(
+                    label: 'Editar',
+                    isSelected: true,
+                    onPressed: cubit.goToEdit,
+                  ),
+                  const SizedBox(width: 8),
+                  ChipCFit(
+                    label: 'Apagar',
+                    isSelected: true,
+                    onPressed: () {
+                      presentBottomSheet(
+                        context: context,
+                        modal: ConfirmDeleteModal(
+                          eventPublic: eventPublic,
+                          onPressed: () async {
+                            final success = await cubit.deleteEvent();
+                            if (success) {
+                              Navigator.of(context).pop();
+                              Navigator.of(context).pop();
+                            } else {
+                              return false;
+                            }
+                            return null;
+                          },
+                        ),
+                      );
+                    },
+                    customBackgroundColor: const Color(0xFFAA121E),
+                  ),
+                ],
               ),
             ],
           ),
@@ -107,11 +138,22 @@ class ChipCFit extends StatelessWidget {
     required this.label,
     required this.isSelected,
     required this.onPressed,
+    this.customBackgroundColor,
   }) : super(key: key);
 
   final String label;
   final bool isSelected;
+  final Color? customBackgroundColor;
   final void Function() onPressed;
+
+  Color getColor(BuildContext context) {
+    if (customBackgroundColor != null) {
+      return customBackgroundColor!;
+    } else if (isSelected) {
+      return Theme.of(context).primaryColor;
+    }
+    return Theme.of(context).primaryColorDark;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -123,9 +165,7 @@ class ChipCFit extends StatelessWidget {
           fontWeight: FontWeight.w400,
         ),
       ),
-      backgroundColor: isSelected
-          ? Theme.of(context).primaryColor
-          : Theme.of(context).primaryColorDark,
+      backgroundColor: getColor(context),
       onPressed: onPressed,
     );
   }

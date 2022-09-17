@@ -1,12 +1,10 @@
 import 'package:cfit/view/common/modais.dart';
 import 'package:flutter/material.dart';
 
-void presentBottomSheet({
+void presentBottomSheet<T>({
   required BuildContext context,
   required Modal modal,
 }) {
-  
-
   showModalBottomSheet(
     context: context,
     isDismissible: true,

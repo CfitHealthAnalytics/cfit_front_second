@@ -103,6 +103,29 @@ class AuthenticatedClient implements ApiClient {
     return factory.fromHttpResponse(response);
   }
 
+
+  Future<ApiResponse> _delete({
+    required String path,
+    required String token,
+    Map<String, dynamic>? query,
+  }) async {
+    final response = await http.delete(
+      Uri(
+        host: baseUri,
+        path: path,
+        queryParameters: query,
+        scheme: 'https',
+      ),
+      headers: {
+        'Authorization': 'Bearer $token',
+        'accept': 'application/json; charset=utf-8',
+        'Content-Type': 'application/json; charset=utf-8',
+        'accept-language': 'pt,en;q=0.9',
+      },
+    );
+    return factory.fromHttpResponse(response);
+  }
+
   Future<void> refreshToken() async {
     final refreshToken = await storage.get(AppConstants.TOKEN_REFRESH);
     final response = await http.post(
@@ -212,6 +235,46 @@ class AuthenticatedClient implements ApiClient {
         query: query,
         retries: retries - 1,
         isBodyEmpty: isBodyEmpty,
+      );
+    }
+  }
+
+  @override
+  Future<ApiResponse> delete({
+    required String path,
+    int retries = 3,
+    Map<String, dynamic>? query,
+  }) async {
+    final token = await storage.get<String>(AppConstants.TOKEN);
+    final refreshToken = await storage.get(AppConstants.TOKEN_REFRESH);
+
+    if (token == null || refreshToken.toString() == "3600") {
+      throw NotLoggedUser();
+    }
+    try {
+      return await _delete(
+        path: path,
+        token: token,
+        query: query,
+      );
+    } on UnauthorizedException catch (_) {
+      if (retries == 0) {
+        rethrow;
+      }
+      await refreshToken();
+      return await delete(
+        path: path,
+        retries: retries - 1,
+        query: query,
+      );
+    } catch (_) {
+      if (retries == 0) {
+        rethrow;
+      }
+      return await delete(
+        path: path,
+        retries: retries - 1,
+        query: query,
       );
     }
   }

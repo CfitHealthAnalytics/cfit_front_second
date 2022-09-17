@@ -33,6 +33,14 @@ abstract class EventsRepository {
   Future<bool> confirmUsersInEvent(
     ConfirmationEventCityRequest confirmationEvent,
   );
+  
+  Future<bool> confirmUsersInEventPublic(
+    ConfirmationEventCityRequest confirmationEvent,
+  );
+
+  Future<bool> declineUsersInEventPublic(
+    ConfirmationEventCityRequest confirmationEvent,
+  );
 
   Future<bool> createEventPublic(
     CreateEventPublicRequest createEventPublicRequest,
@@ -41,6 +49,11 @@ abstract class EventsRepository {
 
   Future<bool> editEventPublic(
     CreateEventPublicRequest createEventPublicRequest,
+    String userId,
+  );
+  
+  Future<bool> deleteEventPublic(
+    String eventId,
     String userId,
   );
 

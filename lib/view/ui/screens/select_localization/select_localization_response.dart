@@ -5,15 +5,19 @@ import 'package:cfit/domain/models/address.dart';
 class SelectLocalizationResponse {
   final Address? address;
   final bool? createdEvent;
+  final String? reason;
+  
   SelectLocalizationResponse({
     this.address,
     this.createdEvent,
+    this.reason,
   });
 
   Map<String, dynamic> toMap() {
     return {
       'address': address?.toMap(),
       'createdEvent': createdEvent,
+      'reason': reason,
     };
   }
 
@@ -21,6 +25,7 @@ class SelectLocalizationResponse {
     return SelectLocalizationResponse(
       address: map['address'] != null ? Address.fromMap(map['address']) : null,
       createdEvent: map['createdEvent'],
+      reason: map['reason'],
     );
   }
 

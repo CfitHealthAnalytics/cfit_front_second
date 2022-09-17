@@ -25,11 +25,18 @@ class SelectLocalizationNavigation {
         context: navigator.context,
         modal: CreatePublicEventModal(
           user: user,
-          onCreate: (created) {
+          onCreate: (created, [String? errorDetail]) {
             if (created) {
               navigator.pop(
                 SelectLocalizationResponse(
                   createdEvent: true,
+                ),
+              );
+            } else {
+              navigator.pop(
+                SelectLocalizationResponse(
+                  createdEvent: false,
+                  reason: errorDetail,
                 ),
               );
             }

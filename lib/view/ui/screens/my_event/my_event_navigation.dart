@@ -11,7 +11,8 @@ class MyEventNavigation {
   final void Function() toHome;
   final void Function() onBack;
   final void Function() toLogin;
-  final void Function(EventPublic, User, void Function(bool)) toEditEvent;
+  final void Function(EventPublic, User, void Function(bool, [String?]))
+      toEditEvent;
   final void Function({required VoidCallback onRetry}) presentError;
 
   MyEventNavigation({
