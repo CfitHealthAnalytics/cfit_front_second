@@ -1,6 +1,4 @@
-import 'package:cfit/domain/models/coordinates.dart';
 import 'package:cfit/domain/models/events_public.dart';
-import 'package:cfit/theme.dart';
 import 'package:cfit/util/extentions.dart';
 import 'package:cfit/view/common/button.dart';
 import 'package:cfit/view/common/input_text.dart';
@@ -268,11 +266,13 @@ class CreatePublicEventScreen extends StatelessWidget {
               label: 'Rua',
               hintText: 'Ex: Rua das flores',
               onChanged: cubit.onChangeStreet,
+              initialValue: cubit.state.address.street,
               type: InputTextType.text,
             ).withPaddingOnly(bottom: 16),
             InputText(
               label: 'Número',
               formKey: numberFormKey,
+              initialValue: cubit.state.address.number,
               validator: (number) {
                 if (number == null || number.isEmpty) {
                   return 'Se não tiver numero, preencha com "s/n"';
@@ -295,6 +295,7 @@ class CreatePublicEventScreen extends StatelessWidget {
             InputText(
               label: 'Bairro',
               formKey: neighborhoodFormKey,
+              initialValue: cubit.state.address.neighborhood,
               validator: (neighborhood) {
                 if (neighborhood == null || neighborhood.isEmpty) {
                   return 'Preencha o bairro onde o evento acontecerá';
@@ -309,6 +310,7 @@ class CreatePublicEventScreen extends StatelessWidget {
             InputText(
               label: 'Cidade',
               formKey: cityFormKey,
+              initialValue: cubit.state.address.city,
               validator: (city) {
                 if (city == null || city.isEmpty) {
                   return 'Preencha a cidade onde o evento acontecerá';
@@ -334,21 +336,6 @@ class CreatePublicEventScreen extends StatelessWidget {
                 return const SizedBox();
               }),
             ),
-            BlocBuilder<CreatePublicEventCubit, CreatePublicEventState>(
-                builder: (context, state) {
-              if (!state.address.coordinates.isValidCoordinates) {
-                return ButtonAction(
-                  text: 'Selecionar local',
-                  type: ButtonActionType.text,
-                  onPressed: cubit.selectLocation,
-                  textStyle: const TextStyle(
-                    color: primaryColorDark,
-                    decoration: TextDecoration.underline,
-                  ),
-                );
-              }
-              return const SizedBox.shrink();
-            }),
           ],
         ).withPaddingSymmetric(
           horizontal: 16,

@@ -22,7 +22,7 @@ class CreatePublicEventCubit extends Cubit<CreatePublicEventState> {
     required this.onCreate,
     this.event,
     this.address,
-  }) : super(address != null
+  }) : super((address != null && isEdit != true)
             ? CreatePublicEventState.emptyOnlyAddress(address)
             : isEdit
                 ? CreatePublicEventState.fromEvent(event!)
@@ -115,17 +115,6 @@ class CreatePublicEventCubit extends Cubit<CreatePublicEventState> {
     emit(state.copyWith(errorMessage: errorMessage));
   }
 
-  Future<void> selectLocation() async {
-    final response = await navigation.toMap();
-    emit(
-      state.copyWith(
-        address: state.address.copyWith(
-          coordinates: response?.address?.coordinates,
-        ),
-      ),
-    );
-  }
-
   Future<List<String>> getCategoriesEvent() async {
     return await categoriesEventUseCase();
   }
@@ -173,6 +162,8 @@ class CreatePublicEventCubit extends Cubit<CreatePublicEventState> {
         loadingRequest: false,
         status: CreatePublicEventStatus.failed,
       ));
+      navigation.back();
+      onCreate(false, UNEXPECTED_FAILED);
     }
   }
 

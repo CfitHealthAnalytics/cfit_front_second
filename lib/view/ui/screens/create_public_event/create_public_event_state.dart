@@ -42,11 +42,14 @@ class CreatePublicEventState {
       date: '',
       hour: '',
       address: Address(
-        coordinates: Coordinates(),
+        coordinates: Coordinates(
+          lat: -8.495077265414775,
+          long: -37.175878467962995,
+        ),
       ),
     );
   }
-  
+
   factory CreatePublicEventState.emptyOnlyAddress(Address address) {
     return CreatePublicEventState(
       loadingRequest: false,

@@ -35,3 +35,6 @@ bool isMobile(BuildContext context) => MediaQuery.of(context).size.width < 600;
 
 const EXCEPTION_MAX_LIMIT =
     '''Você não pode ter mais de 2 eventos ativos simultaneamente''';
+
+const UNEXPECTED_FAILED =
+    '''Ocorreu um erro inesperado, ao tentar criar seu evento. Por favor tente novamente mais tarde. ''';
