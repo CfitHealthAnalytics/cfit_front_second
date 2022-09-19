@@ -31,6 +31,10 @@ class AppConstants {
   static const String CHECK_EMAIL_URI = '/api/v1/auth/check-email';
   static const String VERIFY_EMAIL_URI = '/api/v1/auth/verify-email';
 
+
+  static const String GET_IGP_BY_DATE_URI = '/get_bioimpedance_by_date';
+  static const String GET_BIO_INFO = '/user_bioimpedance';
+
   static const String REGISTER_URI = '/register_user/';
   static const String LOGIN_URI = '/authentication/';
   static const String GET_USER = '/get_user_info/';
@@ -60,7 +64,7 @@ class AppConstants {
   /// City Events
 
   static const String GET_HALL_EVENTS = '/city_hall_events';
-  static const String CONFIRMATION_HALL_EVENTS = '/comfirmation_in_events';
+  static const String CONFIRMATION_HALL_EVENTS = '/comfirmation_in_events/';
   static const String GET_CITY_EVENTS = '/get_city_events/';
   static const String GET_PUBLIC_EVENTS = '/get_public_events/';
   static const String GET_MODALIDADES_EVENTS = '/modalidades';
