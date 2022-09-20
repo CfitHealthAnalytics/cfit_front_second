@@ -18,7 +18,7 @@ class Routes {
   static const eventos_search = '/eventos/pesquisa';
   static const perfil = '/perfil';
   static const my_datas = '/perfil/meus_dados';
-  static const mymeasures = '/mymeasures';
+  static const my_measures = '/my_measures';
   static const qrcode = '/qrcode';
 
   static const map = '/map';

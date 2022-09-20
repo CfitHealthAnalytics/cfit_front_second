@@ -31,7 +31,9 @@ class _BodyGymState extends State<BodyGym> {
   late DateTime selectedDate;
   @override
   void initState() {
-    selectedDate = DateTime.now();
+    selectedDate = widget.user.isAdmin
+        ? DateTime.now().subtract(const Duration(hours: 2))
+        : DateTime.now();
     super.initState();
   }
 
@@ -58,7 +60,9 @@ class _BodyGymState extends State<BodyGym> {
             child: CalendarShort(
               onChange: (newSelectedDate) {
                 setState(() {
-                  selectedDate = newSelectedDate;
+                  selectedDate = widget.user.isAdmin
+                      ? newSelectedDate.subtract(const Duration(hours: 2))
+                      : selectedDate;
                 });
               },
             ),
@@ -104,4 +108,3 @@ class _BodyGymState extends State<BodyGym> {
     );
   }
 }
-

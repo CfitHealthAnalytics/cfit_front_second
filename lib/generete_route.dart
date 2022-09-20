@@ -11,6 +11,7 @@ import 'package:cfit/view/ui/screens/my_datas/my_datas_arguments.dart';
 import 'package:cfit/view/ui/screens/my_datas/my_datas_route.dart';
 import 'package:cfit/view/ui/screens/my_event/my_event_arguments.dart';
 import 'package:cfit/view/ui/screens/my_event/my_event_route.dart';
+import 'package:cfit/view/ui/screens/my_measures/my_measures_route.dart';
 import 'package:cfit/view/ui/screens/register/register_route.dart';
 import 'package:cfit/view/ui/screens/select_localization/select_localization_arguments.dart';
 import 'package:cfit/view/ui/screens/select_localization/select_localization_response.dart';
@@ -29,6 +30,8 @@ Route<dynamic> onGenerateRoutes(RouteSettings settings) {
       return const RegisterRoute().buildRoute();
     case Routes.home:
       return const HomeRoute().buildRoute();
+    case Routes.my_measures:
+      return const MyMeasureRoute().buildRoute();
     case Routes.my_datas:
       final myDatasArguments = MyDataArguments.fromJson(arguments as String);
       return MyDatasRoute(user: myDatasArguments.user).buildRoute();

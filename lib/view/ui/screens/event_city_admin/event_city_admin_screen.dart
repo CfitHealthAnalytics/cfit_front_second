@@ -58,12 +58,17 @@ class EventCityAdminScreen extends StatelessWidget {
           ),
         ),
       ),
-      body: Column(
-        children: [
-          CalendarDetails(eventCity: eventCity),
-          const Divider(),
-          ListUserCheckIn(usersCheckIn: eventCity.usersCheckIn)
-        ],
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            CalendarDetails(eventCity: eventCity),
+            const Divider(),
+            ListUserCheckIn(
+              usersCheckIn: eventCity.usersCheckIn,
+              usersConfirms: eventCity.usersConfirmation,
+            )
+          ],
+        ),
       ),
       bottomNavigationBar: SizedBox(
         height: 120,

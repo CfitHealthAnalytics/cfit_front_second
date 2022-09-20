@@ -26,12 +26,11 @@ class EventPublicDetailsRoute extends StatelessWidget {
           Navigator.of(context),
         ),
         context.scheduleEventsPublicUseCase(),
+        eventPublic,
+        user,
         alreadyScheduled: alreadyScheduled,
       ),
-      child: EventPublicDetailsScreen(
-        eventPublic: eventPublic,
-        user: user,
-      ),
+      child: const EventPublicDetailsScreen(),
     );
   }
 }

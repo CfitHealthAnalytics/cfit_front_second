@@ -75,7 +75,7 @@ class BodyProfile extends StatelessWidget {
                   'assets/images/chart_icon.svg',
                 ),
               ),
-              onPressed: () {},
+              onPressed: navigation.toMyMeasure,
               customPadding: 8,
             ),
           ),

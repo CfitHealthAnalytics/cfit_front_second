@@ -5,21 +5,28 @@ import 'package:cfit/domain/models/user.dart';
 
 class FeedUseCase {
   final UserRepository userRepository;
+  final void Function(User) setUser;
 
   FeedUseCase({
     required this.userRepository,
+    required this.setUser,
   });
 
   Future<User> getUser() async {
     final userResponse = await userRepository.getUser();
     final listAdmin = await userRepository.getAdmins();
-    return User(
-        id: userResponse.id,
-        name: userResponse.name,
-        email: userResponse.email,
-        dateBirth: userResponse.dateBirth,
-        gender: userResponse.gender.toGender(),
-        isAdmin: listAdmin.contains(userResponse.id));
+    final _user = User(
+      id: userResponse.id,
+      name: userResponse.name,
+      email: userResponse.email,
+      dateBirth: userResponse.dateBirth,
+      gender: userResponse.gender.toGender(),
+      isAdmin: listAdmin.contains(userResponse.id),
+    );
+
+    setUser(_user);
+
+    return _user;
   }
 
   Future<List<EventCity>?> getGymCityEvents() async {

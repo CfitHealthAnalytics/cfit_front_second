@@ -1,5 +1,3 @@
-import 'package:cfit/domain/models/events_public.dart';
-import 'package:cfit/domain/models/user.dart';
 import 'package:cfit/util/bottom_sheet.dart';
 import 'package:cfit/view/common/button.dart';
 import 'package:flutter/material.dart';
@@ -19,12 +17,7 @@ final dateBirthMask = MaskTextInputFormatter(
 class EventPublicDetailsScreen extends StatelessWidget {
   const EventPublicDetailsScreen({
     Key? key,
-    required this.eventPublic,
-    required this.user,
   }) : super(key: key);
-
-  final EventPublic eventPublic;
-  final User user;
 
   @override
   Widget build(BuildContext context) {
@@ -64,86 +57,106 @@ class EventPublicDetailsScreen extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            CalendarDetails(eventPublic: eventPublic),
+            CalendarDetails(eventPublic: cubit.eventPublic),
             const Divider(),
-            Details(eventPublic: eventPublic)
+            Details(eventPublic: cubit.eventPublic)
           ],
         ),
       ),
-      bottomNavigationBar: eventPublic.usersConfirmation.contains(user.id)
+      bottomNavigationBar: cubit.isRejected
           ? Container(
-              height: 100,
               width: MediaQuery.of(context).size.width,
+              height: 150,
               alignment: Alignment.center,
-              padding: const EdgeInsets.only(
-                left: 16.0,
-                right: 16.0,
-                bottom: 50,
-              ),
-              decoration: const BoxDecoration(
-                border: Border(
-                  top: BorderSide(
-                    width: 1.0,
-                    color: Colors.grey,
-                  ),
-                ),
-              ),
-              child: const Text(
-                'Sua presença já foi confirmada pelo professor',
-                style: TextStyle(
-                  color: Colors.grey,
-                ),
-              ),
+              child:
+                  const Text('Você foi recusado pelo organizador do evento :/'),
             )
-          : SizedBox(
-              height: 120,
-              width: MediaQuery.of(context).size.width,
-              child: Padding(
-                padding: const EdgeInsets.only(
-                  left: 8.0,
-                  right: 8.0,
-                  bottom: 45,
-                ),
-                child: BlocConsumer<EventPublicDetailsCubit,
-                    EventPublicDetailsState>(
-                  listener: (context, state) {
-                    if (state.status == EventPublicDetailsStatus.failed) {
-                      presentBottomSheet(
-                        context: context,
-                        modal: ScheduleErrorModal(
-                          isUnscheduled: cubit.alreadyScheduled,
-                          onPressed: () {
-                            Navigator.pop(context);
-                            cubit.action(eventPublic);
+          : cubit.isFilled
+              ? Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: 150,
+                  alignment: Alignment.center,
+                  child: const Text('Este evento já está lotado.'),
+                )
+              : cubit.eventPublic.usersConfirmation.contains(cubit.user.id)
+                  ? Container(
+                      height: 100,
+                      width: MediaQuery.of(context).size.width,
+                      alignment: Alignment.center,
+                      padding: const EdgeInsets.only(
+                        left: 16.0,
+                        right: 16.0,
+                        bottom: 50,
+                      ),
+                      decoration: const BoxDecoration(
+                        border: Border(
+                          top: BorderSide(
+                            width: 1.0,
+                            color: Colors.grey,
+                          ),
+                        ),
+                      ),
+                      child: const Text(
+                        'Sua presença já foi confirmada pelo professor',
+                        style: TextStyle(
+                          color: Colors.grey,
+                        ),
+                      ),
+                    )
+                  : SizedBox(
+                      height: 120,
+                      width: MediaQuery.of(context).size.width,
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                          left: 8.0,
+                          right: 8.0,
+                          bottom: 45,
+                        ),
+                        child: BlocConsumer<EventPublicDetailsCubit,
+                            EventPublicDetailsState>(
+                          listener: (context, state) {
+                            if (state.status ==
+                                EventPublicDetailsStatus.failed) {
+                              presentBottomSheet(
+                                context: context,
+                                modal: ScheduleErrorModal(
+                                  isUnscheduled: cubit.alreadyScheduled,
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                    cubit.action();
+                                  },
+                                ),
+                              );
+                            }
+                            if (state.status ==
+                                EventPublicDetailsStatus.succeeds) {
+                              presentBottomSheet(
+                                context: context,
+                                modal: ScheduleConfirmation(
+                                  isUnscheduled: cubit.alreadyScheduled,
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                    Navigator.pop(context);
+                                  },
+                                ),
+                              );
+                            }
+                          },
+                          builder: (context, state) {
+                            return ButtonAction(
+                              text: cubit.alreadyScheduled
+                                  ? 'Desagendar'
+                                  : 'Agendar',
+                              type: ButtonActionType.primary,
+                              onPressed: cubit.action,
+                              customBackgroundColor:
+                                  Theme.of(context).primaryColor,
+                              loading: state.loadingRequest,
+                            );
                           },
                         ),
-                      );
-                    }
-                    if (state.status == EventPublicDetailsStatus.succeeds) {
-                      presentBottomSheet(
-                        context: context,
-                        modal: ScheduleConfirmation(
-                          isUnscheduled: cubit.alreadyScheduled,
-                          onPressed: () {
-                            Navigator.pop(context);
-                            Navigator.pop(context);
-                          },
-                        ),
-                      );
-                    }
-                  },
-                  builder: (context, state) {
-                    return ButtonAction(
-                      text: cubit.alreadyScheduled ? 'Desagendar' : 'Agendar',
-                      type: ButtonActionType.primary,
-                      onPressed: () => cubit.action(eventPublic),
-                      customBackgroundColor: Theme.of(context).primaryColor,
-                      loading: state.loadingRequest,
-                    );
-                  },
-                ),
-              ),
-            ),
+                      ),
+                    ),
     );
   }
 }

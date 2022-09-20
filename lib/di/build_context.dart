@@ -1,9 +1,13 @@
 import 'package:cfit/data/models/auth.dart';
+import 'package:cfit/data/models/bio.dart';
 import 'package:cfit/data/models/events.dart';
 import 'package:cfit/data/models/user.dart';
 import 'package:cfit/data/repository/auth.dart';
+import 'package:cfit/data/repository/bio.dart';
 import 'package:cfit/data/repository/events.dart';
 import 'package:cfit/data/repository/user.dart';
+import 'package:cfit/domain/models/user.dart';
+import 'package:cfit/domain/use_cases/bio_info_use_case.dart';
 import 'package:cfit/domain/use_cases/categories_event_use_case.dart';
 import 'package:cfit/domain/use_cases/confirmation_event_in_city_use_case.dart';
 import 'package:cfit/domain/use_cases/confirmation_event_public_use_case.dart';
@@ -30,8 +34,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../domain/use_cases/login_use_case.dart';
 import '../external/models/storage.dart';
+import 'singleton.dart';
 
 extension DependencyInjection on BuildContext {
+  User getUser() {
+    return Singleton().user;
+  }
+
   UnauthenticatedClient unauthenticatedClient() {
     return UnauthenticatedClient(
       baseUri: AppConstants.BASE_URL,
@@ -73,6 +82,12 @@ extension DependencyInjection on BuildContext {
     );
   }
 
+  BioInfoRepository bioInfoRepository() {
+    return BioInfoRepositoryImpl(
+      authenticatedClient(),
+    );
+  }
+
   InitializationUseCase initializationUseCase() {
     return InitializationUseCase(
       authRepository: authRepository(),
@@ -94,6 +109,7 @@ extension DependencyInjection on BuildContext {
   FeedUseCase feedUseCase() {
     return FeedUseCase(
       userRepository: userRepository(),
+        setUser: (User user) => Singleton().user = user
     );
   }
 
@@ -144,7 +160,7 @@ extension DependencyInjection on BuildContext {
       eventsRepository(),
     );
   }
-  
+
   EditEventPublicUseCase editEventPublicUseCase() {
     return EditEventPublicUseCase(
       eventsRepository(),
@@ -172,6 +188,12 @@ extension DependencyInjection on BuildContext {
   DeclineEventPublicUseCase declineEventPublicUseCase() {
     return DeclineEventPublicUseCase(
       eventsRepository: eventsRepository(),
+    );
+  }
+
+  BioInfoUseCase bioInfoUseCase() {
+    return BioInfoUseCase(
+      bioInfoRepository: bioInfoRepository(),
     );
   }
 }
