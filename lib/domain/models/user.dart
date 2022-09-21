@@ -17,6 +17,16 @@ class User {
     this.isAdmin = false,
   });
 
+  factory User.empty() {
+    return User(
+      id: '',
+      name: '',
+      email: '',
+      dateBirth: '',
+      gender: UserGender.male,
+    );
+  }
+
   Map<String, dynamic> toMap() {
     return {
       'id': id,
@@ -56,7 +66,7 @@ extension GenderStringRepresentation on UserGender {
         return 'feminino';
     }
   }
-  
+
   String abbreviation() {
     switch (this) {
       case UserGender.male:

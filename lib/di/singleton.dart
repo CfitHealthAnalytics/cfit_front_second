@@ -2,7 +2,7 @@ import 'package:cfit/domain/models/user.dart';
 
 class Singleton {
   static final Singleton _singleton = Singleton._internal();
-  late final User _userInternal;
+  User _userInternal = User.empty();
 
   factory Singleton() {
     return _singleton;
