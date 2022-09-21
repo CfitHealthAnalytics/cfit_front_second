@@ -62,7 +62,7 @@ class _BodyGymState extends State<BodyGym> {
                 setState(() {
                   selectedDate = widget.user.isAdmin
                       ? newSelectedDate.subtract(const Duration(hours: 2))
-                      : selectedDate;
+                      : newSelectedDate;
                 });
               },
             ),

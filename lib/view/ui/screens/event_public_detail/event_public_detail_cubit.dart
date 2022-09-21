@@ -22,8 +22,9 @@ class EventPublicDetailsCubit extends Cubit<EventPublicDetailsState> {
   final EventPublic eventPublic;
   final User user;
 
-  bool get isFilled =>
-      eventPublic.usersCheckIn.length == eventPublic.countMaxUsers;
+  bool get isFilled => eventPublic.usersCheckIn.contains(user.id)
+      ? false
+      : eventPublic.usersCheckIn.length == eventPublic.countMaxUsers;
 
   bool get isRejected => eventPublic.usersRejection.contains(user.id);
 

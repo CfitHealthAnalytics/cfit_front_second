@@ -1,4 +1,5 @@
 import 'package:cfit/util/bottom_sheet.dart';
+import 'package:cfit/view/common/bottom_warning.dart';
 import 'package:cfit/view/common/button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -64,44 +65,14 @@ class EventPublicDetailsScreen extends StatelessWidget {
         ),
       ),
       bottomNavigationBar: cubit.isRejected
-          ? Container(
-              width: MediaQuery.of(context).size.width,
-              height: 150,
-              alignment: Alignment.center,
-              child:
-                  const Text('Você foi recusado pelo organizador do evento :/'),
+          ? const BottomWarning(
+              label: 'Você foi recusado pelo organizador do evento :/',
             )
           : cubit.isFilled
-              ? Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: 150,
-                  alignment: Alignment.center,
-                  child: const Text('Este evento já está lotado.'),
-                )
+              ? const BottomWarning(label: 'Este evento já está lotado.')
               : cubit.eventPublic.usersConfirmation.contains(cubit.user.id)
-                  ? Container(
-                      height: 100,
-                      width: MediaQuery.of(context).size.width,
-                      alignment: Alignment.center,
-                      padding: const EdgeInsets.only(
-                        left: 16.0,
-                        right: 16.0,
-                        bottom: 50,
-                      ),
-                      decoration: const BoxDecoration(
-                        border: Border(
-                          top: BorderSide(
-                            width: 1.0,
-                            color: Colors.grey,
-                          ),
-                        ),
-                      ),
-                      child: const Text(
-                        'Sua presença já foi confirmada pelo professor',
-                        style: TextStyle(
-                          color: Colors.grey,
-                        ),
-                      ),
+                  ? const BottomWarning(
+                      label: 'Sua presença já foi confirmada pelo professor',
                     )
                   : SizedBox(
                       height: 120,
