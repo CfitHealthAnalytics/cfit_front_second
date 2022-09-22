@@ -38,6 +38,9 @@ class ApiResponseFactory {
       if (error.body.toLowerCase().contains('email_exists')) {
         return ForbiddenException(error);
       }
+      if (error.body.toLowerCase().contains('invalid_id_token')) {
+        return UnauthorizedException(error);
+      }
       return NotFoundException(error);
     }
     return ApiException('Algo deu errado', error);
