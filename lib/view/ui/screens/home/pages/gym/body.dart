@@ -60,9 +60,16 @@ class _BodyGymState extends State<BodyGym> {
             child: CalendarShort(
               onChange: (newSelectedDate) {
                 setState(() {
-                  selectedDate = widget.user.isAdmin
-                      ? newSelectedDate.subtract(const Duration(hours: 2))
-                      : newSelectedDate;
+                  final today = DateTime.now();
+                  if (newSelectedDate.day == today.day &&
+                      newSelectedDate.month == today.month &&
+                      newSelectedDate.year == today.year) {
+                    selectedDate = widget.user.isAdmin
+                        ? newSelectedDate.subtract(const Duration(hours: 2))
+                        : newSelectedDate;
+                  } else {
+                    selectedDate = newSelectedDate;
+                  }
                 });
               },
             ),
