@@ -41,6 +41,9 @@ class ApiResponseFactory {
       if (error.body.toLowerCase().contains('invalid_id_token')) {
         return UnauthorizedException(error);
       }
+      if (error.body.toLowerCase().contains('email_not_found')) {
+        return NotFoundException(error);
+      }
       return NotFoundException(error);
     }
     return ApiException('Algo deu errado', error);

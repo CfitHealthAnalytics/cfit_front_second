@@ -21,6 +21,7 @@ import 'package:cfit/domain/use_cases/feed_use_case.dart';
 import 'package:cfit/domain/use_cases/get_event_public_use_case.dart';
 import 'package:cfit/domain/use_cases/initialization_use_case.dart';
 import 'package:cfit/domain/use_cases/logout_use_case.dart';
+import 'package:cfit/domain/use_cases/recover_password_use_case.dart';
 import 'package:cfit/domain/use_cases/register_use_case.dart';
 import 'package:cfit/domain/use_cases/schedule_event_in_city_use_case.dart';
 import 'package:cfit/domain/use_cases/schedule_event_public_use_case.dart';
@@ -108,9 +109,8 @@ extension DependencyInjection on BuildContext {
 
   FeedUseCase feedUseCase() {
     return FeedUseCase(
-      userRepository: userRepository(),
-        setUser: (User user) => Singleton().user = user
-    );
+        userRepository: userRepository(),
+        setUser: (User user) => Singleton().user = user);
   }
 
   LogoutUseCase logoutUseCase() {
@@ -194,6 +194,12 @@ extension DependencyInjection on BuildContext {
   BioInfoUseCase bioInfoUseCase() {
     return BioInfoUseCase(
       bioInfoRepository: bioInfoRepository(),
+    );
+  }
+
+  RecoverPasswordUseCase recoverPasswordUseCase() {
+    return RecoverPasswordUseCase(
+      authRepository(),
     );
   }
 }

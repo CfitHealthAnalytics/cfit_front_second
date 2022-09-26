@@ -66,7 +66,7 @@ class AuthRepositoryImpl implements AuthRepository {
       expiresIn: responses[AppConstants.TOKEN_EXPIRESIN],
     );
   }
-  
+
   @override
   Future<void> logout() async {
     await storage.deleteAll({
@@ -75,5 +75,15 @@ class AuthRepositoryImpl implements AuthRepository {
       AppConstants.TOKEN_REFRESH,
       AppConstants.USER_ID,
     });
+  }
+
+  @override
+  Future<void> recoverPassword(String email) async {
+    await client.post(
+      path: AppConstants.RECOVER_PASSWORD,
+      body: {
+        'email': email,
+      },
+    );
   }
 }

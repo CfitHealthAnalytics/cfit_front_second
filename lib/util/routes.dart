@@ -19,6 +19,7 @@ class Routes {
   static const perfil = '/perfil';
   static const my_datas = '/perfil/meus_dados';
   static const my_measures = '/my_measures';
+  static const recover_password = '/recover_password';
   static const qrcode = '/qrcode';
 
   static const map = '/map';

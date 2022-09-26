@@ -1,24 +1,24 @@
 import 'package:cfit/util/routes.dart';
 import 'package:flutter/widgets.dart';
 
-class LoginNavigation {
+class RecoverPasswordNavigation {
   final void Function() toRegister;
   final void Function() toHome;
-  final void Function() toRecoverPassword;
+  final void Function() goBack;
 
-  LoginNavigation({
+  RecoverPasswordNavigation({
     required this.toRegister,
     required this.toHome,
-    required this.toRecoverPassword,
+    required this.goBack,
   });
 
-  factory LoginNavigation.fromMaterialNavigation(
+  factory RecoverPasswordNavigation.fromMaterialNavigation(
     NavigatorState navigator,
   ) {
-    return LoginNavigation(
+    return RecoverPasswordNavigation(
+      goBack: navigator.pop,
       toRegister: () => navigator.pushNamed(Routes.register),
       toHome: () => navigator.pushReplacementNamed(Routes.home),
-      toRecoverPassword: () => navigator.pushNamed(Routes.recover_password),
     );
   }
 }

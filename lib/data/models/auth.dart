@@ -10,4 +10,6 @@ abstract class AuthRepository {
   Future<Credentials> getStoredCredentials();
 
   Future<void> logout();
+  
+  Future<void> recoverPassword(String email);
 }

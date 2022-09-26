@@ -81,11 +81,12 @@ class LoginScreen extends StatelessWidget {
                           type: InputTextType.password,
                         ),
                       ),
-                      const Padding(
-                          padding: EdgeInsets.symmetric(vertical: 8),
+                      Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8),
                           child: ButtonAction(
                             text: 'Esqueceu sua senha ?',
                             type: ButtonActionType.text,
+                            onPressed: cubit.recoverPassword,
                           )),
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 4),

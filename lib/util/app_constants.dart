@@ -40,6 +40,7 @@ class AppConstants {
   static const String GET_USER = '/get_user_info/';
   static const String GET_USERS_ADMIN = '/get_users_admin';
   static const String REFRESH_TOKEN = '/refreshtoken/';
+  static const String RECOVER_PASSWORD = '/send_reset_password_email/';
 
   static const String CHECKOUT_CITY_EVENTS = '/checkout_city_events/';
   static const String CHECKIN_CITY_EVENTS = '/checkin_city_events/';

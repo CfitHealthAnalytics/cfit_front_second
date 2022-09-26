@@ -38,4 +38,8 @@ class LoginCubit extends Cubit<LoginState> {
   void register() {
     _navigation.toRegister();
   }
+  
+  void recoverPassword() {
+    _navigation.toRecoverPassword();
+  }
 }
