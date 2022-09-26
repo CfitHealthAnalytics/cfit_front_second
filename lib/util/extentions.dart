@@ -23,11 +23,11 @@ extension DateShow on DateTime {
         .join('/');
   }
 
-  String formatDateHour() {
+  String formatDateHour({bool withAt = false}) {
     // 1969-07-20T20:18:04.000Z
     final textDate = toIso8601String();
     final date = textDate.split(r'T')[0].split(r'-').reversed.join('/');
     final hour = textDate.split(r'T')[1].split(r':').take(2).join(':');
-    return '$date $hour';
+    return '$date ${withAt ? 'ás' : ''} $hour';
   }
 }

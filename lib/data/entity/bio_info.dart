@@ -6,12 +6,14 @@ class BioInfoResponse {
   final double weight;
   final double imc;
   final double igp;
+  final DateTime date;
   BioInfoResponse({
     required this.pulse,
     required this.height,
     required this.weight,
     required this.imc,
     required this.igp,
+    required this.date,
   });
 
   Map<String, dynamic> toMap() {
@@ -21,16 +23,18 @@ class BioInfoResponse {
       'weight': weight,
       'imc': imc,
       'igp': igp,
+      'date': date.millisecondsSinceEpoch,
     };
   }
 
   factory BioInfoResponse.fromMap(Map<String, dynamic> map) {
     return BioInfoResponse(
-      pulse: double.tryParse(map['pulse']) ?? 0.0,
-      height: double.tryParse(map['height']) ?? 0.0,
-      weight: double.tryParse(map['weight']) ?? 0.0,
+      pulse: double.tryParse(map['pulso']) ?? 0.0,
+      height: double.tryParse(map['altura']) ?? 0.0,
+      weight: double.tryParse(map['peso']) ?? 0.0,
       imc: double.tryParse(map['imc']) ?? 0.0,
       igp: double.tryParse(map['igp']) ?? 0.0,
+      date: DateTime.parse(map['created_at']),
     );
   }
 

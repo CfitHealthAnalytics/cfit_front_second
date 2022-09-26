@@ -15,7 +15,13 @@ class BioInfoRepositoryImpl implements BioInfoRepository {
     final response = await client.get(
       path: '${AppConstants.GET_BIO_INFO}/$userId',
     );
-    return BioInfoResponse.fromMap(response.data);
+    late final Map<String, dynamic> result;
+
+    response.data.forEach((key, _) {
+      result = response.data[key];
+    });
+
+    return BioInfoResponse.fromMap(result);
   }
 
   @override

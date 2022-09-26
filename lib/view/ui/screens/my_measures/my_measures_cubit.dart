@@ -28,10 +28,13 @@ class MyMeasureCubit extends Cubit<MyMeasureState> {
         bioInfoUseCase.getBioInfo(user.id),
         bioInfoUseCase.getChartData(user.id),
       ]);
-      emit(state.copyWith(
+      emit(
+        state.copyWith(
           hasError: false,
           bioInfo: responses.first as BioInfo,
-          chartData: responses.last as Map<DateTime, double>));
+          chartData: responses.last as Map<DateTime, double>,
+        ),
+      );
     } on ForbiddenException {
       emit(state.copyWith(hasError: true));
     } catch (e) {

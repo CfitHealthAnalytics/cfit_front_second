@@ -15,7 +15,6 @@ class BodyProfile extends StatelessWidget {
   final User user;
   final String qrData;
   final ProfileNavigation navigation;
-  
 
   @override
   Widget build(BuildContext context) {
@@ -75,7 +74,8 @@ class BodyProfile extends StatelessWidget {
                   'assets/images/chart_icon.svg',
                 ),
               ),
-              onPressed: navigation.toMyMeasure,
+              onPressed: () => {},
+              // onPressed: navigation.toMyMeasure, // uncomment when charts is completed
               customPadding: 8,
             ),
           ),

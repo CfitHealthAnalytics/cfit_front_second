@@ -8,18 +8,27 @@ class BioInfoUseCase {
     required this.bioInfoRepository,
   });
 
-  Future<BioInfo> getBioInfo(String userId) async {
-    final response = await bioInfoRepository.getCurrentBioInfo(userId);
-    return BioInfo(
-      pulse: response.pulse,
-      height: response.height,
-      weight: response.weight,
-      imc: response.imc,
-      igp: response.igp,
-    );
+  Future<BioInfo?> getBioInfo(String userId) async {
+    try {
+      final response = await bioInfoRepository.getCurrentBioInfo(userId);
+      return BioInfo(
+        pulse: response.pulse,
+        height: response.height,
+        weight: response.weight,
+        imc: response.imc,
+        igp: response.igp,
+        date: response.date,
+      );
+    } catch (e) {
+      return null;
+    }
   }
 
-  Future<Map<DateTime, double>> getChartData(String userId) async {
-    return await bioInfoRepository.getIGPbyTime(userId);
+  Future<Map<DateTime, double>?> getChartData(String userId) async {
+    try {
+      return await bioInfoRepository.getIGPbyTime(userId);
+    } catch (e) {
+      return null;
+    }
   }
 }
