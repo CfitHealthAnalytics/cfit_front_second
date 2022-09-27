@@ -167,7 +167,7 @@ class RecoverPasswordScreen extends StatelessWidget {
                         child: ButtonAction(
                           text: 'Entrar',
                           type: ButtonActionType.text,
-                          onPressed: cubit.register,
+                          onPressed: cubit.onBack,
                         ),
                       ),
                     ],
