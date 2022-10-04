@@ -10,7 +10,10 @@ class StorageImpl implements Storage {
 
   @override
   Future<T?> get<T>(String key) async {
-    return (await sharedPreferences).get(key) as T?;
+    final storageResponse = (await sharedPreferences).get(key) as T?;
+    print('storageResponse: $storageResponse');
+    print('key: $key');
+    return storageResponse;
   }
 
   @override
@@ -25,6 +28,8 @@ class StorageImpl implements Storage {
   @override
   Future<void> set(String key, {required dynamic data}) async {
     final storage = await sharedPreferences;
+    
+    print('key: $key, data: $data');
     if (data is bool) {
       await storage.setBool(key, data);
     } else if (data is String) {

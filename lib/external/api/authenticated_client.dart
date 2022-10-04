@@ -103,7 +103,6 @@ class AuthenticatedClient implements ApiClient {
     return factory.fromHttpResponse(response);
   }
 
-
   Future<ApiResponse> _delete({
     required String path,
     required String token,
@@ -176,6 +175,10 @@ class AuthenticatedClient implements ApiClient {
         retries: retries - 1,
         query: query,
       );
+    } on NotFoundException catch (_) {
+      rethrow;
+    } on ForbiddenException catch (_) {
+      rethrow;
     } catch (_) {
       if (retries == 0) {
         rethrow;
@@ -223,6 +226,10 @@ class AuthenticatedClient implements ApiClient {
         retries: retries - 1,
         isBodyEmpty: isBodyEmpty,
       );
+    } on NotFoundException catch (_) {
+      rethrow;
+    } on ForbiddenException catch (_) {
+      rethrow;
     } catch (_) {
       if (retries == 0) {
         rethrow;
@@ -267,6 +274,10 @@ class AuthenticatedClient implements ApiClient {
         retries: retries - 1,
         query: query,
       );
+    } on NotFoundException catch (_) {
+      rethrow;
+    } on ForbiddenException catch (_) {
+      rethrow;
     } catch (_) {
       if (retries == 0) {
         rethrow;

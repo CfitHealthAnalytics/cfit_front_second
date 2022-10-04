@@ -7,8 +7,10 @@ import 'package:cfit/data/repository/bio.dart';
 import 'package:cfit/data/repository/events.dart';
 import 'package:cfit/data/repository/user.dart';
 import 'package:cfit/domain/models/user.dart';
+import 'package:cfit/domain/use_cases/auto_configure_user_use_case.dart';
 import 'package:cfit/domain/use_cases/bio_info_use_case.dart';
 import 'package:cfit/domain/use_cases/categories_event_use_case.dart';
+import 'package:cfit/domain/use_cases/complete_account_use_case.dart';
 import 'package:cfit/domain/use_cases/confirmation_event_in_city_use_case.dart';
 import 'package:cfit/domain/use_cases/confirmation_event_public_use_case.dart';
 import 'package:cfit/domain/use_cases/create_event_public_use_case.dart';
@@ -19,6 +21,7 @@ import 'package:cfit/domain/use_cases/events_in_city_use_case.dart';
 import 'package:cfit/domain/use_cases/events_public_use_case.dart';
 import 'package:cfit/domain/use_cases/feed_use_case.dart';
 import 'package:cfit/domain/use_cases/get_event_public_use_case.dart';
+import 'package:cfit/domain/use_cases/initialization_by_conecta_use_case.dart';
 import 'package:cfit/domain/use_cases/initialization_use_case.dart';
 import 'package:cfit/domain/use_cases/logout_use_case.dart';
 import 'package:cfit/domain/use_cases/recover_password_use_case.dart';
@@ -37,7 +40,14 @@ import '../domain/use_cases/login_use_case.dart';
 import '../external/models/storage.dart';
 import 'singleton.dart';
 
+final storageImp =
+    StorageImpl(sharedPreferences: SharedPreferences.getInstance());
+
 extension DependencyInjection on BuildContext {
+  Storage storage() {
+    return storageImp;
+  }
+
   User getUser() {
     return Singleton().user;
   }
@@ -54,12 +64,6 @@ extension DependencyInjection on BuildContext {
         baseUri: AppConstants.BASE_URL,
         factory: ApiResponseFactory(),
         storage: storage());
-  }
-
-  Storage storage() {
-    return StorageImpl(
-      sharedPreferences: SharedPreferences.getInstance(),
-    );
   }
 
   AuthRepository authRepository() {
@@ -92,6 +96,20 @@ extension DependencyInjection on BuildContext {
   InitializationUseCase initializationUseCase() {
     return InitializationUseCase(
       authRepository: authRepository(),
+    );
+  }
+
+  InitializationByConectaUseCase initializationByConectaUseCase() {
+    return InitializationByConectaUseCase(
+      authRepository: authRepository(),
+      userRepository: userRepository(),
+    );
+  }
+
+  AutoConfigureUserUseCase autoConfigureUserUseCase() {
+    return AutoConfigureUserUseCase(
+      authRepository: authRepository(),
+      userRepository: userRepository(),
     );
   }
 
@@ -200,6 +218,13 @@ extension DependencyInjection on BuildContext {
   RecoverPasswordUseCase recoverPasswordUseCase() {
     return RecoverPasswordUseCase(
       authRepository(),
+    );
+  }
+
+  CompleteAccountUseCase completeAccountUseCase() {
+    return CompleteAccountUseCase(
+      authRepository(),
+      userRepository(),
     );
   }
 }

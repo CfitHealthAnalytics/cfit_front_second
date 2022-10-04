@@ -95,6 +95,7 @@ class _HomeScreenState extends State<HomeScreen> {
         }
         return HomeLoaded(
           navigation: cubit.navigation,
+          initialTab: cubit.initialTab,
         );
       },
     );
@@ -105,16 +106,23 @@ class HomeLoaded extends StatefulWidget {
   const HomeLoaded({
     Key? key,
     required this.navigation,
+    required this.initialTab,
   }) : super(key: key);
 
   final HomeNavigation navigation;
+  final int initialTab;
 
   @override
   State<HomeLoaded> createState() => _HomeLoadedState();
 }
 
 class _HomeLoadedState extends State<HomeLoaded> {
-  int currentIndex = 0;
+  late int currentIndex;
+  @override
+  void initState() {
+    currentIndex = widget.initialTab;
+    super.initState();
+  }
 
   @override
   void dispose() {

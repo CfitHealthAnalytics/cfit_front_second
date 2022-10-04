@@ -38,9 +38,14 @@ class AppConstants {
   static const String REGISTER_URI = '/register_user/';
   static const String LOGIN_URI = '/authentication/';
   static const String GET_USER = '/get_user_info/';
+  static const String GET_USER_BY_EMAIL = '/get_user_info_by_email/';
   static const String GET_USERS_ADMIN = '/get_users_admin';
   static const String REFRESH_TOKEN = '/refreshtoken/';
   static const String RECOVER_PASSWORD = '/send_reset_password_email/';
+  static const String CONNECTA_USER_INFO = '/connecta_users_info';
+  static const String ADD_CONECTA_USER = '/add_connecta_users';
+  static const String VERIFY_ALREADY_EXIST = '/verify_connecta_users';
+  static const String REGISTER_CONECTA_USER = '/register_connecta_user';
 
   static const String CHECKOUT_CITY_EVENTS = '/checkout_city_events/';
   static const String CHECKIN_CITY_EVENTS = '/checkin_city_events/';
@@ -133,6 +138,8 @@ class AppConstants {
   static const String TOKEN = 'cfit_token';
   static const String TOKEN_REFRESH = 'cfit_refreshToken';
   static const String TOKEN_EXPIRESIN = 'cfit_expiresIn';
+
+  static const String IS_CONECTA_USER = 'cfit_is_conecta_user';
 
   static const String COUNTRY_CODE = 'country_code';
   static const String LANGUAGE_CODE = 'language_code';

@@ -23,7 +23,7 @@ class AppBarDashboard extends StatelessWidget {
             ),
           ),
           Text(
-            user.name,
+            user.name.nameImprovident(),
             style: const TextStyle(
               color: Colors.black,
               fontSize: 22,
@@ -37,5 +37,16 @@ class AppBarDashboard extends StatelessWidget {
       elevation: 0,
       leadingWidth: 0,
     );
+  }
+}
+
+extension on String {
+  String nameImprovident() {
+    if (split(' ').length > 1) {
+      final splinted = split(' ');
+      return '${splinted.first} ${splinted.last}';
+    }
+
+    return this;
   }
 }

@@ -90,3 +90,64 @@ extension GenderByString on String {
     }
   }
 }
+
+class ConectaUser {
+  final String sub;
+  final bool emailVerified;
+  final int securityLevel;
+  final String name;
+  final String preferredUsername;
+  final String givenName;
+  final String familyName;
+  final String userType;
+  final String email;
+  final bool alreadyExists;
+
+  ConectaUser({
+    required this.sub,
+    required this.emailVerified,
+    required this.securityLevel,
+    required this.name,
+    required this.preferredUsername,
+    required this.givenName,
+    required this.familyName,
+    required this.userType,
+    required this.email,
+    required this.alreadyExists,
+  });
+
+  Map<String, dynamic> toMap() {
+    return {
+      'sub': sub,
+      'emailVerified': emailVerified,
+      'securityLevel': securityLevel,
+      'name': name,
+      'preferredUsername': preferredUsername,
+      'givenName': givenName,
+      'familyName': familyName,
+      'userType': userType,
+      'email': email,
+      'alreadyExists': alreadyExists,
+    };
+  }
+
+  factory ConectaUser.fromMap(Map<String, dynamic> map) {
+    return ConectaUser(
+      sub: map['sub'] ?? '',
+      emailVerified: map['emailVerified'] ?? false,
+      securityLevel: map['securityLevel']?.toInt() ?? 0,
+      name: map['name'] ?? '',
+      preferredUsername: map['preferredUsername'] ?? '',
+      givenName: map['givenName'] ?? '',
+      familyName: map['familyName'] ?? '',
+      userType: map['userType'] ?? '',
+      email: map['email'] ?? '',
+      alreadyExists: map['alreadyExists'] ?? false,
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory ConectaUser.fromJson(String source) =>
+      ConectaUser.fromMap(json.decode(source));
+}

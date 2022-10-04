@@ -8,11 +8,22 @@ import 'theme.dart';
 
 Future<void> main(List<String> arguments) async {
   runApp(
-    MaterialApp(
+    const MyApp(),
+  );
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: theme,
       initialRoute: Routes.splash,
       onGenerateRoute: onGenerateRoutes,
-    ),
-  );
+    );
+  }
 }

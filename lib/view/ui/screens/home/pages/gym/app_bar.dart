@@ -18,6 +18,7 @@ class AppBarGym extends StatelessWidget {
       backgroundColor: Theme.of(context).primaryColor,
       elevation: 5,
       leadingWidth: 0,
+      automaticallyImplyLeading: false,
     );
   }
 }

@@ -74,6 +74,7 @@ class AuthRepositoryImpl implements AuthRepository {
       AppConstants.TOKEN_EXPIRESIN,
       AppConstants.TOKEN_REFRESH,
       AppConstants.USER_ID,
+      AppConstants.IS_CONECTA_USER,
     });
   }
 
@@ -84,6 +85,37 @@ class AuthRepositoryImpl implements AuthRepository {
       body: {
         'email': email,
       },
+    );
+  }
+
+  @override
+  Future<void> setConnectaToken(String token) async {
+    await storage.set(AppConstants.TOKEN, data: token);
+  }
+
+  @override
+  Future<bool> verifyAlreadyExistsUser(String cpf, String email) async {
+    try {
+      await client.post(
+        path: AppConstants.VERIFY_ALREADY_EXIST,
+        body: {
+          'hash': cpf,
+          'email': email,
+        },
+      );
+      return true;
+    } on NotFoundException {
+      return false;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> completeAccount(CompleteAccountRequest register) async {
+    await client.post(
+      path: AppConstants.REGISTER_CONECTA_USER,
+      body: register.toMap(),
     );
   }
 }

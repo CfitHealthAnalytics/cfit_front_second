@@ -18,15 +18,23 @@ class HomeCubit extends Cubit<HomeState> {
     required this.eventsInCityUseCase,
     required this.eventsPublicUseCase,
     required this.navigation,
-  }) : super(HomeState.empty());
+    User? user,
+    int? initialTab,
+  })  : _user = user,
+        _initialTab = initialTab,
+        super(HomeState.empty());
 
   final HomeNavigation navigation;
   final FeedUseCase feedUseCase;
   final EventsInCityUseCase eventsInCityUseCase;
   final EventsPublicUseCase eventsPublicUseCase;
+  final User? _user;
+  final int? _initialTab;
 
   bool alreadyTried = false;
-  User? get user => state.feed?.user;
+  User? get user => _user ?? state.feed?.user;
+
+  int get initialTab => _initialTab ?? 0;
 
   String? get qrData =>
       'CF*${user?.id}*${user?.dateBirth.replaceAll('/', '')}*${user?.gender.abbreviation()}';

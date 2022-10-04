@@ -136,3 +136,52 @@ class RegisterBodyResponse {
         expiresIn.hashCode;
   }
 }
+
+class CompleteAccountRequest {
+  final String email;
+  final String cpf;
+  final String name;
+  final String dateBirth;
+  final String gender;
+  final String deficiency;
+  final String password;
+
+  CompleteAccountRequest({
+    required this.email,
+    required this.cpf,
+    required this.name,
+    required this.dateBirth,
+    required this.gender,
+    required this.deficiency,
+    required this.password,
+  });
+
+  Map<String, dynamic> toMap() {
+    return {
+      'email': email,
+      'cpf': cpf,
+      'name': name,
+      'born_date': dateBirth,
+      'gender': gender,
+      'deficiency': deficiency,
+      'password': password,
+    };
+  }
+
+  factory CompleteAccountRequest.fromMap(Map<String, dynamic> map) {
+    return CompleteAccountRequest(
+      email: map['email'] ?? '',
+      cpf: map['cpf'] ?? '',
+      name: map['name'] ?? '',
+      dateBirth: map['dateBirth'] ?? '',
+      gender: map['gender'] ?? '',
+      deficiency: map['deficiency'] ?? '',
+      password: map['password'] ?? '',
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory CompleteAccountRequest.fromJson(String source) =>
+      CompleteAccountRequest.fromMap(json.decode(source));
+}
