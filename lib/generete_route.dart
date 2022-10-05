@@ -23,6 +23,8 @@ import 'package:cfit/view/ui/screens/select_localization/select_localization_rou
 import 'package:cfit/view/ui/screens/splash/splash_route.dart';
 import 'package:flutter/material.dart';
 
+import 'view/ui/screens/generic_error/generic_error_route.dart';
+
 Route<dynamic> onGenerateRoutes(RouteSettings settings) {
   final arguments = settings.arguments;
   final name = settings.name?.split('?').first ?? settings.name ?? '/';
@@ -37,6 +39,8 @@ Route<dynamic> onGenerateRoutes(RouteSettings settings) {
       ).buildRoute();
     case Routes.login:
       return const LoginRoute().buildRoute();
+    case Routes.generic_error:
+      return const GenericErrorRoute().buildRoute();
     case Routes.register:
       return const RegisterRoute().buildRoute();
     case Routes.home:

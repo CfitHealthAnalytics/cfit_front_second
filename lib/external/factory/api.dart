@@ -5,6 +5,10 @@ import 'package:http/http.dart' as http;
 
 class ApiResponseFactory {
   ApiResponse fromHttpResponse(http.Response response) {
+    if (response.statusCode == 200 &&
+        response.body.contains('error_description')) {
+      throw errorHandler(response);
+    }
     if (response.statusCode >= 200 && response.statusCode < 300) {
       final data = jsonDecode(utf8.decode(response.bodyBytes));
 
@@ -33,7 +37,7 @@ class ApiResponseFactory {
     if (error.statusCode == 403) {
       return ForbiddenException(error);
     }
-    
+
     if (error.statusCode == 422) {
       if (error.body.toLowerCase().contains('email_exists')) {
         return ForbiddenException(error);

@@ -48,21 +48,25 @@ class SplashController {
   }
 
   Future<void> initByConnect() async {
-    final responses = await Future.wait([
-      _conectaConfig(),
-      Future.delayed(const Duration(seconds: 3)),
-    ]);
+    try {
+      final responses = await Future.wait([
+        _conectaConfig(),
+        Future.delayed(const Duration(seconds: 3)),
+      ]);
 
-    final conectaUser = responses.first as ConectaUser?;
-    if (conectaUser == null) {
-      navigation.toHome(
-        initialTab: 2,
-      );
-    } else {
-      navigation.toCompleteLogin(
-        conectaUser: conectaUser,
-        initialTab: 2,
-      );
+      final conectaUser = responses.first as ConectaUser?;
+      if (conectaUser == null) {
+        navigation.toHome(
+          initialTab: 2,
+        );
+      } else {
+        navigation.toCompleteLogin(
+          conectaUser: conectaUser,
+          initialTab: 2,
+        );
+      }
+    } catch (e) {
+      navigation.toGenericError();
     }
   }
 

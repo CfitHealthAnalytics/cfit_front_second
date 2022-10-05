@@ -7,6 +7,7 @@ import 'package:flutter/widgets.dart';
 class SplashNavigation {
   final void Function() toLogin;
   final void Function({User? user, int? initialTab}) toHome;
+  final void Function() toGenericError;
   final void Function(
       {required ConectaUser conectaUser,
       required int initialTab}) toCompleteLogin;
@@ -15,6 +16,7 @@ class SplashNavigation {
     required this.toLogin,
     required this.toHome,
     required this.toCompleteLogin,
+    required this.toGenericError,
   });
 
   factory SplashNavigation.fromMaterialNavigation(
@@ -43,6 +45,8 @@ class SplashNavigation {
                 conectaUser: conectaUser, initialTab: initialTab)
             .toJson(),
       ),
+      toGenericError: () =>
+          navigator.pushReplacementNamed(Routes.generic_error),
     );
   }
 }
