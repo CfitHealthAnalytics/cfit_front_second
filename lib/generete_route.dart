@@ -40,8 +40,12 @@ Route<dynamic> onGenerateRoutes(RouteSettings settings) {
     case Routes.register:
       return const RegisterRoute().buildRoute();
     case Routes.home:
-      final homeArguments = HomeArguments.fromJson(arguments as String);
-      print(homeArguments);
+      HomeArguments homeArguments;
+      if (arguments != null) {
+        homeArguments = HomeArguments.fromJson(arguments as String);
+      } else {
+        homeArguments = HomeArguments();
+      }
 
       return HomeRoute(
         user: homeArguments.user,
