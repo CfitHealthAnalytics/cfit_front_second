@@ -11,7 +11,8 @@ class SplashRoute extends StatelessWidget {
   SplashRoute(
       {Key? key,
       this.initializationType = SplashInitialization.normal,
-      this.token})
+      this.token,
+      this.initialPage})
       : assert(
             initializationType == SplashInitialization.connect &&
                 (token == null || token.isEmpty),
@@ -20,12 +21,14 @@ class SplashRoute extends StatelessWidget {
 
   final SplashInitialization initializationType;
   final String? token;
+  final int? initialPage;
 
   @override
   Widget build(BuildContext context) {
     return SplashScreen(
       controller: SplashController(
         token: token,
+        initialPage: initialPage,
         initializationUseCase: context.initializationUseCase(),
         initializationByConectaUseCase:
             context.initializationByConectaUseCase(),

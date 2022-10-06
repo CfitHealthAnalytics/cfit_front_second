@@ -22,6 +22,7 @@ class Routes {
   static const recover_password = '/recover_password';
   static const qrcode = '/qrcode';
   static const conecta_events = '//conecta/events';
+  static const conecta_profile = '//conecta/profile';
   static const complete_account = '/completar_conta';
   static const generic_error = '/error';
 

@@ -7,6 +7,7 @@ import 'package:cfit/view/ui/screens/splash/splash_navigation.dart';
 class SplashController {
   SplashController({
     this.token,
+    this.initialPage,
     required this.navigation,
     required this.initializationUseCase,
     required this.initializationByConectaUseCase,
@@ -14,6 +15,7 @@ class SplashController {
   });
 
   final String? token;
+  final int? initialPage;
   final SplashNavigation navigation;
   final InitializationUseCase initializationUseCase;
   final InitializationByConectaUseCase initializationByConectaUseCase;
@@ -57,12 +59,12 @@ class SplashController {
       final conectaUser = responses.first as ConectaUser?;
       if (conectaUser == null) {
         navigation.toHome(
-          initialTab: 2,
+          initialTab: initialPage,
         );
       } else {
         navigation.toCompleteLogin(
           conectaUser: conectaUser,
-          initialTab: 2,
+          initialTab: initialPage!,
         );
       }
     } catch (e) {

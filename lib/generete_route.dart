@@ -28,7 +28,6 @@ import 'view/ui/screens/generic_error/generic_error_route.dart';
 Route<dynamic> onGenerateRoutes(RouteSettings settings) {
   final arguments = settings.arguments;
   final name = settings.name?.split('?').first ?? settings.name ?? '/';
-  print('name: $name');
   switch (name) {
     case Routes.splash:
       return SplashRoute().buildRoute();
@@ -36,6 +35,13 @@ Route<dynamic> onGenerateRoutes(RouteSettings settings) {
       final token = settings.name!.split('?').last.split('=').last;
       return SplashRoute(
         token: token,
+        initialPage: 2,
+      ).buildRoute();
+    case Routes.conecta_profile:
+      final token = settings.name!.split('?').last.split('=').last;
+      return SplashRoute(
+        token: token,
+        initialPage: 3,
       ).buildRoute();
     case Routes.login:
       return const LoginRoute().buildRoute();
