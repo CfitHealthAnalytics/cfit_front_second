@@ -75,55 +75,63 @@ class EventCityDetailsScreen extends StatelessWidget {
           ? const BottomWarning(
               label: 'Sua presença já foi confirmada pelo professor',
             )
-          : SizedBox(
-              height: 120,
-              width: MediaQuery.of(context).size.width,
-              child: Padding(
-                padding: const EdgeInsets.only(
-                  left: 8.0,
-                  right: 8.0,
-                  bottom: 45,
+          : eventCity.startTime
+                      .difference(DateTime.now())
+                      .compareTo(const Duration(days: 2)) ==
+                  1
+              ? const BottomWarning(
+                  label: 'Essa aula ainda não está disponível para agendamento',
+                )
+              : SizedBox(
+                  height: 120,
+                  width: MediaQuery.of(context).size.width,
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                      left: 8.0,
+                      right: 8.0,
+                      bottom: 45,
+                    ),
+                    child: BlocConsumer<EventCityDetailsCubit,
+                        EventCityDetailsState>(
+                      listener: (context, state) {
+                        if (state.status == EventCityDetailsStatus.failed) {
+                          presentBottomSheet(
+                            context: context,
+                            modal: ScheduleErrorModal(
+                              onPressed: () {
+                                Navigator.pop(context);
+                                cubit.action(eventCity);
+                              },
+                              isUnscheduled: cubit.alreadyScheduled,
+                            ),
+                          );
+                        }
+                        if (state.status == EventCityDetailsStatus.succeeds) {
+                          presentBottomSheet(
+                            context: context,
+                            modal: ScheduleConfirmation(
+                              isUnscheduled: cubit.alreadyScheduled,
+                              onPressed: () {
+                                Navigator.pop(context);
+                                Navigator.pop(context);
+                              },
+                            ),
+                          );
+                        }
+                      },
+                      builder: (context, state) {
+                        return ButtonAction(
+                          text:
+                              cubit.alreadyScheduled ? 'Desagendar' : 'Agendar',
+                          type: ButtonActionType.primary,
+                          onPressed: () => cubit.action(eventCity),
+                          customBackgroundColor: Theme.of(context).primaryColor,
+                          loading: state.loadingRequest,
+                        );
+                      },
+                    ),
+                  ),
                 ),
-                child:
-                    BlocConsumer<EventCityDetailsCubit, EventCityDetailsState>(
-                  listener: (context, state) {
-                    if (state.status == EventCityDetailsStatus.failed) {
-                      presentBottomSheet(
-                        context: context,
-                        modal: ScheduleErrorModal(
-                          onPressed: () {
-                            Navigator.pop(context);
-                            cubit.action(eventCity);
-                          },
-                          isUnscheduled: cubit.alreadyScheduled,
-                        ),
-                      );
-                    }
-                    if (state.status == EventCityDetailsStatus.succeeds) {
-                      presentBottomSheet(
-                        context: context,
-                        modal: ScheduleConfirmation(
-                          isUnscheduled: cubit.alreadyScheduled,
-                          onPressed: () {
-                            Navigator.pop(context);
-                            Navigator.pop(context);
-                          },
-                        ),
-                      );
-                    }
-                  },
-                  builder: (context, state) {
-                    return ButtonAction(
-                      text: cubit.alreadyScheduled ? 'Desagendar' : 'Agendar',
-                      type: ButtonActionType.primary,
-                      onPressed: () => cubit.action(eventCity),
-                      customBackgroundColor: Theme.of(context).primaryColor,
-                      loading: state.loadingRequest,
-                    );
-                  },
-                ),
-              ),
-            ),
     );
   }
 }
