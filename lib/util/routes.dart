@@ -23,6 +23,8 @@ class Routes {
   static const qrcode = '/qrcode';
   static const conecta_events = '//conecta/events';
   static const conecta_profile = '//conecta/profile';
+  static const conecta_gym = '//conecta/gym';
+  static const conecta_dashboard = '//conecta/dashboard';
   static const complete_account = '/completar_conta';
   static const generic_error = '/error';
 

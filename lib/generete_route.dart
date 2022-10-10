@@ -43,6 +43,18 @@ Route<dynamic> onGenerateRoutes(RouteSettings settings) {
         token: token,
         initialPage: 3,
       ).buildRoute();
+    case Routes.conecta_dashboard:
+      final token = settings.name!.split('?').last.split('=').last;
+      return SplashRoute(
+        token: token,
+        initialPage: 0,
+      ).buildRoute();
+    case Routes.conecta_gym:
+      final token = settings.name!.split('?').last.split('=').last;
+      return SplashRoute(
+        token: token,
+        initialPage: 1,
+      ).buildRoute();
     case Routes.login:
       return const LoginRoute().buildRoute();
     case Routes.generic_error:

@@ -229,38 +229,41 @@ class _HomeLoadedState extends State<HomeLoaded> {
   @override
   Widget build(BuildContext context) {
     final content = buildContent(context);
+    final cubit = context.read<HomeCubit>();
     return Scaffold(
       appBar: content.appBar,
       body: content.body,
-      bottomNavigationBar: BottomNavigationBar(
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home_filled),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.fitness_center),
-            label: 'Academia Recife',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.calendar_today),
-            label: 'Eventos',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Perfil',
-          )
-        ],
-        elevation: 10,
-        selectedItemColor: Theme.of(context).primaryColor,
-        unselectedItemColor: Colors.grey.shade400,
-        currentIndex: currentIndex,
-        onTap: (newIndex) {
-          setState(() {
-            currentIndex = newIndex;
-          });
-        },
-      ),
+      bottomNavigationBar: cubit.user?.fromConecta != true
+          ? BottomNavigationBar(
+              items: const [
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.home_filled),
+                  label: 'Home',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.fitness_center),
+                  label: 'Academia Recife',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.calendar_today),
+                  label: 'Eventos',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.person),
+                  label: 'Perfil',
+                )
+              ],
+              elevation: 10,
+              selectedItemColor: Theme.of(context).primaryColor,
+              unselectedItemColor: Colors.grey.shade400,
+              currentIndex: currentIndex,
+              onTap: (newIndex) {
+                setState(() {
+                  currentIndex = newIndex;
+                });
+              },
+            )
+          : null,
     );
   }
 }

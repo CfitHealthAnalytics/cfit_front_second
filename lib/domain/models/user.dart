@@ -7,6 +7,7 @@ class User {
   final String dateBirth;
   final UserGender gender;
   final bool isAdmin;
+  final bool fromConecta;
 
   User({
     required this.id,
@@ -15,6 +16,7 @@ class User {
     required this.dateBirth,
     required this.gender,
     this.isAdmin = false,
+    this.fromConecta = false,
   });
 
   factory User.empty() {
@@ -35,6 +37,7 @@ class User {
       'dateBirth': dateBirth,
       'gender': gender.toStringRepresentation(),
       'is_admin': isAdmin,
+      'from_conecta': fromConecta,
     };
   }
 
@@ -46,6 +49,7 @@ class User {
       dateBirth: map['dateBirth'] ?? '',
       gender: (map['gender'] as String).toGender(),
       isAdmin: map['is_admin'] ?? false,
+      fromConecta: map['from_conecta'] ?? false,
     );
   }
 

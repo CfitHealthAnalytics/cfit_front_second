@@ -14,10 +14,9 @@ class FeedUseCase {
 
   Future<User> getUser() async {
     final isConectaUser = await userRepository.isConectaUser();
-    print('isConectaUser: $isConectaUser');
+
     if (isConectaUser) {
       final userResponse = await userRepository.getUserInStorage();
-      print('userResponse: $userResponse');
 
       final _user = User(
         id: userResponse.id,
@@ -26,9 +25,9 @@ class FeedUseCase {
         dateBirth: userResponse.dateBirth,
         gender: userResponse.gender.toGender(),
         isAdmin: false,
+        fromConecta: isConectaUser,
       );
       setUser(_user);
-      print('_user: $_user');
 
       return _user;
     }
