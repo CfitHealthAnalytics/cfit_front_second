@@ -77,7 +77,7 @@ class EventCityDetailsScreen extends StatelessWidget {
             )
           : eventCity.startTime
                       .difference(DateTime.now())
-                      .compareTo(const Duration(days: 2)) ==
+                      .compareTo(const Duration(days: 1)) ==
                   1
               ? const BottomWarning(
                   label: 'Essa aula ainda não está disponível para agendamento',
