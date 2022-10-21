@@ -42,8 +42,8 @@ class AppBarDashboard extends StatelessWidget {
 
 extension on String {
   String nameImprovident() {
-    if (split(' ').length > 1) {
-      final splinted = split(' ');
+    if (trim().split(' ').length > 1) {
+      final splinted = trim().split(' ');
       return '${splinted.first} ${splinted.last}';
     }
 
