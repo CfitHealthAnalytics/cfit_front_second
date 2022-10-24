@@ -8,8 +8,8 @@ import 'package:cfit/view/ui/screens/event_city_detail/event_city_detail_route.d
 import 'package:cfit/view/ui/screens/event_public_detail/event_public_detail_arguments.dart';
 import 'package:cfit/view/ui/screens/event_public_detail/event_public_detail_route.dart';
 import 'package:cfit/view/ui/screens/home/home_arguments.dart';
+import 'package:cfit/view/ui/screens/home/home_route.dart';
 import 'package:cfit/view/ui/screens/login/login_route.dart';
-import 'package:cfit/view/ui/screens/map/map_route.dart';
 import 'package:cfit/view/ui/screens/my_datas/my_datas_arguments.dart';
 import 'package:cfit/view/ui/screens/my_datas/my_datas_route.dart';
 import 'package:cfit/view/ui/screens/my_event/my_event_arguments.dart';
@@ -75,13 +75,13 @@ Route<dynamic> onGenerateRoutes(RouteSettings settings) {
         homeArguments = HomeArguments();
       }
 
-      // return HomeRoute(
-      //   user: homeArguments.user,
-      //   initialTab: homeArguments.initialTab,
-      // ).buildRoute(fromConecta: fromConecta);
+      return HomeRoute(
+        user: homeArguments.user,
+        initialTab: homeArguments.initialTab,
+      ).buildRoute(fromConecta: fromConecta);
 
       // TODO: remove this after
-      return const MapRoute().buildRoute(fromConecta: fromConecta);
+    // return const MapRoute().buildRoute(fromConecta: fromConecta);
     case Routes.my_measures:
       return const MyMeasureRoute().buildRoute(fromConecta: fromConecta);
     case Routes.recover_password:
