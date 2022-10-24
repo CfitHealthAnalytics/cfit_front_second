@@ -1,4 +1,5 @@
 import 'package:cfit/view/common/loading_box.dart';
+import 'package:cfit/view/common/padding.dart';
 import 'package:cfit/view/ui/screens/home/home_navigation.dart';
 import 'package:cfit/view/ui/screens/home/home_state.dart';
 import 'package:cfit/view/ui/screens/home/pages/dashboard/body.dart';
@@ -47,19 +48,32 @@ class _HomeScreenState extends State<HomeScreen> {
               elevation: 0,
               title: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
-                  LoadingBox(
+                children: [
+                  const LoadingBox(
                     height: 20,
                     customWidth: 50,
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   LoadingBox(
                     height: 20,
+                    customWidth: MediaQuery.of(context).size.width,
                   ),
                 ],
-              ),
+              ).withPaddingSymmetric(horizontal: 16),
               centerTitle: true,
               leadingWidth: 0,
+            ),
+            body: Column(
+              children: List.generate(6, (index) => index % 2 == 0)
+                  .map(
+                    (isOdd) => !isOdd
+                        ? const LoadingBox(height: 45)
+                            .withPaddingOnly(left: 36, right: 16)
+                        : const SizedBox(
+                            height: 40,
+                          ),
+                  )
+                  .toList(),
             ),
           );
         }
