@@ -147,9 +147,6 @@ class UserRepositoryImpl implements UserRepository {
   @override
   Future<bool> isConectaUser() async {
     final response = await storage.get(AppConstants.IS_CONECTA_USER);
-    final userId = await storage.get(AppConstants.USER_ID);
-    print('response isConectaUser: $response');
-    print('userId: $userId');
     return response ?? false;
   }
 

@@ -19,7 +19,6 @@ class HomeRoute extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('initialTab: $initialTab');
     return BlocProvider(
       create: (context) => HomeCubit(
         feedUseCase: context.feedUseCase(),

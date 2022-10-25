@@ -1,6 +1,7 @@
 import 'package:cfit/data/models/auth.dart';
 import 'package:cfit/data/models/bio.dart';
 import 'package:cfit/data/models/events.dart';
+import 'package:cfit/data/models/pole.dart';
 import 'package:cfit/data/models/user.dart';
 import 'package:cfit/data/repository/auth.dart';
 import 'package:cfit/data/repository/bio.dart';
@@ -36,6 +37,8 @@ import 'package:cfit/util/app_constants.dart';
 import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../data/repository/poles.dart';
+import '../domain/use_cases/get_poles_use_case.dart';
 import '../domain/use_cases/login_use_case.dart';
 import '../external/models/storage.dart';
 import 'singleton.dart';
@@ -90,6 +93,12 @@ extension DependencyInjection on BuildContext {
   BioInfoRepository bioInfoRepository() {
     return BioInfoRepositoryImpl(
       authenticatedClient(),
+    );
+  }
+
+  PoleRepository poleRepository() {
+    return PoleRepositoryImpl(
+      client: authenticatedClient(),
     );
   }
 
@@ -225,6 +234,12 @@ extension DependencyInjection on BuildContext {
     return CompleteAccountUseCase(
       authRepository(),
       userRepository(),
+    );
+  }
+
+  GetPolesUseCase getPolesUseCase() {
+    return GetPolesUseCase(
+      poleRepository: poleRepository(),
     );
   }
 }

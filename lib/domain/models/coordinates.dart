@@ -18,8 +18,10 @@ class Coordinates {
 
   factory Coordinates.fromMap(Map<String, dynamic> map) {
     return Coordinates(
-      lat: map['latitude']?.toDouble(),
-      long: map['longitude']?.toDouble(),
+      lat: map['latitude']?.toDouble() ??
+          double.parse((map['lat'] as String).replaceAll(r',', '.')),
+      long: map['longitude']?.toDouble() ??
+          double.parse((map['long'] as String).replaceAll(r',', '.')),
     );
   }
 

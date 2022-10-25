@@ -28,7 +28,6 @@ class SplashNavigation {
         User? user,
         int? initialTab,
       }) {
-        print('initialTab: $initialTab');
         navigator.pushReplacementNamed(Routes.home,
             arguments: HomeArguments(
               user: user,

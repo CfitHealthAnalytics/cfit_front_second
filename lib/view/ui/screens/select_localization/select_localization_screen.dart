@@ -83,8 +83,6 @@ class _SelectLocalizationScreenState extends State<SelectLocalizationScreen> {
       } else {
         return _getUserLocation();
       }
-    } catch (e) {
-      print(e);
     }
   }
 

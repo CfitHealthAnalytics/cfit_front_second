@@ -163,4 +163,7 @@ class AppConstants {
   static const String LOCALIZATION_KEY = 'X-localization';
 
   static const String USER_NUMBER = 'cfit_user_number';
+  
+  // POLES
+  static const String POLES = '/polos';
 }

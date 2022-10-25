@@ -24,6 +24,7 @@ class AuthenticatedClient implements ApiClient {
     required String token,
     Map<String, dynamic>? query,
   }) async {
+    print('antes de chamar o http');
     final response = await http.get(
       Uri(
         host: baseUri,
@@ -38,6 +39,9 @@ class AuthenticatedClient implements ApiClient {
         'accept-language': 'pt,en;q=0.9',
       },
     );
+    print('depois de chamar o http $response');
+    print('body ${response.body}');
+    print('status ${response.statusCode}');
     return factory.fromHttpResponse(response);
   }
 

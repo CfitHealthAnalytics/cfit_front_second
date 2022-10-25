@@ -80,7 +80,7 @@ Route<dynamic> onGenerateRoutes(RouteSettings settings) {
         initialTab: homeArguments.initialTab,
       ).buildRoute(fromConecta: fromConecta);
 
-      // TODO: remove this after
+    // TODO: remove this after
     // return const MapRoute().buildRoute(fromConecta: fromConecta);
     case Routes.my_measures:
       return const MyMeasureRoute().buildRoute(fromConecta: fromConecta);

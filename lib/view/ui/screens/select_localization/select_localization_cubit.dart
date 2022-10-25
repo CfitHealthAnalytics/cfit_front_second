@@ -43,12 +43,10 @@ class SelectLocalizationCubit extends Cubit<SelectLocalizationState> {
 
   Future<Address> buildAddress(LatLng selectedPosition) async {
     try {
-      print(selectedPosition);
       final addresses = await placemarkFromCoordinates(
         selectedPosition.latitude,
         selectedPosition.longitude,
       );
-      print(addresses);
       final infoStreet = addresses.first.street?.split(',') ?? ['', 's/n'];
       final street = infoStreet[0];
       final number = infoStreet[1];
