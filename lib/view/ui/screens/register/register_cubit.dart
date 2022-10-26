@@ -15,28 +15,28 @@ class RegisterCubit extends Cubit<RegisterState> {
   final RegisterNavigation _navigation;
 
   void onChangeName(String name) {
-    emit(state.copyWith(name: name));
+    emit(state.copyWith(name: name.trim()));
   }
 
   void onChangeGender(String? gender) {
     if (gender == null) return;
-    emit(state.copyWith(gender: gender.toGender()));
+    emit(state.copyWith(gender: gender.trim().toGender()));
   }
 
   void onChangeDateBirth(String dateBirth) {
-    emit(state.copyWith(dateBirth: dateBirth));
+    emit(state.copyWith(dateBirth: dateBirth.trim()));
   }
 
   void onChangeEmail(String email) {
-    emit(state.copyWith(email: email));
+    emit(state.copyWith(email: email.trim()));
   }
 
   void onChangePassword(String password) {
-    emit(state.copyWith(password: password));
+    emit(state.copyWith(password: password.trim()));
   }
 
   void onChangeConfirmedPassword(String confirmedPassword) {
-    emit(state.copyWith(confirmedPassword: confirmedPassword));
+    emit(state.copyWith(confirmedPassword: confirmedPassword.trim()));
   }
 
   Future<void> register() async {

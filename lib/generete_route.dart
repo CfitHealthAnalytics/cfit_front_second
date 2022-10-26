@@ -141,9 +141,15 @@ extension on Widget {
     if (fromConecta == true) {
       return MaterialPageRoute(
         builder: (_) => Banner(
-          message: 'BETA',
-          location: BannerLocation.topStart,
+          message: 'VERSÃO\n' 'BETA',
+          location: BannerLocation.topEnd,
           child: this,
+          textStyle: const TextStyle(
+            color: Colors.black,
+            fontSize: 12 * 0.85,
+            fontWeight: FontWeight.w900,
+            height: 1.0,
+          ),
         ),
       );
     }

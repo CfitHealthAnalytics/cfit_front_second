@@ -58,24 +58,6 @@ class Details extends StatelessWidget {
                     ),
                   ),
                 ),
-                const SizedBox(height: 16),
-                const Text(
-                  'Duração',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 20,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                const Text(
-                  '40 mins',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
               ],
             ),
           ),

@@ -31,9 +31,7 @@ class _BodyGymState extends State<BodyGym> {
   late DateTime selectedDate;
   @override
   void initState() {
-    selectedDate = widget.user.isAdmin
-        ? DateTime.now().subtract(const Duration(hours: 2))
-        : DateTime.now();
+    selectedDate = DateTime.now().subtract(const Duration(hours: 2));
     super.initState();
   }
 
@@ -64,9 +62,7 @@ class _BodyGymState extends State<BodyGym> {
                   if (newSelectedDate.day == today.day &&
                       newSelectedDate.month == today.month &&
                       newSelectedDate.year == today.year) {
-                    selectedDate = widget.user.isAdmin
-                        ? newSelectedDate.subtract(const Duration(hours: 2))
-                        : newSelectedDate;
+                    newSelectedDate.subtract(const Duration(hours: 2));
                   } else {
                     selectedDate = newSelectedDate;
                   }

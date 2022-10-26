@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <!--
     If you are serving your web app in a path other than the root, change the
@@ -18,7 +19,7 @@
 
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
-  <meta name="description" content="A new Flutter project.">
+  <meta name="description" content="Vamoo CFIT">
 
   <!-- iOS meta tags & icons -->
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -27,9 +28,9 @@
   <link rel="apple-touch-icon" href="icons/Icon-192.png">
 
   <!-- Favicon -->
-  <link rel="icon" type="image/png" href="favicon.png"/>
+  <link rel="icon" type="image/png" href="favicon.png" />
 
-  <title>CFIT</title>
+  <title>Vamoo</title>
   <link rel="manifest" href="manifest.json">
 
   <script>
@@ -42,8 +43,50 @@
   <script src="https://cdn.jsdelivr.net/npm/jsqr@1.3.1/dist/jsQR.min.js"></script>
   <!-- This script adds the flutter initialization JS code -->
   <script src="flutter.js" defer></script>
+  <style>
+    .lds-dual-ring {
+      display: inline-block;
+      width: 80px;
+      height: 80px;
+    }
+
+    .lds-dual-ring:after {
+      content: " ";
+      display: block;
+      width: 64px;
+      height: 64px;
+      margin: 8px;
+      border-radius: 50%;
+      border: 6px solid #11A599;
+      border-color: #11A599 transparent #11A599 transparent;
+      animation: lds-dual-ring 1.2s linear infinite;
+    }
+
+    @keyframes lds-dual-ring {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+    .full-panel {
+      display: flex;
+      height: 100vh;
+      width: 100vw;
+      flex: 1;
+      justify-content: center;
+      align-items: center;
+    }
+  </style>
 </head>
+
 <body>
-  <script src="main.dart.js?version=1 " type="application/javascript"></script> 
+  <div class="full-panel">
+    <div class="lds-dual-ring"></div>
+  </div>
+  <script src="main.dart.js?version=1 " type="application/javascript"></script>
 </body>
+
 </html>

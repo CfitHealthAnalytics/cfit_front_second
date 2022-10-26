@@ -1,4 +1,3 @@
-import 'package:cfit/view/common/input_text.dart';
 import 'package:flutter/material.dart';
 
 class AppBarGym extends StatelessWidget {
@@ -9,10 +8,12 @@ class AppBarGym extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      title: InputText(
-        type: InputTextType.text,
-        onChanged: (_) {},
-        hintText: 'Perto de Boa Viagem',
+      title: const Text(
+        'Polo Macaxeira',
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 18,
+        ),
       ),
       centerTitle: false,
       backgroundColor: Theme.of(context).primaryColor,

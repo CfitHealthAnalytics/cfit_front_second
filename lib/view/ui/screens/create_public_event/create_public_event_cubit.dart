@@ -178,8 +178,8 @@ class CreatePublicEventCubit extends Cubit<CreatePublicEventState> {
       int.parse(dateArray[2]),
       int.parse(dateArray[1]),
       int.parse(dateArray[0]),
-      int.parse(hourArray[1]),
       int.parse(hourArray[0]),
+      int.parse(hourArray[1]),
     );
     try {
       final success = await editEventPublicUseCase(

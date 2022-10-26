@@ -13,11 +13,11 @@ class LoginCubit extends Cubit<LoginState> {
   final LoginNavigation _navigation;
 
   void onChangeEmail(String email) {
-    emit(state.copyWith(email: email));
+    emit(state.copyWith(email: email.trim()));
   }
 
   void onChangePassword(String password) {
-    emit(state.copyWith(password: password));
+    emit(state.copyWith(password: password.trim()));
   }
 
   Future<void> authentication() async {
