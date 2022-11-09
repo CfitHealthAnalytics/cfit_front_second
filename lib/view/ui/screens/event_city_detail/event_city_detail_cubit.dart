@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:cfit/domain/models/events_city.dart';
 import 'package:cfit/domain/use_cases/schedule_event_in_city_use_case.dart';
+import 'package:cfit/external/models/api.dart';
 
 import 'event_city_detail_navigation.dart';
 import 'event_city_detail_state.dart';
@@ -35,6 +36,14 @@ class EventCityDetailsCubit extends Cubit<EventCityDetailsState> {
           loadingRequest: false,
           errorMessage: null,
           status: EventCityDetailsStatus.succeeds,
+        ),
+      );
+    } on ForbiddenException catch (_) {
+      emit(
+        state.copyWith(
+          loadingRequest: false,
+          errorMessage: 'Evento lotado',
+          status: EventCityDetailsStatus.failed,
         ),
       );
     } catch (e) {

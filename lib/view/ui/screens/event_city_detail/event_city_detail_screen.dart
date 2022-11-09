@@ -95,16 +95,28 @@ class EventCityDetailsScreen extends StatelessWidget {
                         EventCityDetailsState>(
                       listener: (context, state) {
                         if (state.status == EventCityDetailsStatus.failed) {
-                          presentBottomSheet(
-                            context: context,
-                            modal: ScheduleErrorModal(
-                              onPressed: () {
-                                Navigator.pop(context);
-                                cubit.action(eventCity);
-                              },
-                              isUnscheduled: cubit.alreadyScheduled,
-                            ),
-                          );
+                          if (state.errorMessage == 'Evento lotado') {
+                            presentBottomSheet(
+                              context: context,
+                              modal: ScheduleFullErrorModal(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                  cubit.action(eventCity);
+                                },
+                              ),
+                            );
+                          } else {
+                            presentBottomSheet(
+                              context: context,
+                              modal: ScheduleErrorModal(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                  cubit.action(eventCity);
+                                },
+                                isUnscheduled: cubit.alreadyScheduled,
+                              ),
+                            );
+                          }
                         }
                         if (state.status == EventCityDetailsStatus.succeeds) {
                           presentBottomSheet(

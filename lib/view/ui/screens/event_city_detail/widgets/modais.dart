@@ -3,6 +3,70 @@ import 'package:cfit/view/common/modais.dart';
 import 'package:cfit/view/common/padding.dart';
 import 'package:flutter/material.dart';
 
+class ScheduleFullErrorModal extends Modal {
+  const ScheduleFullErrorModal({
+    Key? key,
+    required this.onPressed,
+  }) : super(key: key);
+
+  final VoidCallback onPressed;
+
+  @override
+  double get fraction => 0.4;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          onPressed: Navigator.of(context).pop,
+          icon: const Icon(
+            Icons.close,
+            color: Colors.grey,
+          ),
+        ),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+      ),
+      body: Container(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Aula Lotada',
+              style: TextStyle(
+                fontSize: 22,
+                color: Colors.black,
+                fontWeight: FontWeight.w500,
+              ),
+            ).withPaddingOnly(bottom: 16),
+            const Expanded(
+              child: Text(
+                'O número de pessoas inscritas na aula já atingiu a capacidade máxima. Sugerimos que busque outro horário ou atividade.',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.black,
+                  fontWeight: FontWeight.w300,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+      bottomNavigationBar: SizedBox(
+        height: 115,
+        child: ButtonAction(
+          text: 'Tentar novamente',
+          type: ButtonActionType.primary,
+          onPressed: onPressed,
+          customBackgroundColor: Theme.of(context).primaryColor,
+        ).withPaddingOnly(bottom: 36),
+      ),
+    );
+  }
+}
+
 class ScheduleErrorModal extends Modal {
   const ScheduleErrorModal({
     Key? key,
