@@ -8,7 +8,7 @@ abstract class EventsRepository {
     EventCityRequest eventFilter,
   );
 
-  Future<List<EventPublicResponse>> getEventsPublic();
+  Future<List<EventPublicResponse>> getEventsPublic(DateTime date);
 
   Future<EventPublicResponse> getEventPublic(
     String eventId,

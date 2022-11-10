@@ -106,9 +106,12 @@ class EventsRepositoryImpl implements EventsRepository {
   }
 
   @override
-  Future<List<EventPublicResponse>> getEventsPublic() async {
+  Future<List<EventPublicResponse>> getEventsPublic(DateTime date) async {
     final response = await client.get(
       path: AppConstants.GET_PUBLIC_EVENTS,
+      query: {
+        'initial_date': date.toIso8601String(),
+      },
     );
     final cleanList = (response.data['responses'] as List)
         .where((element) => element != null)

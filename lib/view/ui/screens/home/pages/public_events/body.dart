@@ -33,87 +33,89 @@ class _BodyPublicEventsState extends State<BodyPublicEvents> {
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<HomeCubit>();
-    return VisibilityDetector(
-      key: const Key('public-events-result'),
-      onVisibilityChanged: (visibility) {
-        if (visibility.visibleFraction > 0 && !shown) {
-          setState(() {
-            shown = true;
-          });
-        }
-      },
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  'Próximos Eventos',
-                  style: TextStyle(
-                    fontSize: 18,
-                    color: Colors.black,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                ButtonAction(
-                  text: '+ Criar Evento',
-                  type: ButtonActionType.chip,
-                  onPressed: () => presentBottomSheet(
-                    context: context,
-                    modal: CreatePublicEventModal(
-                      user: widget.user,
-                      onCreate: (result, [String? errorDetail]) {
-                        if (result) {
-                          presentBottomSheet(
-                            context: context,
-                            modal: const CreatePublicEventSuccess(),
-                          );
-                        } else {
-                          presentBottomSheet(
-                            context: context,
-                            modal: CreatePublicEventError(
-                              errorDetail: errorDetail,
-                            ),
-                          );
-                        }
-                      },
+    return Scaffold(
+      body: VisibilityDetector(
+        key: const Key('public-events-result'),
+        onVisibilityChanged: (visibility) {
+          if (visibility.visibleFraction > 0 && !shown) {
+            setState(() {
+              shown = true;
+            });
+          }
+        },
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    'Próximos Eventos',
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
-                  textStyle: const TextStyle(
-                    fontWeight: FontWeight.w500,
-                    color: Colors.white,
-                  ),
-                )
-              ],
-            ).withPaddingSymmetric(horizontal: 16),
-            const SizedBox(height: 16),
-            ResultsEvents(
-              getEventsPublic: widget.getEventsPublic,
-              onTap: (EventPublic eventPublic) {
-                setState(() {
-                  shown = false;
-                });
-                if (eventPublic.userCreator.id == widget.user.id) {
-                  cubit.navigation.toEventPublicAdmin(
-                    eventPublic,
-                    widget.user,
-                  );
-                } else {
-                  cubit.navigation.toEventPublicDetail(
-                    eventPublic,
-                    cubit.user!,
-                    alreadyConfirmed: eventPublic.usersCheckIn
-                        .where(
-                            (userCheckIn) => userCheckIn.id == cubit.user!.id)
-                        .isNotEmpty,
-                  );
-                }
-              },
-            )
-          ],
-        ).withPaddingSymmetric(
-          vertical: 16,
+                  ButtonAction(
+                    text: '+ Criar Evento',
+                    type: ButtonActionType.chip,
+                    onPressed: () => presentBottomSheet(
+                      context: context,
+                      modal: CreatePublicEventModal(
+                        user: widget.user,
+                        onCreate: (result, [String? errorDetail]) {
+                          if (result) {
+                            presentBottomSheet(
+                              context: context,
+                              modal: const CreatePublicEventSuccess(),
+                            );
+                          } else {
+                            presentBottomSheet(
+                              context: context,
+                              modal: CreatePublicEventError(
+                                errorDetail: errorDetail,
+                              ),
+                            );
+                          }
+                        },
+                      ),
+                    ),
+                    textStyle: const TextStyle(
+                      fontWeight: FontWeight.w500,
+                      color: Colors.white,
+                    ),
+                  )
+                ],
+              ).withPaddingSymmetric(horizontal: 16),
+              const SizedBox(height: 16),
+              ResultsEvents(
+                getEventsPublic: widget.getEventsPublic,
+                onTap: (EventPublic eventPublic) {
+                  setState(() {
+                    shown = false;
+                  });
+                  if (eventPublic.userCreator.id == widget.user.id) {
+                    cubit.navigation.toEventPublicAdmin(
+                      eventPublic,
+                      widget.user,
+                    );
+                  } else {
+                    cubit.navigation.toEventPublicDetail(
+                      eventPublic,
+                      cubit.user!,
+                      alreadyConfirmed: eventPublic.usersCheckIn
+                          .where(
+                              (userCheckIn) => userCheckIn.id == cubit.user!.id)
+                          .isNotEmpty,
+                    );
+                  }
+                },
+              )
+            ],
+          ).withPaddingSymmetric(
+            vertical: 16,
+          ),
         ),
       ),
     );
@@ -135,6 +137,19 @@ class ResultsEvents extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const CircularProgressIndicator();
+        }
+        if (snapshot.data?.isEmpty == true) {
+          return const Center(
+            child: Text('Não temos nenhum evento no momento'),
+          );
+        }
+        if (snapshot.hasError) {
+          return Column(
+            children: [
+              SizedBox(height: MediaQuery.of(context).size.height * 0.45),
+              const Text('Não temos nenhum evento no momento'),
+            ],
+          );
         }
         final recentEventsPublic = snapshot.data!.sortMostRecent();
         final categorizedEvents = snapshot.data!.dividerByCategory();

@@ -11,7 +11,11 @@ class EventsPublicUseCase {
   });
 
   Future<List<EventPublic>> call() async {
-    final eventList = await eventsRepository.getEventsPublic();
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final eventList = await eventsRepository.getEventsPublic(
+      today,
+    );
 
     return eventList
         .map(
