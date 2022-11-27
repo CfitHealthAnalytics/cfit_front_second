@@ -23,15 +23,10 @@ class MapCubit extends Cubit<MapState> {
   Future<void> onInit() async {
     emit(state.copyWith(status: MapStatus.loading));
     try {
-      print('antes de chamar o usecase');
       final poles = await getPolesUseCase();
-      print('depois de chamar o usecase');
-      print('poles: $poles');
       buildMarkers(poles);
       emit(state.copyWith(poles: poles, status: MapStatus.success));
-    } catch (e, stack) {
-      print('error: $e');
-      print('stack: $stack');
+    } catch (e) {
       emit(
         state.copyWith(
           status: MapStatus.fail,
@@ -42,7 +37,6 @@ class MapCubit extends Cubit<MapState> {
   }
 
   void buildMarkers(List<Pole> poles) {
-    print('passou aqui');
     final newMarkers = poles
         .map(
           (pole) => Marker(
@@ -57,7 +51,6 @@ class MapCubit extends Cubit<MapState> {
           ),
         )
         .toSet();
-    print('newMarker: $newMarkers');
     emit(state.copyWith(markers: newMarkers));
   }
 }

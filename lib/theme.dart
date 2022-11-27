@@ -6,6 +6,7 @@ const primaryColorLight = Color.fromRGBO(17, 165, 153, 1);
 
 final theme = ThemeData(
   fontFamily: 'Rubik',
+  brightness: Brightness.light,
   primaryColor: primaryColor,
   primaryColorDark: primaryColorDark,
   primaryColorLight: primaryColorLight,

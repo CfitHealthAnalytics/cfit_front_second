@@ -11,17 +11,17 @@ class BioInfoRepositoryImpl implements BioInfoRepository {
   );
 
   @override
-  Future<BioInfoResponse> getCurrentBioInfo(String userId) async {
+  Future<List<BioInfoResponse>> getCurrentBioInfo(String userId) async {
     final response = await client.get(
       path: '${AppConstants.GET_BIO_INFO}/$userId',
     );
-    late final Map<String, dynamic> result;
+    final List<Map<String, dynamic>> result = [];
 
     response.data.forEach((key, _) {
-      result = response.data[key];
+      result.add(response.data[key]);
     });
 
-    return BioInfoResponse.fromMap(result);
+    return result.map((e) => BioInfoResponse.fromMap(e)).toList();
   }
 
   @override

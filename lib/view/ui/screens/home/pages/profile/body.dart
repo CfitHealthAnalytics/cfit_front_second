@@ -74,8 +74,7 @@ class BodyProfile extends StatelessWidget {
                   'assets/images/chart_icon.svg',
                 ),
               ),
-              onPressed: () => {},
-              // onPressed: navigation.toMyMeasure, // uncomment when charts is completed
+              onPressed: navigation.toMyMeasure,
               customPadding: 8,
             ),
           ),

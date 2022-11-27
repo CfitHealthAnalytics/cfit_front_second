@@ -321,12 +321,9 @@ class LinearChat extends StatefulWidget {
 
 class _LinearChatState extends State<LinearChat> {
   List<Color> gradientColors = [
-    const Color(0xff161C19),
-    const Color(0xff274631),
-    const Color(0xff4D9760),
-    const Color(0xff4D9760),
-    const Color(0xff274631),
-    const Color(0xff161C19),
+    const Color.fromRGBO(17, 165, 153, 1),
+    const Color.fromARGB(255, 74, 175, 99),
+    const Color.fromRGBO(17, 165, 153, 1),
   ];
 
   bool showAvg = false;
@@ -337,9 +334,33 @@ class _LinearChatState extends State<LinearChat> {
     return isEnough
         ? Stack(
             children: <Widget>[
-              AspectRatio(
-                aspectRatio: 1.70,
-                child: LineChart(mainData()),
+              Column(
+                children: [
+                  const SizedBox(height: 16),
+                  Row(
+                    children: const [
+                      Text(
+                        'IGP',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(width: 36),
+                      Text(
+                        'Acompanhe sua evolução',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    ],
+                  ).withPaddingSymmetric(horizontal: 50),
+                  const SizedBox(height: 16),
+                  AspectRatio(
+                    aspectRatio: 1.70,
+                    child: LineChart(mainData()),
+                  ).withPaddingSymmetric(horizontal: 40),
+                ],
               ),
             ],
           )
@@ -347,21 +368,36 @@ class _LinearChatState extends State<LinearChat> {
             height: 300,
             width: MediaQuery.of(context).size.width,
             color: Colors.grey.shade100,
-            child: const Center(
-                child:
-                    Text('Sem dados o suficiente para a criação do grafico')),
+            child: Center(
+              child: const Text(
+                'Estamos quase lá! A partir da segunda avaliação, vem ver aqui o gráfico da sua evolução 😉',
+                textAlign: TextAlign.center,
+              ).withPaddingSymmetric(horizontal: 16),
+            ),
           );
   }
 
   LineChartData mainData() {
-    const double resevedSizeButtom = 12.0;
-
     final List<FlSpot> spots = [];
+    int lastIndex = 0;
+    double minValue = 0.0;
+    double maxValue = 0.0;
 
     final values = widget.data.values.toList();
 
     values.asMap().entries.forEach((entry) {
-      spots.add(FlSpot(entry.key.toDouble(), entry.value));
+      if (entry.key == 0) {
+        maxValue = entry.value;
+        minValue = entry.value;
+      } else {
+        if (entry.value > maxValue) {
+          maxValue = entry.value;
+        }
+        if (entry.value < minValue) {
+          minValue = entry.value;
+        }
+      }
+      spots.add(FlSpot((entry.key * 1.0), entry.value));
     });
 
     return LineChartData(
@@ -369,18 +405,64 @@ class _LinearChatState extends State<LinearChat> {
         show: false,
       ),
       borderData: FlBorderData(
-        show: false,
-      ),
-      lineBarsData: [
-        LineChartBarData(
-          spots: spots,
-          isCurved: true,
-          barWidth: 3,
-          isStrokeCapRound: false,
-          dotData: FlDotData(
-            show: false,
+        show: true,
+        border: const Border(
+          bottom: BorderSide(
+            width: 1,
+            color: Colors.black,
+          ),
+          left: BorderSide(
+            width: 1,
+            color: Colors.black,
           ),
         ),
+      ),
+      titlesData: FlTitlesData(
+        show: true,
+        rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+        topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+        bottomTitles: AxisTitles(
+          sideTitles: SideTitles(
+            showTitles: true,
+            getTitlesWidget: (index, title) {
+              if (index == 0.0 || lastIndex != (index + 0.1).floor()) {
+                lastIndex = (index + 0.1).floor();
+                return SideTitleWidget(
+                  child: Text(
+                      widget.data.keys.toList()[lastIndex].getCustomDate()),
+                  axisSide: title.axisSide,
+                );
+              } else {
+                return const SizedBox.shrink();
+              }
+            },
+          ),
+        ),
+      ),
+      minY: minValue - 1.6,
+      maxY: maxValue + 1.6,
+      lineBarsData: [
+        LineChartBarData(
+            spots: spots,
+            isCurved: true,
+            barWidth: 5,
+            isStrokeCapRound: false,
+            dotData: FlDotData(
+              show: false,
+            ),
+            gradient: LinearGradient(
+              colors: gradientColors,
+            ),
+            belowBarData: BarAreaData(
+              show: true,
+              gradient: LinearGradient(
+                colors: [
+                  ...gradientColors.map((color) => color.withAlpha(20)).toList()
+                ],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+              ),
+            )),
       ],
     );
   }

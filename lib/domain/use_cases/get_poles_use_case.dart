@@ -9,10 +9,7 @@ class GetPolesUseCase {
   });
 
   Future<List<Pole>> call() async {
-    print('antes de chamar o repositorio');
     final poles = await poleRepository.getPoles();
-    print('depois de chamar o repositorio');
-    print('poles: $poles');
 
     return poles
         .map(
