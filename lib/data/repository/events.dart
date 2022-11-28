@@ -23,6 +23,7 @@ class EventsRepositoryImpl implements EventsRepository {
       query: {
         'initial_date': eventFilter.startTime!.toIso8601String(),
         'end_date': eventFilter.endTime!.toIso8601String(),
+        'pole': eventFilter.pole
       },
     );
     return (response.data['responses'] as List)

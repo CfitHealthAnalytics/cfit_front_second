@@ -142,6 +142,7 @@ class HomeCubit extends Cubit<HomeState> {
 
   Future<List<EventCity>> getEventsCity({
     required DateTime startTime,
+    String pole = '',
     DateTime? endTime,
   }) async {
     late DateTime _endTime;
@@ -160,6 +161,7 @@ class HomeCubit extends Cubit<HomeState> {
     final events = await eventsInCityUseCase(
       startTime: startTime,
       endTime: _endTime,
+      pole: pole
     );
 
     return events;

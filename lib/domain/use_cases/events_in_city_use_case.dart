@@ -14,11 +14,13 @@ class EventsInCityUseCase {
   Future<List<EventCity>> call({
     required DateTime startTime,
     required DateTime endTime,
+    required String pole,
   }) async {
     final eventList =
         await eventsRepository.getEventsPrivateInCity(EventCityRequest(
       startTime: startTime,
       endTime: endTime,
+      pole: pole
     ));
 
     return eventList

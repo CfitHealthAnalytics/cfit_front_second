@@ -8,29 +8,37 @@ class EventCityRequest {
   final DateTime? endTime;
   final String? city;
   final String? modality;
+  final String pole;
 
   EventCityRequest({
     this.startTime,
     this.endTime,
     this.city,
     this.modality,
+    required this.pole,
   });
 
   Map<String, dynamic> toMap() {
     return {
-      if (startTime != null) 'startTime': startTime?.toIso8601String(),
-      if (endTime != null) 'endTime': endTime?.toIso8601String(),
-      if (city != null) 'city': city,
-      if (modality != null) 'modality': modality,
+      'startTime': startTime?.millisecondsSinceEpoch,
+      'endTime': endTime?.millisecondsSinceEpoch,
+      'city': city,
+      'modality': modality,
+      'pole': pole,
     };
   }
 
   factory EventCityRequest.fromMap(Map<String, dynamic> map) {
     return EventCityRequest(
-      startTime: DateTime.fromMillisecondsSinceEpoch(map['startTime']),
-      endTime: DateTime.fromMillisecondsSinceEpoch(map['endTime']),
-      city: map['city'] ?? '',
-      modality: map['modality'] ?? '',
+      startTime: map['startTime'] != null
+          ? DateTime.fromMillisecondsSinceEpoch(map['startTime'])
+          : null,
+      endTime: map['endTime'] != null
+          ? DateTime.fromMillisecondsSinceEpoch(map['endTime'])
+          : null,
+      city: map['city'],
+      modality: map['modality'],
+      pole: map['pole'] ?? '',
     );
   }
 
@@ -38,6 +46,48 @@ class EventCityRequest {
 
   factory EventCityRequest.fromJson(String source) =>
       EventCityRequest.fromMap(json.decode(source));
+
+  EventCityRequest copyWith({
+    DateTime? startTime,
+    DateTime? endTime,
+    String? city,
+    String? modality,
+    String? pole,
+  }) {
+    return EventCityRequest(
+      startTime: startTime ?? this.startTime,
+      endTime: endTime ?? this.endTime,
+      city: city ?? this.city,
+      modality: modality ?? this.modality,
+      pole: pole ?? this.pole,
+    );
+  }
+
+  @override
+  String toString() {
+    return 'EventCityRequest(startTime: $startTime, endTime: $endTime, city: $city, modality: $modality, pole: $pole)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is EventCityRequest &&
+        other.startTime == startTime &&
+        other.endTime == endTime &&
+        other.city == city &&
+        other.modality == modality &&
+        other.pole == pole;
+  }
+
+  @override
+  int get hashCode {
+    return startTime.hashCode ^
+        endTime.hashCode ^
+        city.hashCode ^
+        modality.hashCode ^
+        pole.hashCode;
+  }
 }
 
 class EventCityResponse {
